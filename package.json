@@ -1,0 +1,42 @@
+{
+  "name": "mern",
+  "version": "1.0.0",
+  "description": "Mern Demo",
+  "main": "server.js",
+  "scripts": {
+    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start:prod": "node server.js",
+    "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
+    "client": "cd client && npm run start",
+    "seed": "node scripts/seedDB.js",
+    "install": "cd client && npm install",
+    "build": "cd client && npm run build",
+    "heroku-postbuild": "npm run build"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^4.1.0",
+    "nodemon": "^1.18.7"
+  },
+  "dependencies": {
+    "@material-ui/core": "^3.9.3",
+    "@material-ui/icons": "^3.0.2",
+    "autosuggest-highlight": "^3.1.1",
+    "emotion": "^10.0.9",
+    "express": "^4.16.3",
+    "font-awesome": "^4.7.0",
+    "i": "^0.3.6",
+    "if-env": "^1.0.4",
+    "mongoose": "^5.4.19",
+    "rc-table": "^6.6.0",
+    "react": "^16.8.6",
+    "react-autosuggest": "^9.4.3",
+    "react-dom": "^16.8.6",
+    "react-fontawesome": "^1.6.1",
+    "react-gif-player": "^0.4.2",
+    "react-select": "^2.4.2",
+    "react-table": "^6.10.0",
+    "typeface-roboto": "0.0.54"
+  }
+}
