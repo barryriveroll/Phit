@@ -74,6 +74,7 @@ class TrackerTable extends React.Component {
 
     widthSizes = myFunction(x);
     console.log(widthSizes);
+    console.log("bitchass");
     x.addListener(myFunction);
   }
 
