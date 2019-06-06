@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import auth from "../firebase.js";
 import Meal from "./Meal";
+import firebase from "firebase";
 
 //Panel imports
 import FitnessPanel from "../components/panels/FitnessPanel";
@@ -41,9 +42,23 @@ class Dashboard extends Component {
     });
   };
 
+  verifyUser = () => {
+    let user = firebase.auth().currentUser;
+
+    user
+      .sendEmailVerification()
+      .then(function() {
+        alert("I should have sent");
+      })
+      .catch(function(error) {
+        // An error happened.
+      });
+  };
+
   render() {
     return (
       <React.Fragment>
+        <button onClick={this.verifyUser}> CLICK ME</button>
         <CssBaseline />
 
         <AppBar position="static">

@@ -11,6 +11,7 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import auth from "../firebase";
+import firebase from "firebase";
 import API from "../utils/API";
 import { Grid } from "@material-ui/core";
 import landingBG from "../images/landingBG.jpg";
@@ -500,6 +501,19 @@ class SignIn extends React.Component {
   signOut = event => {
     event.preventDefault();
     auth.signOut();
+  };
+
+  verifyUser = () => {
+    let user = firebase.auth().currentUser;
+
+    user
+      .sendEmailVerification()
+      .then(function() {
+        alert("I should have sent");
+      })
+      .catch(function(error) {
+        // An error happened.
+      });
   };
 
   render() {
