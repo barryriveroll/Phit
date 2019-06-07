@@ -31,6 +31,7 @@ import {
 import blueGrey from "@material-ui/core/colors/blueGrey";
 import { Typography } from "@material-ui/core";
 import { setTimeout } from "timers";
+import firebase from "firebase";
 
 const theme = createMuiTheme({
   palette: {
@@ -61,9 +62,10 @@ class App extends Component {
   componentDidMount = () => {
     auth.onAuthStateChanged(firebaseUser => {
       this.setState({
-        user: firebaseUser.email
+        user: firebaseUser.email,
+        verified: firebaseUser.emailVerified
       });
-
+      console.log(firebaseUser);
       //USER AUTH STUFF
       if (firebaseUser) {
         API.findUser(firebaseUser.email).then(res => {
@@ -93,7 +95,7 @@ class App extends Component {
           );
         });
 
-        console.log("I AM THE FB USER" + JSON.stringify(firebaseUser.email));
+        console.log(`Am I verified? ${firebaseUser.emailVerified}`);
       } else {
         console.log("not logged in");
       }
@@ -309,7 +311,7 @@ class App extends Component {
                       exact
                       path="/"
                       render={() =>
-                        this.state.user ? (
+                        this.state.verified ? (
                           <Dashboard
                             xlFit={this.state.xlFit}
                             topPanel={this.state.topPanel}

@@ -11,7 +11,6 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import auth from "../firebase";
-import firebase from "firebase";
 import API from "../utils/API";
 import { Grid } from "@material-ui/core";
 import landingBG from "../images/landingBG.jpg";
@@ -19,6 +18,7 @@ import { css, cx } from "emotion";
 import FontAwesome from "react-fontawesome";
 import LandingChart from "../components/LandingChart";
 import Showcase from "../components/Showcase";
+import firebase from "firebase";
 
 const emotionClasses = {
   exampleBtn: {
@@ -457,15 +457,26 @@ class SignIn extends React.Component {
     this.setState({ exampleData: newData, options: newOptions, isPie });
   };
 
+  verifyUser = () => {
+    let verifiedUser = firebase.auth().currentUser;
+    verifiedUser
+      .sendEmailVerification()
+      .then(function() {})
+      .catch(function(error) {
+        console.log(error);
+      });
+  };
+
   createAccount = event => {
     event.preventDefault();
+
     auth
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then(res => {
         this.setState({
           errors: null
         });
-
+        this.verifyUser();
         API.createUser({ email: this.state.email }).then(res => {
           localStorage.userId = res.data._id;
           //setTimeout(() => this.props.history.push("/dashboard"), 500);
@@ -501,19 +512,6 @@ class SignIn extends React.Component {
   signOut = event => {
     event.preventDefault();
     auth.signOut();
-  };
-
-  verifyUser = () => {
-    let user = firebase.auth().currentUser;
-
-    user
-      .sendEmailVerification()
-      .then(function() {
-        alert("I should have sent");
-      })
-      .catch(function(error) {
-        // An error happened.
-      });
   };
 
   render() {
