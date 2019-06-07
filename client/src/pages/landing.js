@@ -12,13 +12,14 @@ import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import auth from "../firebase";
 import API from "../utils/API";
-import { Grid } from "@material-ui/core";
+import { Grid, Dialog } from "@material-ui/core";
 import landingBG from "../images/landingBG.jpg";
 import { css, cx } from "emotion";
 import FontAwesome from "react-fontawesome";
 import LandingChart from "../components/LandingChart";
 import Showcase from "../components/Showcase";
 import firebase from "firebase";
+import SimpleDialogDemo from "../components/Dialog";
 
 const emotionClasses = {
   exampleBtn: {
@@ -220,7 +221,8 @@ class SignIn extends React.Component {
         },
         position: "bottom"
       }
-    }
+    },
+    showModal: false
   };
 
   handleChange = e => {
@@ -457,7 +459,14 @@ class SignIn extends React.Component {
     this.setState({ exampleData: newData, options: newOptions, isPie });
   };
 
+  createAndVerify = event => {
+    event.preventDefault();
+    this.createAccount();
+    this.verifyUser();
+  };
+
   verifyUser = () => {
+    this.setState({ showModal: true });
     let verifiedUser = firebase.auth().currentUser;
     verifiedUser
       .sendEmailVerification()
@@ -468,8 +477,6 @@ class SignIn extends React.Component {
   };
 
   createAccount = event => {
-    event.preventDefault();
-
     auth
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then(res => {
@@ -477,6 +484,7 @@ class SignIn extends React.Component {
           errors: null
         });
         this.verifyUser();
+
         API.createUser({ email: this.state.email }).then(res => {
           localStorage.userId = res.data._id;
           //setTimeout(() => this.props.history.push("/dashboard"), 500);
@@ -486,6 +494,9 @@ class SignIn extends React.Component {
         this.setState({
           errors: error.message
         });
+      })
+      .then(() => {
+        this.setState({ email: "", password: "" });
       });
   };
 
@@ -524,6 +535,7 @@ class SignIn extends React.Component {
         justify="center"
         style={{ zIndex: 9001 }}
       >
+        {this.state.errors ? "" : this.state.showModal && <SimpleDialogDemo />}
         <Grid container className={classes.demo}>
           <Grid item sm={6}>
             <div className={classes.logo}>
@@ -548,7 +560,9 @@ class SignIn extends React.Component {
                 </Typography>
                 <form className={classes.form}>
                   <FormControl margin="normal" required fullWidth>
-                    <InputLabel htmlFor="email">Email Address</InputLabel>
+                    <InputLabel htmlFor="email">
+                      Verifiable Email Address
+                    </InputLabel>
                     <Input
                       id="email"
                       value={this.state.email}
@@ -599,7 +613,7 @@ class SignIn extends React.Component {
                   <Grid container spacing={8}>
                     <Grid item sm={12} md={6}>
                       <Button
-                        onClick={this.createAccount}
+                        onClick={this.createAndVerify}
                         fullWidth
                         variant="contained"
                         color="primary"
