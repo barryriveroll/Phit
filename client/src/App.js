@@ -99,6 +99,7 @@ class App extends Component {
       }
     });
   };
+
   signOut = event => {
     this.setState({ user: null, value: 0, darkMode: true }, () => {
       auth.signOut();

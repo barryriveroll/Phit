@@ -46,13 +46,8 @@ function NutritionTracker(props) {
       >
         Tracking
       </Typography>
-      <Grid
-        container
-        direction="row"
-        justify="space-between"
-        alignItems="center"
-      >
-        <Grid item xs={6} sm={6}>
+      <Grid spacing={16} container>
+        <Grid item xs={5} sm={5}>
           <IntegrationReactSelect
             fetchDropdownData={props.fetchDropdownData}
             handleLoadMealChange={props.handleLoadMealChange}
@@ -68,7 +63,7 @@ function NutritionTracker(props) {
             variant="filled"
           />
         </Grid>
-        <Grid item xs={6} sm={2}>
+        <Grid item xs={2} sm={2}>
           <FormControl>
             <Button
               disabled={!props.mealToLoad}
@@ -79,7 +74,7 @@ function NutritionTracker(props) {
               className={classes.margin}
               onClick={props.addMeal}
             >
-              Load Meal
+              Load
             </Button>
             <Button
               variant="contained"
@@ -89,7 +84,7 @@ function NutritionTracker(props) {
               className={classes.margin}
               onClick={props.addMeal}
             >
-              Add Meal
+              Add
             </Button>
           </FormControl>
         </Grid>
@@ -143,6 +138,7 @@ function NutritionTracker(props) {
                   changeQuantity={props.changeQuantity}
                   mealIndex={index}
                   data={meal}
+                  type="nutrition"
                 />
               </TabContainer>
             </div>

@@ -9,7 +9,6 @@ import NutritionPanel from "../components/panels/NutritionPanel";
 // Material UI imports
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
-import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -19,9 +18,10 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import Button from "@material-ui/core/Button";
 import Drawer from "@material-ui/core/Drawer";
 import Settings from "../pages/Settings";
+import Paper from "@material-ui/core/Paper";
 
 class Dashboard extends Component {
-  state = { xlFit: this.props.xlFit };
+  state = { xlFit: this.props.xlFit, value: 0 };
 
   componentDidMount = () => {
     setTimeout(
@@ -39,6 +39,10 @@ class Dashboard extends Component {
     this.setState({
       [side]: open
     });
+  };
+
+  handleChange = (event, value) => {
+    this.setState({ value });
   };
 
   render() {
@@ -61,7 +65,7 @@ class Dashboard extends Component {
             </Typography>
             <div>
               {this.state.user ? (
-                <Tabs value={0} onChange={this.handleChange} centered>
+                <Tabs value={0} centered>
                   <Tab
                     icon={<SettingsIcon />}
                     label={this.state.user.email}
@@ -72,6 +76,31 @@ class Dashboard extends Component {
             </div>
           </ToolBar>
         </AppBar>
+
+        <Paper style={{ flexGrow: 1 }}>
+          <AppBar position="static" color="default">
+            <Tabs
+              value={this.state.value}
+              onChange={this.handleChange}
+              indicatorColor="primary"
+              textColor="primary"
+              scrollButtons="auto"
+              centered
+            >
+              <Tab label="Nutrition" />
+              <Tab label="Fitness" />
+            </Tabs>
+          </AppBar>
+        </Paper>
+
+        <Grid container spacing={0} justify="center">
+          {this.state.value === 0 && (
+            <NutritionPanel xlNut={this.props.xlNut} theme={this.props.theme} />
+          )}
+          {this.state.value === 1 && (
+            <FitnessPanel xlFit={this.props.xlFit} theme={this.props.theme} />
+          )}
+        </Grid>
 
         {this.state.user ? (
           <Grid container spacing={0} justify="center">
@@ -107,12 +136,7 @@ class Dashboard extends Component {
           open={this.state.right}
           onClose={this.toggleSettings("right", false)}
         >
-          <div
-            tabIndex={0}
-            role="button"
-            // onClick={this.toggleSettings("right", false)}
-            // onKeyDown={this.toggleSettings("right", false)}
-          >
+          <div tabIndex={0} role="button">
             <div style={{ width: 350 }}>
               <Settings
                 currentUser={

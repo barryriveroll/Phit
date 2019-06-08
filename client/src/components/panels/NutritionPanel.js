@@ -22,7 +22,10 @@ const styles = theme => ({
     marginLeft: -16
   },
   margin: {
-    margin: theme.spacing.unit
+    margin: theme.spacing.unit,
+    [theme.breakpoints.down("xs")]: {
+      minWidth: 46
+    }
   },
   formControl: {
     margin: theme.spacing.unit,
