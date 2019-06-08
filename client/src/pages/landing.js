@@ -459,11 +459,11 @@ class SignIn extends React.Component {
     this.setState({ exampleData: newData, options: newOptions, isPie });
   };
 
-  createAndVerify = event => {
-    event.preventDefault();
-    this.createAccount();
-    this.verifyUser();
-  };
+  // createAndVerify = event => {
+  //   event.preventDefault();
+  //  this.createAccount();
+  //  this.verifyUser();
+  // };
 
   verifyUser = () => {
     this.setState({ showModal: true });
@@ -477,6 +477,7 @@ class SignIn extends React.Component {
   };
 
   createAccount = event => {
+    event.preventDefault();
     auth
       .createUserWithEmailAndPassword(this.state.email, this.state.password)
       .then(res => {
@@ -497,6 +498,7 @@ class SignIn extends React.Component {
       })
       .then(() => {
         this.setState({ email: "", password: "" });
+        this.verifyUser();
       });
   };
 
@@ -505,8 +507,10 @@ class SignIn extends React.Component {
     auth
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(res => {
+        console.log(res);
         this.setState({
-          errors: null
+          errors: null,
+          emailVerified: res.user.emailVerified
         });
         API.findUser(this.state.email).then(res => {
           localStorage.userId = res.data._id;
@@ -581,6 +585,9 @@ class SignIn extends React.Component {
                       }}
                     >
                       {this.state.errors}
+                      {this.state.emailVerified === false
+                        ? "Please verify your email"
+                        : null}
                     </div>
                   </FormControl>
                   <FormControl margin="normal" required fullWidth>
@@ -613,7 +620,7 @@ class SignIn extends React.Component {
                   <Grid container spacing={8}>
                     <Grid item sm={12} md={6}>
                       <Button
-                        onClick={this.createAndVerify}
+                        onClick={this.createAccount}
                         fullWidth
                         variant="contained"
                         color="primary"

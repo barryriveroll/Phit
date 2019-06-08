@@ -102,11 +102,14 @@ class App extends Component {
     });
   };
   signOut = event => {
-    this.setState({ user: null, value: 0, darkMode: true }, () => {
-      auth.signOut();
-      localStorage.userId = null;
-      this.pinkTheme();
-    });
+    this.setState(
+      { user: null, value: 0, darkMode: true, verified: false },
+      () => {
+        auth.signOut();
+        localStorage.userId = null;
+        this.pinkTheme();
+      }
+    );
   };
   //THEME STUFF
   theme = () => {
