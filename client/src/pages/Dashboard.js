@@ -1,10 +1,12 @@
 import React, { Component } from "react";
 import auth from "../firebase.js";
 import Meal from "./Meal";
+import firebase from "firebase";
 
 //Panel imports
 import FitnessPanel from "../components/panels/FitnessPanel";
 import NutritionPanel from "../components/panels/NutritionPanel";
+import Landing from "./landing";
 
 // Material UI imports
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -49,7 +51,6 @@ class Dashboard extends Component {
     return (
       <React.Fragment>
         <CssBaseline />
-
         <AppBar position="static">
           <ToolBar
             style={{
@@ -129,7 +130,7 @@ class Dashboard extends Component {
             )}
           </Grid>
         ) : (
-          "No user found"
+          "i am dumb"
         )}
         <Drawer
           anchor="right"
@@ -140,8 +141,9 @@ class Dashboard extends Component {
             <div style={{ width: 350 }}>
               <Settings
                 currentUser={
-                  this.state.user ? this.state.user.email : "no user"
+                  this.state.user ? this.state.user.email : "no user email"
                 }
+                toggleSettings={this.toggleSettings}
                 signOut={this.props.signOut}
                 handleSettingsChange={this.props.handleSettingsChange}
                 topPanel={this.props.topPanel}

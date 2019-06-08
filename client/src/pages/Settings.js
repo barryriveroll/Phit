@@ -88,6 +88,12 @@ const styles = theme => ({
 class Settings extends Component {
   state = {};
 
+  signOut = (signOutFunc, closeSettingsFunc) => {
+    closeSettingsFunc("right", false);
+
+    signOutFunc();
+  };
+
   render() {
     const { classes } = this.props;
 
@@ -129,7 +135,12 @@ class Settings extends Component {
                       color="secondary"
                       component={Link}
                       to="/"
-                      onClick={this.props.signOut}
+                      onClick={() =>
+                        this.signOut(
+                          this.props.signOut,
+                          this.props.toggleSettings
+                        )
+                      }
                     >
                       Sign Out
                     </Button>
