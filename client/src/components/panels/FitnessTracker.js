@@ -9,7 +9,8 @@ import Tab from "@material-ui/core/Tab";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import Table from "@material-ui/core/Table";
+// import Table from "@material-ui/core/Table";
+import TrackerTable from "../Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
@@ -67,7 +68,6 @@ function FitnessTracker(props) {
           <DatePickers
             margin="dense"
             label="Workout Date"
-            variant="filled"
             value={props.workoutDate}
             changeHandler={props.selectDate}
             name="workoutDate"
@@ -100,152 +100,24 @@ function FitnessTracker(props) {
       >
         {value === 0 && (
           <TabContainer>
-            <Table style={{ tableLayout: "auto" }}>
-              <colgroup>
-                <col style={{ width: "70%" }} />
-                <col style={{ width: "10%" }} />
-                <col style={{ width: "10%" }} />
-                <col style={{ width: "10%" }} />
-              </colgroup>
-              <TableHead>
-                <TableRow style={{ height: 30 }}>
-                  <TableCell className={classes.cell} align="right">
-                    Exercise
-                  </TableCell>
-                  <TableCell className={classes.cell} align="right">
-                    Reps
-                  </TableCell>
-                  <TableCell className={classes.cell} align="right">
-                    Sets
-                  </TableCell>
-                  <TableCell className={classes.cell} align="right">
-                    Weight
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {props.resistanceToAdd.map((exercise, index) => (
-                  <TableRow key={index}>
-                    <TableCell component="th" scope="row">
-                      <div
-                        onClick={() => props.clickDelete("resistance", index)}
-                        className={classes.cancelDiv}
-                      >
-                        <CancelIcon />
-                      </div>
-                      <Input
-                        error={props.nameError ? true : false}
-                        id={index.toString()}
-                        onChange={props.handleInputChange("resistanceToAdd")}
-                        name="name"
-                        placeholder="Exercise"
-                        className={classes.input}
-                        value={exercise.name}
-                      />
-                    </TableCell>
-                    <TableCell className={classes.cell} align="right">
-                      <Input
-                        id={index.toString()}
-                        name="reps"
-                        onChange={props.handleInputChange("resistanceToAdd")}
-                        style={{ width: 50 }}
-                        placeholder="Reps"
-                        type="number"
-                        className={classes.input}
-                        value={exercise.reps}
-                      />
-                    </TableCell>
-                    <TableCell className={classes.cell} align="right">
-                      <Input
-                        id={index.toString()}
-                        onChange={props.handleInputChange("resistanceToAdd")}
-                        name="sets"
-                        placeholder="Sets"
-                        type="number"
-                        className={classes.input}
-                        value={exercise.sets}
-                      />
-                    </TableCell>
-                    <TableCell className={classes.cell} align="right">
-                      <Input
-                        id={index.toString()}
-                        onChange={props.handleInputChange("resistanceToAdd")}
-                        name="weight"
-                        placeholder="Weight"
-                        type="number"
-                        className={classes.input}
-                        value={exercise.weight}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <TrackerTable
+              fitness
+              onChange={props.handleInputChange}
+              clickDelete={props.clickDelete}
+              type="resistance"
+              data={props.resistanceToAdd}
+            />
           </TabContainer>
         )}
         {value === 1 && (
           <TabContainer>
-            <Table style={{ tableLayout: "auto" }}>
-              <TableHead>
-                <TableRow style={{ height: 30 }}>
-                  <TableCell className={classes.cell} align="right">
-                    Exercise
-                  </TableCell>
-                  <TableCell className={classes.cell} align="right">
-                    Distance (mi)
-                  </TableCell>
-                  <TableCell className={classes.cell} align="right">
-                    Time (mins)
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {props.cardioToAdd.map((exercise, index) => (
-                  <TableRow key={index}>
-                    <TableCell component="th" scope="row">
-                      <div
-                        onClick={() => props.clickDelete("cardio", index)}
-                        className={classes.cancelDiv}
-                      >
-                        <CancelIcon />
-                      </div>
-                      <Input
-                        id={index.toString()}
-                        onChange={props.handleInputChange("cardioToAdd")}
-                        name="name"
-                        placeholder="Exercise"
-                        className={classes.input}
-                        value={exercise.name}
-                      />
-                    </TableCell>
-                    <TableCell className={classes.cell} align="right">
-                      <Input
-                        id={index.toString()}
-                        onChange={props.handleInputChange("cardioToAdd")}
-                        name="distance"
-                        style={{ width: 50 }}
-                        placeholder="Distance"
-                        type="number"
-                        className={classes.input}
-                        value={exercise.distance}
-                      />
-                    </TableCell>
-                    <TableCell className={classes.cell} align="right">
-                      <Input
-                        id={index.toString()}
-                        onChange={props.handleInputChange("cardioToAdd")}
-                        name="time"
-                        style={{ width: 50 }}
-                        placeholder="Time"
-                        type="number"
-                        className={classes.input}
-                        value={exercise.time}
-                      />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+            <TrackerTable
+              fitness
+              onChange={props.handleInputChange}
+              clickDelete={props.clickDelete}
+              type="cardio"
+              data={props.cardioToAdd}
+            />
           </TabContainer>
         )}
       </div>

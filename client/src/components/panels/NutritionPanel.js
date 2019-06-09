@@ -22,7 +22,10 @@ const styles = theme => ({
     marginLeft: -16
   },
   margin: {
-    margin: theme.spacing.unit
+    margin: theme.spacing.unit,
+    [theme.breakpoints.down("xs")]: {
+      minWidth: 46
+    }
   },
   formControl: {
     margin: theme.spacing.unit,
@@ -172,7 +175,6 @@ class NutritionPanel extends Component {
   };
 
   clickDelete = (index, foodIndex) => {
-    console.log("\n\n DELETE\n\n");
     let newArr = [...this.state.mealsToAdd];
     newArr[index].foodItem.splice(foodIndex, 1);
     this.setState({ mealsToAdd: newArr });

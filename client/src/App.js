@@ -59,6 +59,10 @@ class App extends Component {
     this.setState({ value });
   };
 
+  updateVerified = verified => {
+    this.setState({ verified });
+  };
+
   componentDidMount = () => {
     auth.onAuthStateChanged(firebaseUser => {
       this.setState({
@@ -101,6 +105,7 @@ class App extends Component {
       }
     });
   };
+
   signOut = event => {
     this.setState(
       { user: null, value: 0, darkMode: true, verified: false },
@@ -333,7 +338,7 @@ class App extends Component {
                             xlFit={this.state.xlFit}
                           />
                         ) : (
-                          <Landing />
+                          <Landing updateVerified={this.updateVerified} />
                         )
                       }
                     />

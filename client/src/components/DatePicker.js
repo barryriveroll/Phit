@@ -13,7 +13,7 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     width: 200,
     [theme.breakpoints.down("sm")]: {
-      width: 150
+      width: 136
     }
   }
 });
