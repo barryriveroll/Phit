@@ -103,6 +103,7 @@ function FitnessTracker(props) {
             <TrackerTable
               fitness
               onChange={props.handleInputChange}
+              clickDelete={props.clickDelete}
               type="resistance"
               data={props.resistanceToAdd}
             />
@@ -113,6 +114,7 @@ function FitnessTracker(props) {
             <TrackerTable
               fitness
               onChange={props.handleInputChange}
+              clickDelete={props.clickDelete}
               type="cardio"
               data={props.cardioToAdd}
             />

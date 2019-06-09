@@ -508,6 +508,7 @@ class SignIn extends React.Component {
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(res => {
         console.log(res);
+        this.props.updateVerified(res.user.emailVerified);
         this.setState({
           errors: null,
           emailVerified: res.user.emailVerified

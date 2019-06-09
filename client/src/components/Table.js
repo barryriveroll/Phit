@@ -26,15 +26,17 @@ function returnNutritionData(propData, changeQuantity, mealIndex, clickDelete) {
     let data = [...propData];
     data.forEach((food, index) => {
       newData.push({
-        name:
-          (
+        name: (
+          <>
             <div
               onClick={() => clickDelete(mealIndex, index)}
               // className={classes.cancelDiv}
             >
-              <CancelIcon />
+              <CancelIcon style={{ float: "left" }} />
             </div>
-          ) + food.name,
+            {food.name}
+          </>
+        ),
         servingQty: (
           <Input
             placeholder="1"
@@ -42,6 +44,7 @@ function returnNutritionData(propData, changeQuantity, mealIndex, clickDelete) {
             onChange={changeQuantity}
             type="number"
             inputProps={{
+              style: { padding: "0 0 7px" },
               name: mealIndex,
               id: index
             }}
@@ -59,8 +62,7 @@ function returnNutritionData(propData, changeQuantity, mealIndex, clickDelete) {
   }
 }
 
-function returnFitnessData(data, type, changeHandler) {
-  console.log(type);
+function returnFitnessData(data, type, changeHandler, clickDelete) {
   let newData = [];
 
   if (data) {
@@ -68,14 +70,23 @@ function returnFitnessData(data, type, changeHandler) {
       data.forEach((exercise, index) => {
         newData.push({
           exercise: (
-            <Input
-              id={index}
-              fullWidth
-              name="name"
-              onChange={changeHandler("resistanceToAdd")}
-              value={exercise.name}
-              type="text"
-            />
+            <>
+              <div
+                onClick={() => clickDelete("resistance", index)}
+                // className={classes.cancelDiv}
+              >
+                <CancelIcon style={{ float: "left" }} />
+              </div>
+
+              <Input
+                id={index}
+                fullWidth
+                name="name"
+                onChange={changeHandler("resistanceToAdd")}
+                value={exercise.name}
+                type="text"
+              />
+            </>
           ),
           sets: (
             <Input
@@ -110,14 +121,23 @@ function returnFitnessData(data, type, changeHandler) {
       data.forEach((exercise, index) => {
         newData.push({
           exercise: (
-            <Input
-              id={index}
-              fullWidth
-              name="name"
-              onChange={changeHandler("cardioToAdd")}
-              value={exercise.name}
-              type="text"
-            />
+            <>
+              <div
+                onClick={() => clickDelete("cardio", index)}
+                // className={classes.cancelDiv}
+              >
+                <CancelIcon style={{ float: "left" }} />
+              </div>
+
+              <Input
+                id={index}
+                fullWidth
+                name="name"
+                onChange={changeHandler("cardioToAdd")}
+                value={exercise.name}
+                type="text"
+              />
+            </>
           ),
           time: (
             <Input
@@ -268,12 +288,14 @@ class TrackerTable extends React.Component {
               ? returnFitnessData(
                   this.props.data,
                   this.props.type,
-                  this.props.onChange
+                  this.props.onChange,
+                  this.props.clickDelete
                 )
               : returnNutritionData(
                   this.props.data.foodItem,
                   this.props.changeQuantity,
-                  this.props.mealIndex
+                  this.props.mealIndex,
+                  this.props.clickDelete
                 )
           }
           columns={returnColumns(this.props.type)}

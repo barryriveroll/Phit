@@ -175,7 +175,6 @@ class NutritionPanel extends Component {
   };
 
   clickDelete = (index, foodIndex) => {
-    console.log("\n\n DELETE\n\n");
     let newArr = [...this.state.mealsToAdd];
     newArr[index].foodItem.splice(foodIndex, 1);
     this.setState({ mealsToAdd: newArr });

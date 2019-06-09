@@ -139,6 +139,7 @@ function NutritionTracker(props) {
                   mealIndex={index}
                   data={meal}
                   type="nutrition"
+                  clickDelete={props.clickDelete}
                 />
               </TabContainer>
             </div>
