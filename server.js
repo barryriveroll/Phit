@@ -1,6 +1,6 @@
 const express = require("express");
 const path = require("path");
-const PORT = process.env.PORT || 3001;
+const PORT = 27017;
 const app = express();
 const mongoose = require("mongoose");
 const routes = require("./routes");
@@ -18,12 +18,14 @@ app.use(routes);
 
 // Send every request to the React app
 // Define any API routes before this runs
-app.get("*", function(req, res) {
-  res.sendFile(path.join(__dirname, "./client/build/index.html"));
+app.get("/*", function(req, res) {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
 //setting up MongoDB
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/PHIT";
+var MONGODB_URI =
+  "mongodb://heroku_zpthwn7z:eiPemxQ4BevqENn@ds135456.mlab.com:35456/heroku_zpthwn7z";
+// ||"mongodb://localhost/PHIT";
 mongoose
   .connect(MONGODB_URI)
   .then(() => console.log(`connected to mongoDB`))

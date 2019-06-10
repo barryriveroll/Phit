@@ -36,6 +36,11 @@ const classes = {
     border-radius: 4px;
     box-shadow: 2px 4px 8px #00000063;
     text-shadow: 1px 1px 2px #0000008a;
+    @media (max-width: 700px) {
+      padding: 36px 16px;
+      margin: auto;
+      margin-bottom: 20px;
+    }
   `,
   gifDiv: css`
     width: 740px;
@@ -44,6 +49,21 @@ const classes = {
     border-radius: 4px;
     position: relative;
     box-shadow: 1px 1px 9px #00000080;
+    @media (max-width: 700px) {
+      width: auto;
+      height: calc(100% - 4px);
+    }
+  `,
+  paper: css`
+    height: 290px;
+    padding: 20px;
+    margin: 20px;
+    display: flex;
+    text-align: center;
+    @media (max-width: 700px) {
+      flex-direction: column;
+      height: auto;
+    }
   `
 };
 
@@ -64,12 +84,8 @@ class Showcase extends React.Component {
     const { props } = this;
     return (
       <Paper
+        className={classes.paper}
         style={{
-          height: 290,
-          padding: 20,
-          margin: 20,
-          display: "flex",
-          textAlign: "center",
           backgroundColor: props.background
         }}
       >
@@ -108,8 +124,8 @@ class Showcase extends React.Component {
                 }
               />
               <GifPlayer
-                gif={props.workout ? Gif2 : Gif3}
-                still={props.workout ? Still2 : Still3}
+                gif={props.workout ? Gif2 : props.meal ? Gif1 : Gif3}
+                still={props.workout ? Still2 : props.meal ? Still1 : Still3}
                 pauseRef={pause => (this.pauseGif = pause)}
               />
             </div>

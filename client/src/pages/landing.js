@@ -20,37 +20,58 @@ import LandingChart from "../components/LandingChart";
 import Showcase from "../components/Showcase";
 import firebase from "firebase";
 import SimpleDialogDemo from "../components/Dialog";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+// const matches = ;
 
 const emotionClasses = {
-  exampleBtn: {
-    width: 128,
-    height: 128,
-    borderRadius: "50%",
-    boxShadow: "2px 4px 7px #00000042",
-    transition: "all 0.1s",
-    position: "relative",
-    ":hover": {
-      cursor: "pointer",
-      boxShadow: "3px 6px 10px #00000042",
-      transform: "scale(1.1)"
+  exampleBtn: css`
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    box-shadow: 2px 4px 7px #00000042;
+    transition: all 0.1s;
+    position: relative;
+    padding: 37px;
+    &:hover {
+      cursor: pointer;
+      box-shadow: 3px 6px 10px #00000042;
+      transform: scale(1.1);
     }
-  },
+    @media (max-width: 700px) {
+      width: 114px;
+      height: 114px;
+      padding: 30px;
+    }
+  `,
+  pieBtn: css`
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    box-shadow: 2px 4px 7px #00000042;
+    transition: all 0.1s;
+    position: relative;
+    padding: 32px;
+    &:hover {
+      cursor: pointer;
+      box-shadow: 3px 6px 10px #00000042;
+      transform: scale(1.1);
+    }
+    @media (max-width: 700px) {
+      width: 114px;
+      height: 114px;
+      padding: 24px;
+    }
+  `,
   exampleIcon: {
     textShadow: "rgba(0, 0, 0, 0.36) 1px 1px 2px",
     pointerEvents: "none",
-    position: "absolute",
     color: "#252525",
-    top: 32,
-    right: 40,
     fontSize: "4rem"
   },
   pieIcon: {
     textShadow: "rgba(0, 0, 0, 0.36) 1px 1px 2px",
     pointerEvents: "none",
-    position: "absolute",
     color: "#252525",
-    top: 32,
-    right: 29,
     fontSize: "4rem"
   }
 };
@@ -65,7 +86,10 @@ const styles = theme => ({
     [theme.breakpoints.up("lg")]: {
       width: 1170
     },
-    marginTop: "200px "
+    [theme.breakpoints.down("xs")]: {
+      marginTop: "10px"
+    },
+    marginTop: "200px"
   },
   background: {
     background: `linear-gradient(rgba(84, 138, 130, 0.43), rgba(105, 89, 94, 0.6)), url(${landingBG})`,
@@ -75,7 +99,21 @@ const styles = theme => ({
     backgroundRepeat: "no-repeat",
     backgroundAttachment: "fixed"
   },
+  featureHeader: {
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "3.4rem !important"
+    },
+    textAlign: "center",
+    fontFamily: "lobster",
+    paddingBottom: 20
+  },
   logo: {
+    [theme.breakpoints.down("xs")]: {
+      height: 205,
+      width: 205,
+      top: 15,
+      left: "calc(50% - 102px)"
+    },
     height: 364,
     width: 364,
     top: 150,
@@ -89,12 +127,20 @@ const styles = theme => ({
     boxShadow: "4px 6px 8px #00000069"
   },
   main: {
+    [theme.breakpoints.down("xs")]: {
+      marginTop: 50
+    },
     width: 364,
     margin: "auto",
     marginTop: 150,
-    display: "block" // Fix IE 11 issue.
+    display: "block"
   },
   title: {
+    [theme.breakpoints.down("xs")]: {
+      fontSize: 100,
+      right: 30,
+      top: 54
+    },
     fontSize: 170,
     fontFamily: "Lobster",
     position: "absolute",
@@ -124,7 +170,11 @@ const styles = theme => ({
   phitlosophy: {},
   calorie: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
+    [theme.breakpoints.down("xs")]: {
+      margin: 12,
+      padding: 30
+    }
   },
   fitness: {},
   exampleBtn: {
@@ -154,6 +204,17 @@ const styles = theme => ({
     background: "red"
   }
 });
+
+let left = true;
+let x = window.matchMedia("(max-width: 700px)");
+
+function leftResponsive(x) {
+  if (x.matches) {
+    return false;
+  } else {
+    return true;
+  }
+}
 
 class SignIn extends React.Component {
   state = {
@@ -533,6 +594,9 @@ class SignIn extends React.Component {
   render() {
     const { classes } = this.props;
 
+    left = leftResponsive(x);
+    x.addListener(leftResponsive);
+
     return (
       <Grid
         container
@@ -542,14 +606,14 @@ class SignIn extends React.Component {
       >
         {this.state.errors ? "" : this.state.showModal && <SimpleDialogDemo />}
         <Grid container className={classes.demo}>
-          <Grid item sm={6}>
+          <Grid item xs={12} sm={6}>
             <div className={classes.logo}>
               <Typography className={classes.title} variant="h1">
                 Phit
               </Typography>
             </div>
           </Grid>
-          <Grid item sm={6}>
+          <Grid item xs={12} sm={6}>
             <main className={classes.main}>
               <CssBaseline />
               <Paper className={classes.paper}>
@@ -619,7 +683,7 @@ class SignIn extends React.Component {
                     )}
                   </FormControl>
                   <Grid container spacing={8}>
-                    <Grid item sm={12} md={6}>
+                    <Grid item xs={6} md={6}>
                       <Button
                         onClick={this.createAccount}
                         fullWidth
@@ -630,7 +694,7 @@ class SignIn extends React.Component {
                         Create Account
                       </Button>
                     </Grid>
-                    <Grid item sm={12} md={6}>
+                    <Grid item xs={6} md={6}>
                       <Button
                         onClick={this.signIn}
                         type="submit"
@@ -666,7 +730,7 @@ class SignIn extends React.Component {
               the aspects of nutrition and fitness tracking that matter most.
             </Typography>
           </Grid>
-          <Grid item sm={6} className={classes.calorie}>
+          <Grid item xs={12} sm={6} className={classes.calorie}>
             <Typography variant="h5" style={{ textAlign: "center" }}>
               Tracking your progress made simple
             </Typography>
@@ -680,7 +744,7 @@ class SignIn extends React.Component {
             <div className={classes.btnContainer}>
               <div>
                 <div
-                  className={css(emotionClasses.exampleBtn)}
+                  className={emotionClasses.exampleBtn}
                   style={{ backgroundColor: "#81C0AD" }}
                   id="ex1"
                   onClick={this.handleExampleClick}
@@ -700,7 +764,7 @@ class SignIn extends React.Component {
               </div>
               <div>
                 <div
-                  className={css(emotionClasses.exampleBtn)}
+                  className={emotionClasses.exampleBtn}
                   style={{ backgroundColor: "#BA7D8F" }}
                   id="ex2"
                   onClick={this.handleExampleClick}
@@ -720,7 +784,7 @@ class SignIn extends React.Component {
               </div>
               <div>
                 <div
-                  className={css(emotionClasses.exampleBtn)}
+                  className={emotionClasses.pieBtn}
                   style={{ backgroundColor: "#D3AE75" }}
                   id="ex3"
                   onClick={this.handleExampleClick}
@@ -758,14 +822,8 @@ class SignIn extends React.Component {
             className={classes.demo}
             style={{ zIndex: 100 }}
           >
-            <Grid item sm={12}>
-              <Typography
-                variant="h2"
-                style={{
-                  textAlign: "center",
-                  fontFamily: "lobster"
-                }}
-              >
+            <Grid item xs={12} sm={12}>
+              <Typography variant="h2" className={classes.featureHeader}>
                 <span
                   style={{
                     color: "#74d6c8",
@@ -783,12 +841,15 @@ class SignIn extends React.Component {
                 body="Both regular workouts and that one day you felt like changing it up can easily be added. See your progress report updated instantly."
                 workout
               />
+
               <Showcase
                 background="#81c0ad"
                 header="Create and save meals"
                 body="All your favorite meals can be loaded up and saved with just a couple of clicks. Want to change the serving size or add some food? No problem!"
-                left
+                left={left}
+                meal
               />
+
               <Showcase
                 background="#d3ae75"
                 header="Customize your dashboard"
