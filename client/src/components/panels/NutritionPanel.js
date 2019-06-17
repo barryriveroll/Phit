@@ -382,14 +382,9 @@ class NutritionPanel extends Component {
   };
 
   changeQuantity = event => {
-    console.log("\n\n CHANGE\n\n");
-
-    console.log(this.state.mealsToAdd);
     const { name, id, value } = event.target;
     let newFoodToAdd = [...this.state.mealsToAdd];
     newFoodToAdd[name].foodItem[id].servingQty = parseInt(value);
-    console.log(newFoodToAdd);
-
     this.setState({ mealsToAdd: newFoodToAdd });
   };
 
@@ -406,8 +401,6 @@ class NutritionPanel extends Component {
   };
 
   addMeal = () => {
-    console.log("\n\n ADD\n\n");
-
     let mealArray = [...this.state.mealsToAdd];
     mealArray.push({
       name: this.state.mealToLoad.label || this.state.mealName,
@@ -440,8 +433,6 @@ class NutritionPanel extends Component {
   };
 
   selectMealsByDate = date => {
-    console.log("\n\n SELECT\n\n");
-
     this.setState({ nutritionDate: date, value: 0 }, () => {
       API.getMealsByDate(this.state.nutritionDate, localStorage.userId).then(
         res => {
@@ -468,8 +459,6 @@ class NutritionPanel extends Component {
   };
 
   addFoodItem = food => {
-    console.log("\n\n ADD FOOD\n\n");
-
     const foodArr = [...this.state.mealsToAdd];
     foodArr[this.state.value].foodItem.push({
       name: food.foodItem[0].name,
@@ -480,7 +469,6 @@ class NutritionPanel extends Component {
       servingQty: food.foodItem[0].servingQty,
       servingUnit: food.foodItem[0].servingUnit
     });
-    // console.log(this.state.value)
     // debugger;
     this.setState({ mealsToAdd: foodArr });
   };

@@ -1,23 +1,11 @@
 import React, { Fragment, Component } from "react";
-import { withStyles } from "@material-ui/core/styles";
 import auth from "./firebase";
 import API from "./utils/API";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import AppBar from "@material-ui/core/AppBar";
-import ToolBar from "@material-ui/core/Toolbar";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Landing from "./pages/landing";
 import Dashboard from "./pages/Dashboard";
 import Settings from "./pages/Settings";
-import HomeIcon from "@material-ui/icons/Home";
-import DnsIcon from "@material-ui/icons/Dns";
-import SettingsIcon from "@material-ui/icons/Settings";
-import Button from "@material-ui/core/Button";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import Drawer from "@material-ui/core/Drawer";
-
-import SimpleTable from "./components/Table";
 
 import pink from "@material-ui/core/colors/pink";
 import cyan from "@material-ui/core/colors/cyan";
@@ -29,9 +17,6 @@ import {
   yellow
 } from "@material-ui/core/colors";
 import blueGrey from "@material-ui/core/colors/blueGrey";
-import { Typography } from "@material-ui/core";
-import { setTimeout } from "timers";
-import firebase from "firebase";
 
 const theme = createMuiTheme({
   palette: {
@@ -69,37 +54,38 @@ class App extends Component {
         user: firebaseUser.email,
         verified: firebaseUser.emailVerified
       });
-      console.log(firebaseUser);
       //USER AUTH STUFF
       if (firebaseUser) {
         API.findUser(firebaseUser.email).then(res => {
-          this.setState(
-            {
-              topPanel: res.data.topPanel,
-              darkMode: res.data.darkMode,
-              xlFit: res.data.xlFit,
-              xlNut: res.data.xlNut
-            },
-            () => {
-              switch (res.data.theme) {
-                case "orange":
-                  this.theme();
-                  break;
-                case "cyan":
-                  this.cyanTheme();
-                  break;
-                case "pink":
-                  this.pinkTheme();
-                  break;
-                case "grey":
-                  this.greyTheme();
-                  break;
+          if (res.data) {
+            this.setState(
+              {
+                topPanel: res.data.topPanel,
+                darkMode: res.data.darkMode,
+                xlFit: res.data.xlFit,
+                xlNut: res.data.xlNut
+              },
+              () => {
+                switch (res.data.theme) {
+                  case "orange":
+                    this.theme();
+                    break;
+                  case "cyan":
+                    this.cyanTheme();
+                    break;
+                  case "pink":
+                    this.pinkTheme();
+                    break;
+                  case "grey":
+                    this.greyTheme();
+                    break;
+                }
               }
-            }
-          );
+            );
+          } else {
+            console.log("NO USER FOUND IN DB");
+          }
         });
-
-        console.log(`Am I verified? ${firebaseUser.emailVerified}`);
       } else {
         console.log("not logged in");
       }

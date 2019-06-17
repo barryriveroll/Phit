@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import auth from "../firebase.js";
 import Meal from "./Meal";
 import firebase from "firebase";
@@ -21,6 +21,8 @@ import Button from "@material-ui/core/Button";
 import Drawer from "@material-ui/core/Drawer";
 import Settings from "../pages/Settings";
 import Paper from "@material-ui/core/Paper";
+
+let x = window.matchMedia("(max-width: 700px)");
 
 class Dashboard extends Component {
   state = { xlFit: this.props.xlFit, value: 0 };
@@ -78,59 +80,76 @@ class Dashboard extends Component {
           </ToolBar>
         </AppBar>
 
-        <Paper style={{ flexGrow: 1 }}>
-          <AppBar position="static" color="default">
-            <Tabs
-              value={this.state.value}
-              onChange={this.handleChange}
-              indicatorColor="primary"
-              textColor="primary"
-              scrollButtons="auto"
-              centered
-            >
-              <Tab label="Nutrition" />
-              <Tab label="Fitness" />
-            </Tabs>
-          </AppBar>
-        </Paper>
-
-        <Grid container spacing={0} justify="center">
-          {this.state.value === 0 && (
-            <NutritionPanel xlNut={this.props.xlNut} theme={this.props.theme} />
-          )}
-          {this.state.value === 1 && (
-            <FitnessPanel xlFit={this.props.xlFit} theme={this.props.theme} />
-          )}
-        </Grid>
-
-        {this.state.user ? (
-          <Grid container spacing={0} justify="center">
-            {this.props.topPanel === "fitness" ? (
-              <React.Fragment>
-                <FitnessPanel
-                  xlFit={this.props.xlFit}
-                  theme={this.props.theme}
-                />
-                <NutritionPanel
-                  xlNut={this.props.xlNut}
-                  theme={this.props.theme}
-                />
-              </React.Fragment>
+        {x.matches ? (
+          <Fragment>
+            {this.state.user ? (
+              <Fragment>
+                <Paper style={{ flexGrow: 1 }}>
+                  <AppBar position="static" color="default">
+                    <Tabs
+                      value={this.state.value}
+                      onChange={this.handleChange}
+                      indicatorColor="primary"
+                      textColor="primary"
+                      scrollButtons="auto"
+                      centered
+                    >
+                      <Tab label="Fitness" />
+                      <Tab label="Nutrition" />
+                    </Tabs>
+                  </AppBar>
+                </Paper>
+                <Grid container spacing={0} justify="center">
+                  {this.state.value === 0 && (
+                    <NutritionPanel
+                      xlNut={this.props.xlNut}
+                      theme={this.props.theme}
+                    />
+                  )}
+                  {this.state.value === 1 && (
+                    <FitnessPanel
+                      xlFit={this.props.xlFit}
+                      theme={this.props.theme}
+                    />
+                  )}
+                </Grid>{" "}
+              </Fragment>
             ) : (
-              <React.Fragment>
-                <NutritionPanel
-                  xlNut={this.props.xlNut}
-                  theme={this.props.theme}
-                />
-                <FitnessPanel
-                  xlFit={this.props.xlFit}
-                  theme={this.props.theme}
-                />
-              </React.Fragment>
+              ""
             )}
-          </Grid>
+          </Fragment>
         ) : (
-          "i am dumb"
+          <Fragment>
+            {this.state.user ? (
+              <Grid container spacing={0} justify="center">
+                {this.props.topPanel === "fitness" ? (
+                  <Fragment>
+                    <FitnessPanel
+                      xlFit={this.props.xlFit}
+                      theme={this.props.theme}
+                    />
+                    <NutritionPanel
+                      xlNut={this.props.xlNut}
+                      theme={this.props.theme}
+                    />
+                  </Fragment>
+                ) : (
+                  <Fragment>
+                    <NutritionPanel
+                      xlNut={this.props.xlNut}
+                      theme={this.props.theme}
+                    />
+                    <FitnessPanel
+                      xlFit={this.props.xlFit}
+                      theme={this.props.theme}
+                    />
+                  </Fragment>
+                )}
+              </Grid>
+            ) : (
+              ""
+            )}
+          </Fragment>
         )}
         <Drawer
           anchor="right"

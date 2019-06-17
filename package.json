@@ -2,7 +2,7 @@
   "name": "phit",
   "version": "1.0.0",
   "description": "Phit, nutrition and fitness tracking web app",
-  "homepage": ".",
+  "homepage": "https://phit.monstertooth.tech",
   "main": "server.js",
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
