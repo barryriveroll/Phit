@@ -94,8 +94,8 @@ class Dashboard extends Component {
                       scrollButtons="auto"
                       centered
                     >
-                      <Tab label="Fitness" />
                       <Tab label="Nutrition" />
+                      <Tab label="Fitness" />
                     </Tabs>
                   </AppBar>
                 </Paper>
