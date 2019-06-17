@@ -11,15 +11,6 @@ let widthSizes = {
 let rows = 6;
 let x = window.matchMedia("(max-width: 700px)");
 
-function ResistanceToRender(propData, changeHandler) {
-  let newData = [];
-  if (propData) {
-    let data = [...propData];
-
-    return newData;
-  }
-}
-
 function returnNutritionData(propData, changeQuantity, mealIndex, clickDelete) {
   let newData = [];
   if (propData) {
@@ -32,7 +23,7 @@ function returnNutritionData(propData, changeQuantity, mealIndex, clickDelete) {
               onClick={() => clickDelete(mealIndex, index)}
               // className={classes.cancelDiv}
             >
-              <CancelIcon style={{ float: "left" }} />
+              <CancelIcon style={{ float: "left", marginRight: 5 }} />
             </div>
             {food.name}
           </>
@@ -75,7 +66,7 @@ function returnFitnessData(data, type, changeHandler, clickDelete) {
                 onClick={() => clickDelete("resistance", index)}
                 // className={classes.cancelDiv}
               >
-                <CancelIcon style={{ float: "left" }} />
+                <CancelIcon style={{ float: "left", marginRight: 5 }} />
               </div>
 
               <Input

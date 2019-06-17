@@ -299,9 +299,6 @@ class FitnessPanel extends Component {
     this.state.cardioToAdd[id][name] = value;
     this.setState({ cardioToAdd: this.state.cardioToAdd });
   };
-  loadWorkOuts = event => {
-    API.findUserWorkOuts(localStorage.userId).then(res => console.log(res));
-  };
 
   saveDay = () => {
     let data = {
@@ -532,7 +529,6 @@ class FitnessPanel extends Component {
             selectDate={this.selectDate}
             woName={this.state.woName}
             handleNameChange={this.handleNameChange}
-            loadWorkOuts={this.loadWorkOuts}
             resistanceToAdd={this.state.resistanceToAdd}
             cardioToAdd={this.state.cardioToAdd}
             handleToggle={this.handleToggle}

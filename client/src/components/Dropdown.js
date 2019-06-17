@@ -139,7 +139,6 @@ class IntegrationAutosuggest extends React.Component {
     const APP_KEY = "368d7805ed86900874f9dc4fb92aba0f";
 
     let foodSearchQuery = userInput;
-    console.log(foodSearchQuery);
     const response = await fetch(
       "https://trackapi.nutritionix.com/v2/search/instant",
       {
@@ -158,7 +157,6 @@ class IntegrationAutosuggest extends React.Component {
       console.log("Error: " + response);
     }
     const data = await response.json();
-    console.log(data.common);
     const results = [];
     let length = 5;
     if (data.common.length < length) {

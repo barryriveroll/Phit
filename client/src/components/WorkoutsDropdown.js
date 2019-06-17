@@ -83,8 +83,6 @@ function Control(props) {
 }
 
 const handleInputChange = property => event => {
-  console.log(event.target.value);
-
   this.props.handleLoadMealChange();
 
   return e => {

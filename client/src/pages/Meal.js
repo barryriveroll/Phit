@@ -83,9 +83,6 @@ class Meal extends Component {
   };
 
   saveMeal(mealData) {
-    console.log("saving meal data to the database");
-    console.log(mealData);
-
     API.saveMeal(mealData)
       .then(res => this.load())
       .catch(err => console.log(err));
@@ -100,7 +97,6 @@ class Meal extends Component {
     const APP_KEY = "368d7805ed86900874f9dc4fb92aba0f";
 
     let foodSearchQuery = document.getElementById("foodSearchInput").value;
-    console.log(foodSearchQuery);
     for (let i = 0; i < 5; i++) {
       const response = await fetch(
         "https://trackapi.nutritionix.com/v2/natural/nutrients",
@@ -121,11 +117,7 @@ class Meal extends Component {
         console.log("Error: " + response);
       }
       const data = await response.json();
-
-      console.log(data);
-
       const results = data.foods;
-      // console.log(results);
 
       if (results !== undefined) {
         this.setState({ results });

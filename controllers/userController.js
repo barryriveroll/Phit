@@ -2,7 +2,6 @@ const db = require("../models");
 
 module.exports = {
   createUser: function(req, res) {
-    console.log(req.body);
     db.User.create(req.body).then(userData => res.json(userData));
   },
   findUser: function(req, res) {
@@ -49,7 +48,6 @@ module.exports = {
   },
 
   updateSettings: function(req, res) {
-    console.log(req.body);
     db.User.findByIdAndUpdate(req.body.id, {
       $set: {
         [req.body.setting]: req.body.settingValue
