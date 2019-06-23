@@ -5,7 +5,6 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 const mongoose = require("mongoose");
 const routes = require("./routes");
-var http = require("http");
 
 //Middleware
 app.use(express.urlencoded({ extended: true }));
@@ -42,7 +41,3 @@ mongoose
 app.listen(PORT, function() {
   console.log(`🌎 ==> API server now on port ${PORT}!`);
 });
-
-setInterval(function() {
-  http.get("https://phitness.herokuapp.com/");
-}, 300000); // every 5 minutes (300000)
