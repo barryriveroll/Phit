@@ -4,6 +4,7 @@ module.exports = {
   createUser: function(req, res) {
     db.User.create(req.body).then(userData => res.json(userData));
   },
+
   findUser: function(req, res) {
     db.User.findOne({ email: req.params.email }).then(dbData =>
       res.json(dbData)
