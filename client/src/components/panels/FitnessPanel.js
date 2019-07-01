@@ -226,11 +226,20 @@ class FitnessPanel extends Component {
   };
 
   handleClose = name => event => {
+    let joined;
     let value = 0;
-    if (name === "cardioToAdd") value = 1;
-
+    if (name === "cardioToAdd") {
+      value = 1;
+      joined = this.state[name].concat({ name: "" });
+    } else if (name === "resistanceToAdd") {
+      joined = this.state[name].concat({
+        name: "",
+        weight: [1],
+        reps: [1],
+        sets: 1
+      });
+    }
     if (name) {
-      let joined = this.state[name].concat({ name: "" });
       this.setState({ open: false, [name]: joined, value });
     } else {
       this.setState({ open: false });
@@ -284,6 +293,13 @@ class FitnessPanel extends Component {
     this.setState({ open: false, [name]: joined });
   };
 
+  handleResistanceArrayChange = (type, exerciseId) => event => {
+    const { value, id } = event.currentTarget;
+    let newRez = [...this.state.resistanceToAdd];
+    newRez[exerciseId][type][id] = parseInt(value);
+    this.setState({ resistanceToAdd: newRez });
+  };
+
   handleInputChange = type => event => {
     const { value, id, name } = event.currentTarget;
     let newExerciseArr = [...this.state[type]];
@@ -298,6 +314,15 @@ class FitnessPanel extends Component {
     const { value, id, name } = event.currentTarget;
     this.state.cardioToAdd[id][name] = value;
     this.setState({ cardioToAdd: this.state.cardioToAdd });
+  };
+
+  handleSetChange = event => {
+    const { value, id } = event.currentTarget;
+    let resistanceArrayCopy = [...this.state.resistanceToAdd];
+    resistanceArrayCopy[id].weight.length = value;
+    resistanceArrayCopy[id].reps.length = value;
+    resistanceArrayCopy[id].sets = value;
+    this.setState({ resistanceToAdd: resistanceArrayCopy });
   };
 
   saveDay = () => {
@@ -327,8 +352,8 @@ class FitnessPanel extends Component {
         data.WorkOut.resistance.push({
           name: resistance.name,
           sets: parseInt(resistance.sets),
-          reps: parseInt(resistance.reps),
-          weight: parseInt(resistance.weight)
+          reps: resistance.reps,
+          weight: resistance.weight
         });
       });
     }
@@ -515,6 +540,8 @@ class FitnessPanel extends Component {
         </Typography>
         <Grid item xs={12} md={this.props.xlFit ? 12 : 6}>
           <FitnessTracker
+            handleResistanceArrayChange={this.handleResistanceArrayChange}
+            handleSetChange={this.handleSetChange}
             clickDelete={this.clickDelete}
             errorMessage={this.state.errorMessage}
             fetchDropdownData={this.state.fetchDropdownData}

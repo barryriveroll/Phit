@@ -4,16 +4,26 @@ const resistanceSchema = new mongoose.Schema({
   name: { type: String, required: true, min: 1, max: 10000, trim: true },
   sets: { type: Number, required: true, min: 1, max: 10000, trim: true },
   reps: {
-    type: [Number],
+    type: [
+      {
+        type: Number,
+        min: 1
+      }
+    ],
     required: true,
-    min: 0,
+    min: 1,
     max: 10000,
     trim: true
   },
   weight: {
-    type: [Number],
+    type: [
+      {
+        type: Number,
+        min: 1
+      }
+    ],
     required: true,
-    min: 0,
+    min: 1,
     max: 10000,
     trim: true
   }
