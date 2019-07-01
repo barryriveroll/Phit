@@ -106,6 +106,8 @@ function FitnessTracker(props) {
               clickDelete={props.clickDelete}
               type="resistance"
               data={props.resistanceToAdd}
+              handleSetChange={props.handleSetChange}
+              handleResistanceArrayChange={props.handleResistanceArrayChange}
             />
           </TabContainer>
         )}

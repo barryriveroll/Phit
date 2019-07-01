@@ -53,7 +53,13 @@ function returnNutritionData(propData, changeQuantity, mealIndex, clickDelete) {
   }
 }
 
-function returnFitnessData(data, type, changeHandler, clickDelete) {
+function returnFitnessData(
+  data,
+  type,
+  changeHandler,
+  clickDelete,
+  handleSetChange
+) {
   let newData = [];
 
   if (data) {
@@ -76,6 +82,7 @@ function returnFitnessData(data, type, changeHandler, clickDelete) {
                 onChange={changeHandler("resistanceToAdd")}
                 value={exercise.name}
                 type="text"
+                inputProps={{ placeholder: "Exercise Name" }}
               />
             </>
           ),
@@ -83,9 +90,10 @@ function returnFitnessData(data, type, changeHandler, clickDelete) {
             <Input
               id={index}
               name="sets"
-              onChange={changeHandler("resistanceToAdd")}
+              onChange={handleSetChange}
               value={exercise.sets}
               type="number"
+              inputProps={{ min: 1, defaultValue: 1 }}
             />
           ),
           reps: (
@@ -95,6 +103,7 @@ function returnFitnessData(data, type, changeHandler, clickDelete) {
               onChange={changeHandler("resistanceToAdd")}
               value={exercise.reps}
               type="number"
+              inputProps={{ min: 1, defaultValue: 1 }}
             />
           ),
           weight: (
@@ -104,6 +113,7 @@ function returnFitnessData(data, type, changeHandler, clickDelete) {
               onChange={changeHandler("resistanceToAdd")}
               value={exercise.weight}
               type="number"
+              inputProps={{ min: 1, defaultValue: 1 }}
             />
           )
         });
@@ -155,6 +165,46 @@ function returnFitnessData(data, type, changeHandler, clickDelete) {
   return newData;
 }
 
+function resistanceSets(data, rowIndex, changeHandler, handleSetChange) {
+  let setData = [];
+
+  for (let i = 0; i < data[rowIndex].sets; i++) {
+    setData.push({
+      reps: (
+        <Input
+          id={i}
+          name="reps"
+          value={data[rowIndex].reps[i]}
+          type="number"
+          onChange={changeHandler("reps", rowIndex)}
+          inputProps={{ min: 1, defaultValue: 1 }}
+        />
+      ),
+      weight: (
+        <Input
+          id={i}
+          name="weight"
+          value={data[rowIndex].weight[i]}
+          type="number"
+          onChange={changeHandler("weight", rowIndex)}
+          inputProps={{ min: 1, defaultValue: 1 }}
+        />
+      )
+    });
+  }
+  // data.forEach((exercise, index) => {
+  //   setData.push({
+  //     reps: (
+  //       <Input id={index} name="reps" value={exercise.reps} type="number" />
+  //     ),
+  //     weight: (
+  //       <Input id={index} name="weight" value={exercise.weight} type="number" />
+  //     )
+  //   });
+  // });
+  return setData;
+}
+
 function columnResponsive(x, type) {
   if (x.matches) {
     switch (type) {
@@ -175,6 +225,31 @@ function columnResponsive(x, type) {
         return { bigWidth: 250, smallWidth: 134 };
     }
   }
+}
+
+function returnSubColumn() {
+  const classes = {
+    TableHeader: {
+      color: localStorage.getItem("secondaryTheme")
+    }
+  };
+  return [
+    {
+      Header: () => <span style={classes.TableHeader}>Set</span>,
+      width: widthSizes.smallWidth,
+      accessor: "setNumber"
+    },
+    {
+      Header: () => <span style={classes.TableHeader}>Reps</span>,
+      width: widthSizes.smallWidth,
+      accessor: "reps"
+    },
+    {
+      Header: () => <span style={classes.TableHeader}>Weight</span>,
+      width: widthSizes.smallWidth,
+      accessor: "weight"
+    }
+  ];
 }
 
 function returnColumns(type) {
@@ -270,17 +345,21 @@ function returnColumns(type) {
 }
 
 class TrackerTable extends React.Component {
+  state = {};
+
   render() {
     return (
       <>
         <ReactTable
+          collapseOnDataChange={false}
           data={
             this.props.fitness
               ? returnFitnessData(
                   this.props.data,
                   this.props.type,
                   this.props.onChange,
-                  this.props.clickDelete
+                  this.props.clickDelete,
+                  this.props.handleSetChange
                 )
               : returnNutritionData(
                   this.props.data.foodItem,
@@ -299,6 +378,27 @@ class TrackerTable extends React.Component {
           minRows={rows}
           showPagination={false}
           className="-striped -highlight"
+          SubComponent={
+            this.props.type === "resistance"
+              ? row => {
+                  return (
+                    <div style={{ padding: "20px" }}>
+                      <ReactTable
+                        data={resistanceSets(
+                          this.props.data,
+                          row.index,
+                          this.props.handleResistanceArrayChange,
+                          this.props.handleSetChange
+                        )}
+                        minRows={this.props.data[row.index].sets}
+                        columns={returnSubColumn()}
+                        showPagination={false}
+                      />
+                    </div>
+                  );
+                }
+              : null
+          }
         />
       </>
     );
