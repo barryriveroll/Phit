@@ -139,7 +139,11 @@ class Showcase extends React.Component {
           fullWidth
           maxWidth="md"
         >
-          <img style={{ width: "100%" }} src={this.state.fullScreenGif} />
+          <img
+            style={{ width: "100%" }}
+            alt="example"
+            src={this.state.fullScreenGif}
+          />
         </Dialog>
       </Paper>
     );

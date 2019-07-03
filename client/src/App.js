@@ -1,7 +1,7 @@
 import React, { Fragment, Component } from "react";
 import auth from "./firebase";
 import API from "./utils/API";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Landing from "./pages/landing";
 import Dashboard from "./pages/Dashboard";
 import Settings from "./pages/Settings";
@@ -9,13 +9,7 @@ import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 import pink from "@material-ui/core/colors/pink";
 import cyan from "@material-ui/core/colors/cyan";
-import {
-  deepOrange,
-  deepPurple,
-  purple,
-  teal,
-  yellow
-} from "@material-ui/core/colors";
+import { deepOrange, yellow } from "@material-ui/core/colors";
 import blueGrey from "@material-ui/core/colors/blueGrey";
 
 const theme = createMuiTheme({
@@ -27,6 +21,9 @@ const theme = createMuiTheme({
       main: localStorage.secondaryTheme || "#74d6c8"
     },
     type: localStorage.darkToggle || "dark"
+  },
+  typography: {
+    useNextVariants: true
   }
 });
 
@@ -79,6 +76,8 @@ class App extends Component {
                   case "grey":
                     this.greyTheme();
                     break;
+                  default:
+                    break;
                 }
               }
             );
@@ -121,6 +120,9 @@ class App extends Component {
               main: blueGrey[200]
             },
             type: colorType
+          },
+          typography: {
+            useNextVariants: true
           }
         })
       },
@@ -146,6 +148,9 @@ class App extends Component {
               main: "#74d6c8"
             },
             type: colorType
+          },
+          typography: {
+            useNextVariants: true
           }
         })
       },
@@ -169,6 +174,9 @@ class App extends Component {
               main: yellow[400]
             },
             type: colorType
+          },
+          typography: {
+            useNextVariants: true
           }
         })
       },
@@ -194,6 +202,9 @@ class App extends Component {
               main: "#eccc69"
             },
             type: colorType
+          },
+          typography: {
+            useNextVariants: true
           }
         })
       },
@@ -223,6 +234,9 @@ class App extends Component {
               main: newVar.palette.secondary.main
             },
             type: colorType
+          },
+          typography: {
+            useNextVariants: true
           }
         })
       },
@@ -258,8 +272,7 @@ class App extends Component {
   };
 
   render() {
-    const { value } = this.state;
-    let { pinkTheme, theme, cyanTheme, greyTheme, switchUp } = this.state;
+    let { theme } = this.state;
 
     return (
       <Router>
@@ -313,15 +326,11 @@ class App extends Component {
                             xlNut={this.state.xlNut}
                             signOut={this.signOut}
                             handleSettingsChange={this.handleSettingsChange}
-                            topPanel={this.state.topPanel}
                             orangeTheme={this.theme}
                             pinkTheme={this.pinkTheme}
                             greyTheme={this.greyTheme}
                             cyanTheme={this.cyanTheme}
                             switchUp={this.switchUp}
-                            theme={this.state.theme}
-                            xlNut={this.state.xlNut}
-                            xlFit={this.state.xlFit}
                           />
                         ) : (
                           <Landing updateVerified={this.updateVerified} />

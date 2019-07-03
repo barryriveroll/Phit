@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import Input from "@material-ui/core/Input";
@@ -92,26 +92,6 @@ function returnFitnessData(
               name="sets"
               onChange={handleSetChange}
               value={exercise.sets}
-              type="number"
-              inputProps={{ min: 1, defaultValue: 1 }}
-            />
-          ),
-          reps: (
-            <Input
-              id={index}
-              name="reps"
-              onChange={changeHandler("resistanceToAdd")}
-              value={exercise.reps}
-              type="number"
-              inputProps={{ min: 1, defaultValue: 1 }}
-            />
-          ),
-          weight: (
-            <Input
-              id={index}
-              name="weight"
-              onChange={changeHandler("resistanceToAdd")}
-              value={exercise.weight}
               type="number"
               inputProps={{ min: 1, defaultValue: 1 }}
             />
@@ -214,6 +194,8 @@ function columnResponsive(x, type) {
         return { bigWidth: 172, smallWidth: 65 };
       case "cardio":
         return { bigWidth: 172, smallWidth: 98 };
+      default:
+        break;
     }
   } else {
     switch (type) {
@@ -223,6 +205,8 @@ function columnResponsive(x, type) {
         return { bigWidth: 250, smallWidth: 92 };
       case "cardio":
         return { bigWidth: 250, smallWidth: 134 };
+      default:
+        break;
     }
   }
 }

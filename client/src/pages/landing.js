@@ -12,15 +12,15 @@ import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import auth from "../firebase";
 import API from "../utils/API";
-import { Grid, Dialog } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
 import landingBG from "../images/landingBG.jpg";
-import { css, cx } from "emotion";
+import { css } from "emotion";
 import FontAwesome from "react-fontawesome";
 import LandingChart from "../components/LandingChart";
 import Showcase from "../components/Showcase";
 import firebase from "firebase";
 import SimpleDialogDemo from "../components/Dialog";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
+
 // const matches = ;
 
 const emotionClasses = {
@@ -515,6 +515,8 @@ class SignIn extends React.Component {
           }
         };
         break;
+      default:
+        break;
     }
 
     this.setState({ exampleData: newData, options: newOptions, isPie });
@@ -816,10 +818,9 @@ class SignIn extends React.Component {
           }}
         >
           <Grid
-            style={{ marginTop: 100, marginBottom: 350 }}
+            style={{ marginTop: 100, marginBottom: 350, zIndex: 100 }}
             container
             className={classes.demo}
-            style={{ zIndex: 100 }}
           >
             <Grid item xs={12} sm={12}>
               <Typography variant="h2" className={classes.featureHeader}>

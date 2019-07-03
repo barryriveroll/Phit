@@ -2,13 +2,10 @@ import React from "react";
 import PropTypes from "prop-types";
 import deburr from "lodash/deburr";
 import Autosuggest from "react-autosuggest";
-import match from "autosuggest-highlight/match";
-import parse from "autosuggest-highlight/parse";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import { withStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
 
 var userInput = "";
 var suggestions = [];
@@ -40,14 +37,12 @@ function renderInputComponent(inputProps) {
   );
 }
 
-function renderSuggestion(suggestion, { query, isHighlighted }) {
-  const matches = match(suggestion.label, query);
-  const parts = parse(suggestion.label, matches);
+function renderSuggestion(suggestion, { isHighlighted }) {
   return (
     <MenuItem selected={isHighlighted} component="div">
       <div>
         <span style={{ fontWeight: 100, fontStyle: "bold" }}>
-          <img height="35" width="40" src={suggestion.img} />
+          <img alt="foodPicture" height="35" width="40" src={suggestion.img} />
           {suggestion.label}
         </span>
       </div>

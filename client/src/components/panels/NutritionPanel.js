@@ -189,6 +189,8 @@ class NutritionPanel extends Component {
       case "carbs":
         yAxis = "carbohydrates";
         break;
+      default:
+        break;
     }
 
     for (let j = 0; j < mealData.meal.length; j++) {
@@ -289,6 +291,8 @@ class NutritionPanel extends Component {
               break;
             case "protein":
               color = "#FFCE56";
+              break;
+            default:
               break;
           }
 

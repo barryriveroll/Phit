@@ -3,7 +3,6 @@ import FitnessTracker from "./FitnessTracker";
 import FitnessReports from "./FitnessReports";
 import moment from "moment";
 import API from "../../utils/API";
-import auth from "../../firebase.js";
 
 // Material UI imports
 import { withStyles } from "@material-ui/core/styles";
@@ -185,8 +184,8 @@ class FitnessPanel extends Component {
         res.data[0].resistance.forEach(exercise => {
           newResistance.push({
             name: exercise.name,
-            weight: exercise.weight[0],
-            reps: exercise.reps[0],
+            weight: exercise.weight,
+            reps: exercise.reps,
             sets: exercise.sets
           });
         });
@@ -312,7 +311,7 @@ class FitnessPanel extends Component {
   };
   handleCardio = event => {
     const { value, id, name } = event.currentTarget;
-    this.state.cardioToAdd[id][name] = value;
+    [...this.state.cardioToAdd[id][name]] = value;
     this.setState({ cardioToAdd: this.state.cardioToAdd });
   };
 
