@@ -1,5 +1,4 @@
 import React from "react";
-import moment from "moment";
 
 // Material UI imports
 import Typography from "@material-ui/core/Typography";
@@ -11,15 +10,9 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 // import Table from "@material-ui/core/Table";
 import TrackerTable from "../Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import DatePickers from "../DatePicker";
-import Input from "@material-ui/core/Input";
 import Grid from "@material-ui/core/Grid";
 import WorkoutsDropdown from "../WorkoutsDropdown";
-import CancelIcon from "@material-ui/icons/Cancel";
 
 function TabContainer(props) {
   return (
@@ -30,13 +23,6 @@ function TabContainer(props) {
 }
 
 function FitnessTracker(props) {
-  const classNames = {
-    errorTab: {
-      transition: "color 1s",
-      color: "red"
-    }
-  };
-
   const { value, classes } = props;
   return (
     <Paper className={props.xlFit ? classes.xlPaperHeight : classes.paper}>
@@ -145,7 +131,7 @@ function FitnessTracker(props) {
         <Grid item xs={2}>
           {/* Check for the first letter in error message, currently "Missing data..." */}
           <Typography
-            component="body1"
+            variant="body1"
             style={
               props.errorMessage.charAt(0) === "M"
                 ? { color: "red", marginTop: 6 }

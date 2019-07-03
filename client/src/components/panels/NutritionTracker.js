@@ -1,10 +1,9 @@
-import React, { Fragment } from "react";
+import React from "react";
 import Meal from "../../pages/Meal";
 import DatePickers from "../DatePicker";
 import IntegrationReactSelect from "../MealsDropdown";
 
 // Material UI imports
-import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
 import Paper from "@material-ui/core/Paper";
 import AppBar from "@material-ui/core/AppBar";
@@ -16,12 +15,6 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
 import TrackerTable from "../Table";
-
-const styles = {
-  root: {
-    width: 500
-  }
-};
 
 function TabContainer(props) {
   return (
@@ -70,7 +63,6 @@ function NutritionTracker(props) {
               variant="contained"
               size="small"
               color="primary"
-              disabled={!props.mealToLoad}
               className={classes.margin}
               onClick={props.addMeal}
             >
@@ -158,4 +150,4 @@ NutritionTracker.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(NutritionTracker);
+export default NutritionTracker;

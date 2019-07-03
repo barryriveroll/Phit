@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import API from "../utils/API";
 
 // Material UI imports
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -9,14 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Switch from "@material-ui/core/Switch";
-import Input from "@material-ui/core/Input";
-import NativeSelect from "@material-ui/core/NativeSelect";
-import Divider from "@material-ui/core/Divider";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
-import TextField from "@material-ui/core/TextField";
 import { Link } from "react-router-dom";
 
 const styles = theme => ({

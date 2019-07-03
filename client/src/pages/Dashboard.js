@@ -1,12 +1,9 @@
 import React, { Component, Fragment } from "react";
 import auth from "../firebase.js";
-import Meal from "./Meal";
-import firebase from "firebase";
 
 //Panel imports
 import FitnessPanel from "../components/panels/FitnessPanel";
 import NutritionPanel from "../components/panels/NutritionPanel";
-import Landing from "./landing";
 
 // Material UI imports
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -17,7 +14,6 @@ import Tab from "@material-ui/core/Tab";
 import AppBar from "@material-ui/core/AppBar";
 import ToolBar from "@material-ui/core/Toolbar";
 import SettingsIcon from "@material-ui/icons/Settings";
-import Button from "@material-ui/core/Button";
 import Drawer from "@material-ui/core/Drawer";
 import Settings from "../pages/Settings";
 import Paper from "@material-ui/core/Paper";
