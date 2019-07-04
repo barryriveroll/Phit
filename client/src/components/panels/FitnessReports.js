@@ -6,6 +6,9 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Grid from "@material-ui/core/Grid";
+import AddIcon from "@material-ui/icons/Add";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import Fab from "@material-ui/core/Fab";
 
 let x = window.matchMedia("(max-width: 700px)");
 let chartHeight = 50;
@@ -14,6 +17,20 @@ function myFunction(x) {
   if (x.matches) return 85;
   else return 50;
 }
+
+const classes = {
+  smallBtn: {
+    minHeight: 28,
+    width: 28,
+    height: 28
+  },
+  backBtn: {
+    minHeight: 28,
+    width: 28,
+    height: 28,
+    position: "absolute"
+  }
+};
 
 class FitnessReports extends Component {
   constructor(props) {
@@ -42,7 +59,8 @@ class FitnessReports extends Component {
               display: false
             },
             ticks: {
-              fontColor: this.props.textColor
+              fontColor: this.props.textColor,
+              fontSize: 10
             }
           }
         ],
@@ -78,6 +96,22 @@ class FitnessReports extends Component {
             labels: {
               show: true
             }
+          },
+          {
+            ticks: {
+              beginAtZero: true,
+              fontColor: this.props.textColor
+            },
+            type: "linear",
+            display: true,
+            position: "right",
+            id: "y-axis-3",
+            gridLines: {
+              display: false
+            },
+            labels: {
+              show: true
+            }
           }
         ]
       },
@@ -85,13 +119,13 @@ class FitnessReports extends Component {
         labels: {
           fontColor: this.props.textColor
         },
-        position: "bottom"
+        position: "top"
       }
     };
 
     return (
       <div>
-        <Grid container>
+        <Grid container justify="center">
           <FormControl>
             <InputLabel htmlFor="type-native-simple">Type</InputLabel>
             <Select
@@ -134,7 +168,7 @@ class FitnessReports extends Component {
                 : null}
             </Select>
           </FormControl>
-          <FormControl disabled={!this.props.exercise}>
+          {/* <FormControl disabled={!this.props.exercise}>
             <InputLabel htmlFor="reps-native-simple">Y-Axis</InputLabel>
             <Select
               style={{ width: 120, marginRight: 15 }}
@@ -159,9 +193,9 @@ class FitnessReports extends Component {
                 </Fragment>
               )}
             </Select>
-          </FormControl>
+          </FormControl> */}
 
-          <FormControl disabled={!this.props.yAxis}>
+          <FormControl disabled={!this.props.exercise}>
             <InputLabel htmlFor="timeframe-native-simple">Timeframe</InputLabel>
             <Select
               style={{ width: 120, marginRight: 15 }}
@@ -176,16 +210,62 @@ class FitnessReports extends Component {
               <option value="" />
               <option value={"thisWeek"}>This Week</option>
               <option value={"thisMonth"}>This Month</option>
+              <option value={"thisYear"}>This Year</option>
             </Select>
           </FormControl>
         </Grid>
 
-        <Bar
-          data={this.props.data}
-          width={100}
-          height={chartHeight}
-          options={mixedOptions}
-        />
+        {this.props.detailView ? (
+          <>
+            <Bar
+              // redraw
+              data={this.props.detailData}
+              width={100}
+              height={chartHeight}
+              options={mixedOptions}
+            />
+            <Fab
+              onClick={this.props.closeDetailView}
+              style={classes.backBtn}
+              size="small"
+              color="primary"
+              aria-label="Add"
+            >
+              <ChevronLeftIcon />
+            </Fab>
+          </>
+        ) : (
+          <>
+            <Bar
+              // redraw
+              data={this.props.data}
+              width={100}
+              height={chartHeight}
+              options={mixedOptions}
+            />
+          </>
+        )}
+        <Grid
+          style={{ marginLeft: 20, paddingRight: 57 }}
+          container
+          justify="space-evenly"
+        >
+          {this.props.data.datasets[0].data.map((data, index) => (
+            <Fab
+              key={index}
+              disabled={!data}
+              onClick={() =>
+                this.props.clickChartDetail(this.props.data.labels[index][1])
+              }
+              style={classes.smallBtn}
+              size="small"
+              color="secondary"
+              aria-label="Add"
+            >
+              <AddIcon />
+            </Fab>
+          ))}
+        </Grid>
       </div>
     );
   }
