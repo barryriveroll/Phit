@@ -547,7 +547,6 @@ class SignIn extends React.Component {
         this.setState({
           errors: null
         });
-        this.verifyUser();
 
         API.createUser({ email: this.state.email }).then(res => {
           localStorage.userId = res.data._id;
