@@ -7,6 +7,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
 
 let x = window.matchMedia("(max-width: 700px)");
 let chartHeight = 50;
@@ -46,7 +47,7 @@ class NutritionReports extends React.Component {
               fontColor: this.props.textColor
             },
             type: "linear",
-            display: true,
+            display: false,
             position: "left",
             id: "y-axis-1",
             gridLines: {
@@ -62,7 +63,7 @@ class NutritionReports extends React.Component {
         labels: {
           fontColor: this.props.textColor
         },
-        position: "bottom"
+        position: "top"
       }
     };
 
@@ -103,7 +104,7 @@ class NutritionReports extends React.Component {
         labels: {
           fontColor: this.props.textColor
         },
-        position: "bottom"
+        position: "top"
       }
     };
 
@@ -139,72 +140,64 @@ class NutritionReports extends React.Component {
             </Select>
           </FormControl>
 
-          {this.props.chartType ? (
-            this.props.chartType === "barChart" ? (
-              <div style={{ float: "left" }}>
-                <FormControl>
-                  <InputLabel htmlFor="type-native-simple">X-Axis</InputLabel>
-                  <Select
-                    style={{ width: 120, marginRight: 15 }}
-                    native
-                    value={this.props.xAxis}
-                    onChange={this.props.handleInputChange("xAxis")}
-                    inputProps={{
-                      name: "xAxis",
-                      id: "type-native-simple"
-                    }}
-                  >
-                    <option value="" />
-                    <option value={"thisWeek"}>This Week</option>
-                    <option value={"today"}>Today</option>
-                  </Select>
-                </FormControl>
-                {this.props.xAxis === "thisWeek" ? (
-                  <FormControl>
-                    <InputLabel htmlFor="type-native-simple">Y-Axis</InputLabel>
-                    <Select
-                      style={{ width: 120, marginRight: 15 }}
-                      native
-                      value={this.props.yAxis}
-                      onChange={this.props.handleInputChange("yAxis")}
-                      inputProps={{
-                        name: "yAxis",
-                        id: "type-native-simple"
-                      }}
-                    >
-                      <option value="" />
-                      <option value={"calories"}>Calories</option>
-                      <option value={"protein"}>Protein</option>
-                      <option value={"fat"}>Fat</option>
-                      <option value={"carbs"}>Carbs</option>
-                    </Select>
-                  </FormControl>
-                ) : null}
-              </div>
-            ) : (
-              <FormControl>
-                <InputLabel htmlFor="type-native-simple">Timeframe</InputLabel>
-                <Select
-                  style={{ width: 120, marginRight: 15 }}
-                  native
-                  value={this.props.xAxis}
-                  onChange={this.props.handleInputChange("xAxis")}
-                  inputProps={{
-                    name: "xAxis",
-                    id: "type-native-simple"
-                  }}
-                >
-                  <option value="" />
-                  <option value={"thisWeek"}>This Week</option>
-                  <option value={"today"}>Today</option>
-                </Select>
-              </FormControl>
-            )
-          ) : (
-            <Typography variant="caption">
-              Select a chart type to see more options
-            </Typography>
-          )}
+          <FormControl>
+            <InputLabel htmlFor="type-native-simple">Timeframe</InputLabel>
+            <Select
+              style={{ width: 120, marginRight: 15 }}
+              native
+              value={this.props.xAxis}
+              onChange={this.props.handleInputChange("xAxis")}
+              inputProps={{
+                name: "xAxis",
+                id: "type-native-simple"
+              }}
+            >
+              <option value="" />
+              <option value={"daily"}>Daily</option>
+              <option value={"weekly"}>Weekly</option>
+            </Select>
+          </FormControl>
+
+          <FormControl>
+            <TextField
+              id="date"
+              style={{ marginRight: 15 }}
+              value={this.props.chartWeek}
+              name="workoutDate"
+              onChange={this.props.selectWeek}
+              label=" "
+              type={this.props.xAxis === "weekly" ? "week" : "date"}
+              className={classes.textField}
+              InputLabelProps={{
+                shrink: true
+              }}
+            />
+          </FormControl>
+
+          <FormControl
+            disabled={
+              this.props.xAxis !== "weekly" &&
+              this.props.chartType !== "barChart"
+            }
+          >
+            <InputLabel htmlFor="type-native-simple">Y-Axis</InputLabel>
+            <Select
+              style={{ width: 120, marginRight: 15 }}
+              native
+              value={this.props.yAxis}
+              onChange={this.props.handleInputChange("yAxis")}
+              inputProps={{
+                name: "yAxis",
+                id: "type-native-simple"
+              }}
+            >
+              <option value="" />
+              <option value={"calories"}>Calories</option>
+              <option value={"protein"}>Protein</option>
+              <option value={"fat"}>Fat</option>
+              <option value={"carbs"}>Carbs</option>
+            </Select>
+          </FormControl>
 
           {this.props.chartType === "barChart" ? (
             <Bar

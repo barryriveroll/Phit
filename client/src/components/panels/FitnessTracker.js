@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 // Material UI imports
 import Typography from "@material-ui/core/Typography";
@@ -8,7 +8,6 @@ import Tab from "@material-ui/core/Tab";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-// import Table from "@material-ui/core/Table";
 import TrackerTable from "../Table";
 import DatePickers from "../DatePicker";
 import Grid from "@material-ui/core/Grid";
@@ -24,6 +23,7 @@ function TabContainer(props) {
 
 function FitnessTracker(props) {
   const { value, classes } = props;
+  const [selectedDate, handleDateChange] = useState(new Date());
   return (
     <Paper className={props.xlFit ? classes.xlPaperHeight : classes.paper}>
       <Typography
@@ -51,12 +51,17 @@ function FitnessTracker(props) {
           />
         </Grid>
         <Grid item xs={5}>
-          <DatePickers
-            margin="dense"
-            label="Workout Date"
+          <TextField
+            id="date"
             value={props.workoutDate}
-            changeHandler={props.selectDate}
             name="workoutDate"
+            onChange={props.selectDate}
+            label="Workout Date"
+            type="date"
+            className={classes.textField}
+            InputLabelProps={{
+              shrink: true
+            }}
           />
         </Grid>
       </Grid>

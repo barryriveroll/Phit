@@ -21,6 +21,9 @@ const styles = theme => ({
     paddingTop: 5,
     marginLeft: -16
   },
+  textField: {
+    width: 140
+  },
   margin: {
     margin: theme.spacing.unit,
     [theme.breakpoints.down("xs")]: {
@@ -116,6 +119,7 @@ const styles = theme => ({
 class NutritionPanel extends Component {
   state = {
     fetchDropdownData: false,
+    chartWeek: moment().week(),
     data: {
       labels: [],
       datasets: [
@@ -239,24 +243,31 @@ class NutritionPanel extends Component {
           const dateArray = [
             moment()
               .day("Sunday")
+              .week(this.state.chartWeek)
               .format("MM-DD-YYYY"),
             moment()
               .day("Monday")
+              .week(this.state.chartWeek)
               .format("MM-DD-YYYY"),
             moment()
               .day("Tuesday")
+              .week(this.state.chartWeek)
               .format("MM-DD-YYYY"),
             moment()
               .day("Wednesday")
+              .week(this.state.chartWeek)
               .format("MM-DD-YYYY"),
             moment()
               .day("Thursday")
+              .week(this.state.chartWeek)
               .format("MM-DD-YYYY"),
             moment()
               .day("Friday")
+              .week(this.state.chartWeek)
               .format("MM-DD-YYYY"),
             moment()
               .day("Saturday")
+              .week(this.state.chartWeek)
               .format("MM-DD-YYYY")
           ];
 

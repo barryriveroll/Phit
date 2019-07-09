@@ -1,8 +1,9 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { Bar } from "react-chartjs-2";
 
 // Material UI imports
 import InputLabel from "@material-ui/core/InputLabel";
+import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Grid from "@material-ui/core/Grid";
@@ -22,13 +23,22 @@ const classes = {
   smallBtn: {
     minHeight: 28,
     width: 28,
-    height: 28
+    height: 28,
+    transition: "0.5s all"
   },
   backBtn: {
     minHeight: 28,
     width: 28,
     height: 28,
-    position: "absolute"
+    position: "absolute",
+    top: "calc(50% - 14px)"
+  },
+  detailBtn: {
+    minHeight: 28,
+    width: 28,
+    height: 28,
+    transition: "0.5s all",
+    transform: "rotate(225deg)"
   }
 };
 
@@ -71,7 +81,7 @@ class FitnessReports extends Component {
               fontColor: this.props.textColor
             },
             type: "linear",
-            display: true,
+            display: false,
             position: "left",
             id: "y-axis-1",
             gridLines: {
@@ -87,7 +97,7 @@ class FitnessReports extends Component {
               fontColor: this.props.textColor
             },
             type: "linear",
-            display: true,
+            display: false,
             position: "right",
             id: "y-axis-2",
             gridLines: {
@@ -103,7 +113,7 @@ class FitnessReports extends Component {
               fontColor: this.props.textColor
             },
             type: "linear",
-            display: true,
+            display: false,
             position: "right",
             id: "y-axis-3",
             gridLines: {
@@ -117,7 +127,13 @@ class FitnessReports extends Component {
       },
       legend: {
         labels: {
-          fontColor: this.props.textColor
+          fontColor: this.props.textColor,
+          filter: (legendItem, chartData) => {
+            if (legendItem.datasetIndex === 1) {
+              if (this.props.type === "cardio") return false;
+            }
+            return true;
+          }
         },
         position: "top"
       }
@@ -168,35 +184,20 @@ class FitnessReports extends Component {
                 : null}
             </Select>
           </FormControl>
-          {/* <FormControl disabled={!this.props.exercise}>
-            <InputLabel htmlFor="reps-native-simple">Y-Axis</InputLabel>
-            <Select
-              style={{ width: 120, marginRight: 15 }}
-              native
-              value={this.props.reps}
-              onChange={this.props.handleChange("yAxis")}
-              inputProps={{
-                name: "reps",
-                id: "reps-native-simple"
-              }}
-            >
-              <option value="" />
-
-              {this.props.type === "resistance" ? (
-                <Fragment>
-                  <option value={"reps"}>Reps</option>
-                  <option value={"sets"}>Sets</option>
-                </Fragment>
-              ) : (
-                <Fragment>
-                  <option value={"time"}>Time</option>
-                </Fragment>
-              )}
-            </Select>
-          </FormControl> */}
-
           <FormControl disabled={!this.props.exercise}>
-            <InputLabel htmlFor="timeframe-native-simple">Timeframe</InputLabel>
+            <TextField
+              id="date"
+              value={this.props.chartWeek}
+              name="workoutDate"
+              onChange={this.props.selectWeek}
+              label=" "
+              type="week"
+              className={classes.textField}
+              InputLabelProps={{
+                shrink: true
+              }}
+            />
+            {/* <InputLabel htmlFor="timeframe-native-simple">Timeframe</InputLabel>
             <Select
               style={{ width: 120, marginRight: 15 }}
               native
@@ -211,7 +212,7 @@ class FitnessReports extends Component {
               <option value={"thisWeek"}>This Week</option>
               <option value={"thisMonth"}>This Month</option>
               <option value={"thisYear"}>This Year</option>
-            </Select>
+            </Select> */}
           </FormControl>
         </Grid>
 
@@ -224,15 +225,6 @@ class FitnessReports extends Component {
               height={chartHeight}
               options={mixedOptions}
             />
-            <Fab
-              onClick={this.props.closeDetailView}
-              style={classes.backBtn}
-              size="small"
-              color="primary"
-              aria-label="Add"
-            >
-              <ChevronLeftIcon />
-            </Fab>
           </>
         ) : (
           <>
@@ -245,21 +237,27 @@ class FitnessReports extends Component {
             />
           </>
         )}
-        <Grid
-          style={{ marginLeft: 20, paddingRight: 57 }}
-          container
-          justify="space-evenly"
-        >
+        <Grid container justify="space-around">
           {this.props.data.datasets[0].data.map((data, index) => (
             <Fab
               key={index}
-              disabled={!data}
-              onClick={() =>
-                this.props.clickChartDetail(this.props.data.labels[index][1])
+              disabled={!this.props.canClickDetail || !data}
+              onClick={
+                this.props.detailIndex == index
+                  ? this.props.closeDetailView
+                  : () =>
+                      this.props.clickChartDetail(
+                        this.props.data.labels[index][1],
+                        index
+                      )
               }
-              style={classes.smallBtn}
+              style={
+                this.props.detailIndex == index
+                  ? classes.detailBtn
+                  : classes.smallBtn
+              }
               size="small"
-              color="secondary"
+              color={this.props.detailIndex == index ? "primary" : "secondary"}
               aria-label="Add"
             >
               <AddIcon />

@@ -157,7 +157,9 @@ class FitnessPanel extends Component {
     exercise: "",
     detailView: false,
     yAxis: "",
-    queryData: []
+    queryData: [],
+    chartWeek: moment().week(),
+    canClickDetail: false
   };
 
   styles = {
@@ -172,10 +174,10 @@ class FitnessPanel extends Component {
     }
   };
 
-  clickChartDetail = date => {
+  clickChartDetail = (date, detailIndex) => {
     date = moment(date).format("YYYY-MM-DD");
     let index = this.state.queryData.findIndex(
-      loopburger => loopburger.date == date
+      loopburger => loopburger.date === date
     );
     let newLabels = [];
     let newLineData = this.state.queryData[index].resistance.reps;
@@ -213,11 +215,17 @@ class FitnessPanel extends Component {
       ]
     };
 
-    this.setState({ detailView: true, detailData });
+    this.setState({ detailView: true, detailData, detailIndex }, () =>
+      this.getWorkOutByTimeframe(this.state.exercise)
+    );
   };
 
   closeDetailView = () => {
-    this.setState({ detailView: false });
+    this.setState({
+      detailView: false,
+      detailIndex: null,
+      timeframe: "thisWeek"
+    });
   };
 
   clickDelete = (type, index) => {
@@ -229,12 +237,17 @@ class FitnessPanel extends Component {
 
   clickExerciseType = name => event => {
     const { value } = event.target;
-    this.setState({ [name]: value, yAxis: "" });
+    this.setState({
+      [name]: value,
+      yAxis: "",
+      exercise: "",
+      canClickDetail: false
+    });
   };
 
   clickExerciseName = name => event => {
     const { value } = event.target;
-    this.setState({ [name]: value }, () => {
+    this.setState({ [name]: value, canClickDetail: false }, () => {
       if (this.state.timeframe) {
         this.getWorkOutByTimeframe(this.state.exercise);
       }
@@ -277,7 +290,7 @@ class FitnessPanel extends Component {
 
   handleChange = name => event => {
     this.setState({ [name]: event.target.value }, () => {
-      if (name == "timeframe" || (name === "yAxis" && this.state.timeframe)) {
+      if (name === "timeframe" || (name === "yAxis" && this.state.timeframe)) {
         this.getWorkOutByTimeframe(this.state.exercise);
       }
     });
@@ -395,6 +408,10 @@ class FitnessPanel extends Component {
     resistanceArrayCopy[id].weight.length = value;
     resistanceArrayCopy[id].reps.length = value;
     resistanceArrayCopy[id].sets = value;
+    resistanceArrayCopy[id].weight[
+      resistanceArrayCopy[id].weight.length - 1
+    ] = 1;
+    resistanceArrayCopy[id].reps[resistanceArrayCopy[id].reps.length - 1] = 1;
     this.setState({ resistanceToAdd: resistanceArrayCopy });
   };
 
@@ -515,34 +532,42 @@ class FitnessPanel extends Component {
 
   getWorkOutByTimeframe = exercise => {
     API.workOutByWeek({
-      week: moment().week(),
+      week: this.state.chartWeek,
       name: exercise,
       user: localStorage.userId,
       type: this.state.type
     }).then(res => {
+      console.log(res.data);
       let newChartData = { ...this.state.data };
 
       const dateArray = [
         moment()
           .day("Sunday")
+          .week(this.state.chartWeek)
           .format("MM-DD-YYYY"),
         moment()
           .day("Monday")
+          .week(this.state.chartWeek)
           .format("MM-DD-YYYY"),
         moment()
           .day("Tuesday")
+          .week(this.state.chartWeek)
           .format("MM-DD-YYYY"),
         moment()
           .day("Wednesday")
+          .week(this.state.chartWeek)
           .format("MM-DD-YYYY"),
         moment()
           .day("Thursday")
+          .week(this.state.chartWeek)
           .format("MM-DD-YYYY"),
         moment()
           .day("Friday")
+          .week(this.state.chartWeek)
           .format("MM-DD-YYYY"),
         moment()
           .day("Saturday")
+          .week(this.state.chartWeek)
           .format("MM-DD-YYYY")
       ];
 
@@ -567,21 +592,38 @@ class FitnessPanel extends Component {
           newData[id] = this.returnAverage(res.data[i].resistance.weight);
           lineData[id] = this.returnAverage(res.data[i].resistance.reps);
           line2Data[id] = res.data[i].resistance.sets;
-          newChartData.datasets[1].label = "Weight";
+          newChartData.datasets[2].label = "Weight";
+          newChartData.datasets[0].label = "Reps";
+          newChartData.datasets[1].label = "Sets";
         } else if (this.state.type === "cardio") {
           newData[id] = res.data[i].cardio.distance;
-          newChartData.datasets[1].label = "Distance";
-          lineData[id] = res.data[i].cardio[this.state.yAxis];
+          lineData[id] = res.data[i].cardio["time"];
+          newChartData.datasets[2].label = "Distance";
+          newChartData.datasets[0].label = "Time";
         }
       }
 
       newChartData.datasets[2].data = newData;
-      newChartData.datasets[0].label = "Reps";
       newChartData.datasets[0].data = lineData;
       newChartData.datasets[1].data = line2Data;
-      newChartData.datasets[1].label = "Sets";
 
-      this.setState({ data: newChartData, queryData: res.data });
+      let queryData = [...res.data];
+      queryData.forEach(data => {
+        if (data.cardio) {
+          data.cardio = [];
+        }
+      });
+
+      let canClickDetail = false;
+      if (this.state.type === "resistance") {
+        canClickDetail = true;
+      }
+
+      this.setState({
+        data: newChartData,
+        queryData,
+        canClickDetail
+      });
     });
   };
 
@@ -608,6 +650,19 @@ class FitnessPanel extends Component {
   selectDate = event => {
     let newDate = event.target.value;
     this.returnWorkoutsByDate(newDate);
+  };
+
+  selectWeek = event => {
+    const week = event.target.value.split("W")[1];
+    this.setState(
+      {
+        chartWeek: week,
+        timeframe: "thisWeek",
+        detailView: false,
+        detailIndex: null
+      },
+      () => this.getWorkOutByTimeframe(this.state.exercise)
+    );
   };
 
   selectWorktout = name => event => {
@@ -667,9 +722,13 @@ class FitnessPanel extends Component {
               Reports
             </Typography>
             <FitnessReports
+              canClickDetail={this.state.canClickDetail}
+              selectWeek={this.selectWeek}
+              chartWeek={this.props.chartWeek}
               closeDetailView={this.closeDetailView}
               detailView={this.state.detailView}
               detailData={this.state.detailData}
+              detailIndex={this.state.detailIndex}
               data={this.state.data}
               clickChartDetail={this.clickChartDetail}
               workOuts={this.state.allWorkOuts}
