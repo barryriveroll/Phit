@@ -11,6 +11,7 @@ import pink from "@material-ui/core/colors/pink";
 import cyan from "@material-ui/core/colors/cyan";
 import { deepOrange, yellow } from "@material-ui/core/colors";
 import blueGrey from "@material-ui/core/colors/blueGrey";
+import { withStyles } from "@material-ui/core/styles";
 
 const theme = createMuiTheme({
   palette: {
@@ -24,6 +25,26 @@ const theme = createMuiTheme({
   },
   typography: {
     useNextVariants: true
+  }
+});
+
+const styles = theme => ({
+  "@global": {
+    "*::-webkit-scrollbar": {
+      width: 8
+    },
+
+    "*::-webkit-scrollbar-track": {
+      background: "#00000040"
+    },
+
+    "*::-webkit-scrollbar-thumb": {
+      background: localStorage.secondaryTheme
+    },
+
+    "*::-webkit-scrollbar-thumb:hover": {
+      background: localStorage.secondaryDarker
+    }
   }
 });
 
@@ -257,6 +278,10 @@ class App extends Component {
   };
 
   setLocalTheme = () => {
+    localStorage.setItem(
+      "secondaryDarker",
+      this.state.theme.palette.secondary.dark
+    );
     localStorage.setItem("primaryTheme", this.state.theme.palette.primary.main);
     localStorage.setItem(
       "secondaryTheme",
@@ -348,4 +373,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default withStyles(styles)(App);

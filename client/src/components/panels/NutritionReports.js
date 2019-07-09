@@ -32,7 +32,8 @@ class NutritionReports extends React.Component {
         xAxes: [
           {
             ticks: {
-              fontColor: this.props.textColor
+              fontColor: this.props.textColor,
+              fontSize: 10
             },
             display: true,
             gridLines: {
@@ -162,9 +163,9 @@ class NutritionReports extends React.Component {
             <TextField
               id="date"
               style={{ marginRight: 15 }}
-              value={this.props.chartWeek}
+              defaultValue={this.props.chartDate}
               name="workoutDate"
-              onChange={this.props.selectWeek}
+              onChange={this.props.selectChartTimeframe}
               label=" "
               type={this.props.xAxis === "weekly" ? "week" : "date"}
               className={classes.textField}
@@ -176,8 +177,9 @@ class NutritionReports extends React.Component {
 
           <FormControl
             disabled={
-              this.props.xAxis !== "weekly" &&
-              this.props.chartType !== "barChart"
+              this.props.xAxis === "daily" ||
+              this.props.xAxis === "" ||
+              this.props.chartType === "pieChart"
             }
           >
             <InputLabel htmlFor="type-native-simple">Y-Axis</InputLabel>

@@ -463,7 +463,11 @@ class FitnessPanel extends Component {
     this.setState({ fetchDropdownData: true, errorMessage: "" }, () => {
       API.saveWorkOut(data.WorkOut).then(res => {
         if (res.data.errors) {
-          this.setState({ errorMessage: "Missing workout info!" });
+          this.setState({ errorMessage: "Missing workout info!" }, () => {
+            setTimeout(() => {
+              this.setState({ errorMessage: "" });
+            }, 2000);
+          });
         } else {
           if (res.data.upserted) {
             API.pushWorkOut({
@@ -476,12 +480,19 @@ class FitnessPanel extends Component {
             this.getWorkOutByTimeframe(this.state.exercise);
           }
 
-          this.setState({
-            resistanceExerciseNames: resistanceNames,
-            cardioExerciseNames: cardioNames,
-            fetchDropdownData: false,
-            errorMessage: "Saved workout!"
-          });
+          this.setState(
+            {
+              resistanceExerciseNames: resistanceNames,
+              cardioExerciseNames: cardioNames,
+              fetchDropdownData: false,
+              errorMessage: "Saved workout!"
+            },
+            () => {
+              setTimeout(() => {
+                this.setState({ errorMessage: "" });
+              }, 2000);
+            }
+          );
         }
       });
     });
@@ -653,7 +664,8 @@ class FitnessPanel extends Component {
   };
 
   selectWeek = event => {
-    const week = event.target.value.split("W")[1];
+    let week = event.target.value.split("W")[1];
+    if (week === undefined) week = 52;
     this.setState(
       {
         chartWeek: week,
