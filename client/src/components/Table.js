@@ -3,12 +3,14 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 import Input from "@material-ui/core/Input";
 import CancelIcon from "@material-ui/icons/Cancel";
+import Typography from "@material-ui/core/Typography";
 
 let widthSizes = {
   bigWidth: 60,
   smallWidth: 60
 };
 let rows = 6;
+let tableHeight = "282px";
 let x = window.matchMedia("(max-width: 700px)");
 
 function returnNutritionData(propData, changeQuantity, mealIndex, clickDelete) {
@@ -150,6 +152,7 @@ function resistanceSets(data, rowIndex, changeHandler, handleSetChange) {
 
   for (let i = 0; i < data[rowIndex].sets; i++) {
     setData.push({
+      setNumber: <Typography variant="body1">{`Set ${i + 1}`}</Typography>,
       reps: (
         <Input
           id={i}
@@ -198,6 +201,8 @@ function columnResponsive(x, type) {
         break;
     }
   } else {
+    rows = 3;
+    tableHeight = "170px";
     switch (type) {
       case "nutrition":
         return { bigWidth: 135, smallWidth: 65 };
@@ -225,12 +230,12 @@ function returnSubColumn() {
     },
     {
       Header: () => <span style={classes.TableHeader}>Reps</span>,
-      width: widthSizes.smallWidth,
+      width: "200px",
       accessor: "reps"
     },
     {
       Header: () => <span style={classes.TableHeader}>Weight</span>,
-      width: widthSizes.smallWidth,
+      width: "200px",
       accessor: "weight"
     }
   ];
@@ -295,17 +300,17 @@ function returnColumns(type) {
         Header: () => <span style={classes.TableHeader}>Sets</span>,
         width: widthSizes.smallWidth,
         accessor: "sets"
-      },
-      {
-        Header: () => <span style={classes.TableHeader}>Reps</span>,
-        width: widthSizes.smallWidth,
-        accessor: "reps"
-      },
-      {
-        Header: () => <span style={classes.TableHeader}>Weight</span>,
-        width: widthSizes.smallWidth,
-        accessor: "weight"
       }
+      // {
+      //   Header: () => <span style={classes.TableHeader}>Reps</span>,
+      //   width: widthSizes.smallWidth,
+      //   accessor: "reps"
+      // },
+      // {
+      //   Header: () => <span style={classes.TableHeader}>Weight</span>,
+      //   width: widthSizes.smallWidth,
+      //   accessor: "weight"
+      // }
     ];
   } else if (type === "cardio") {
     return [
@@ -354,7 +359,7 @@ class TrackerTable extends React.Component {
           }
           columns={returnColumns(this.props.type)}
           style={{
-            height: "282px",
+            height: tableHeight,
             fontSize: 12,
             textAlign: "left"
           }}

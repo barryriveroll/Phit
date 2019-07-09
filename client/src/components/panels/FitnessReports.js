@@ -1,11 +1,15 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { Bar } from "react-chartjs-2";
 
 // Material UI imports
 import InputLabel from "@material-ui/core/InputLabel";
+import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Grid from "@material-ui/core/Grid";
+import AddIcon from "@material-ui/icons/Add";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import Fab from "@material-ui/core/Fab";
 
 let x = window.matchMedia("(max-width: 700px)");
 let chartHeight = 50;
@@ -14,6 +18,29 @@ function myFunction(x) {
   if (x.matches) return 85;
   else return 50;
 }
+
+const classes = {
+  smallBtn: {
+    minHeight: 28,
+    width: 28,
+    height: 28,
+    transition: "0.5s all"
+  },
+  backBtn: {
+    minHeight: 28,
+    width: 28,
+    height: 28,
+    position: "absolute",
+    top: "calc(50% - 14px)"
+  },
+  detailBtn: {
+    minHeight: 28,
+    width: 28,
+    height: 28,
+    transition: "0.5s all",
+    transform: "rotate(225deg)"
+  }
+};
 
 class FitnessReports extends Component {
   constructor(props) {
@@ -42,7 +69,8 @@ class FitnessReports extends Component {
               display: false
             },
             ticks: {
-              fontColor: this.props.textColor
+              fontColor: this.props.textColor,
+              fontSize: 10
             }
           }
         ],
@@ -53,7 +81,7 @@ class FitnessReports extends Component {
               fontColor: this.props.textColor
             },
             type: "linear",
-            display: true,
+            display: false,
             position: "left",
             id: "y-axis-1",
             gridLines: {
@@ -69,9 +97,25 @@ class FitnessReports extends Component {
               fontColor: this.props.textColor
             },
             type: "linear",
-            display: true,
+            display: false,
             position: "right",
             id: "y-axis-2",
+            gridLines: {
+              display: false
+            },
+            labels: {
+              show: true
+            }
+          },
+          {
+            ticks: {
+              beginAtZero: true,
+              fontColor: this.props.textColor
+            },
+            type: "linear",
+            display: false,
+            position: "right",
+            id: "y-axis-3",
             gridLines: {
               display: false
             },
@@ -83,15 +127,21 @@ class FitnessReports extends Component {
       },
       legend: {
         labels: {
-          fontColor: this.props.textColor
+          fontColor: this.props.textColor,
+          filter: (legendItem, chartData) => {
+            if (legendItem.datasetIndex === 1) {
+              if (this.props.type === "cardio") return false;
+            }
+            return true;
+          }
         },
-        position: "bottom"
+        position: "top"
       }
     };
 
     return (
       <div>
-        <Grid container>
+        <Grid container justify="center">
           <FormControl>
             <InputLabel htmlFor="type-native-simple">Type</InputLabel>
             <Select
@@ -135,34 +185,19 @@ class FitnessReports extends Component {
             </Select>
           </FormControl>
           <FormControl disabled={!this.props.exercise}>
-            <InputLabel htmlFor="reps-native-simple">Y-Axis</InputLabel>
-            <Select
-              style={{ width: 120, marginRight: 15 }}
-              native
-              value={this.props.reps}
-              onChange={this.props.handleChange("yAxis")}
-              inputProps={{
-                name: "reps",
-                id: "reps-native-simple"
+            <TextField
+              id="date"
+              value={this.props.chartWeek}
+              name="workoutDate"
+              onChange={this.props.selectWeek}
+              label=" "
+              type="week"
+              className={classes.textField}
+              InputLabelProps={{
+                shrink: true
               }}
-            >
-              <option value="" />
-
-              {this.props.type === "resistance" ? (
-                <Fragment>
-                  <option value={"reps"}>Reps</option>
-                  <option value={"sets"}>Sets</option>
-                </Fragment>
-              ) : (
-                <Fragment>
-                  <option value={"time"}>Time</option>
-                </Fragment>
-              )}
-            </Select>
-          </FormControl>
-
-          <FormControl disabled={!this.props.yAxis}>
-            <InputLabel htmlFor="timeframe-native-simple">Timeframe</InputLabel>
+            />
+            {/* <InputLabel htmlFor="timeframe-native-simple">Timeframe</InputLabel>
             <Select
               style={{ width: 120, marginRight: 15 }}
               native
@@ -176,16 +211,59 @@ class FitnessReports extends Component {
               <option value="" />
               <option value={"thisWeek"}>This Week</option>
               <option value={"thisMonth"}>This Month</option>
-            </Select>
+              <option value={"thisYear"}>This Year</option>
+            </Select> */}
           </FormControl>
         </Grid>
 
-        <Bar
-          data={this.props.data}
-          width={100}
-          height={chartHeight}
-          options={mixedOptions}
-        />
+        {this.props.detailView ? (
+          <>
+            <Bar
+              // redraw
+              data={this.props.detailData}
+              width={100}
+              height={chartHeight}
+              options={mixedOptions}
+            />
+          </>
+        ) : (
+          <>
+            <Bar
+              // redraw
+              data={this.props.data}
+              width={100}
+              height={chartHeight}
+              options={mixedOptions}
+            />
+          </>
+        )}
+        <Grid container justify="space-around">
+          {this.props.data.datasets[0].data.map((data, index) => (
+            <Fab
+              key={index}
+              disabled={!this.props.canClickDetail || !data}
+              onClick={
+                this.props.detailIndex == index
+                  ? this.props.closeDetailView
+                  : () =>
+                      this.props.clickChartDetail(
+                        this.props.data.labels[index][1],
+                        index
+                      )
+              }
+              style={
+                this.props.detailIndex == index
+                  ? classes.detailBtn
+                  : classes.smallBtn
+              }
+              size="small"
+              color={this.props.detailIndex == index ? "primary" : "secondary"}
+              aria-label="Add"
+            >
+              <AddIcon />
+            </Fab>
+          ))}
+        </Grid>
       </div>
     );
   }

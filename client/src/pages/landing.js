@@ -547,7 +547,6 @@ class SignIn extends React.Component {
         this.setState({
           errors: null
         });
-        this.verifyUser();
 
         API.createUser({ email: this.state.email }).then(res => {
           localStorage.userId = res.data._id;
@@ -686,6 +685,7 @@ class SignIn extends React.Component {
                   <Grid container spacing={8}>
                     <Grid item xs={6} md={6}>
                       <Button
+                        style={{ fontSize: "0.85rem" }}
                         onClick={this.createAccount}
                         fullWidth
                         variant="contained"
@@ -699,8 +699,9 @@ class SignIn extends React.Component {
                       <Button
                         onClick={this.signIn}
                         type="submit"
+                        style={{ fontSize: "0.85rem" }}
                         fullWidth
-                        variant="contained"
+                        variant="outlined"
                         color="primary"
                         className={classes.submit}
                       >
