@@ -232,7 +232,7 @@ class Meal extends Component {
                 onClick={this.handleSubmit}
                 disabled={this.state.food.length < 1}
               >
-                Search
+                Nutrition Detail
               </Button>
             </Grid>
             <Grid item>

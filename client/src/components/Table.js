@@ -13,7 +13,15 @@ let rows = 6;
 let tableHeight = "282px";
 let x = window.matchMedia("(max-width: 700px)");
 
-function returnNutritionData(propData, changeQuantity, mealIndex, clickDelete) {
+let test = { width: 300 };
+
+function returnNutritionData(
+  propData,
+  changeQuantity,
+  mealIndex,
+  clickDelete,
+  classes
+) {
   let newData = [];
   if (propData) {
     let data = [...propData];
@@ -21,11 +29,11 @@ function returnNutritionData(propData, changeQuantity, mealIndex, clickDelete) {
       newData.push({
         name: (
           <>
-            <div
-              onClick={() => clickDelete(mealIndex, index)}
-              // className={classes.cancelDiv}
-            >
-              <CancelIcon style={{ float: "left", marginRight: 5 }} />
+            <div onClick={() => clickDelete(mealIndex, index)}>
+              <CancelIcon
+                style={{ float: "left", marginRight: 5, cursor: "pointer" }}
+                className={classes.cancelTable}
+              />
             </div>
             {food.name}
           </>
@@ -60,7 +68,8 @@ function returnFitnessData(
   type,
   changeHandler,
   clickDelete,
-  handleSetChange
+  handleSetChange,
+  classes
 ) {
   let newData = [];
 
@@ -74,7 +83,10 @@ function returnFitnessData(
                 onClick={() => clickDelete("resistance", index)}
                 // className={classes.cancelDiv}
               >
-                <CancelIcon style={{ float: "left", marginRight: 5 }} />
+                <CancelIcon
+                  style={{ float: "left", marginRight: 5 }}
+                  className={classes.cancelTable}
+                />
               </div>
 
               <Input
@@ -348,13 +360,15 @@ class TrackerTable extends React.Component {
                   this.props.type,
                   this.props.onChange,
                   this.props.clickDelete,
-                  this.props.handleSetChange
+                  this.props.handleSetChange,
+                  this.props.classes
                 )
               : returnNutritionData(
                   this.props.data.foodItem,
                   this.props.changeQuantity,
                   this.props.mealIndex,
-                  this.props.clickDelete
+                  this.props.clickDelete,
+                  this.props.classes
                 )
           }
           columns={returnColumns(this.props.type)}

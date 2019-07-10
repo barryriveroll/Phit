@@ -4,6 +4,7 @@ import DatePickers from "../DatePicker";
 import IntegrationReactSelect from "../MealsDropdown";
 
 // Material UI imports
+import CancelIcon from "@material-ui/icons/Cancel";
 import PropTypes from "prop-types";
 import Paper from "@material-ui/core/Paper";
 import AppBar from "@material-ui/core/AppBar";
@@ -15,6 +16,17 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
 import TrackerTable from "../Table";
+
+let x = window.matchMedia("(max-width: 700px)");
+
+function myFunction(x) {
+  if (x.matches) return true;
+  else return false;
+}
+let mobile = myFunction(x);
+// mobile = myFunction(x);
+
+// x.addListener(myFunction);
 
 function TabContainer(props) {
   return (
@@ -49,6 +61,7 @@ function NutritionTracker(props) {
             fullWidth
             id="filled-dense"
             value={props.mealName}
+            inputProps={{ maxLength: 30 }}
             onChange={props.handleInputChange("mealName")}
             label="New meal name"
             style={{ padding: 0 }}
@@ -104,7 +117,27 @@ function NutritionTracker(props) {
         >
           {props.mealsToAdd.length ? (
             props.mealsToAdd.map((meal, index) => (
-              <Tab key={index} label={meal.name} />
+              <Tab
+                key={index}
+                label={
+                  <div>
+                    {value === index ? (
+                      <CancelIcon
+                        className={classes.cancel}
+                        onClick={() => props.deleteMeal(index)}
+                        style={
+                          mobile
+                            ? { float: "left", marginRight: 5 }
+                            : { position: "absolute", left: 0 }
+                        }
+                      />
+                    ) : (
+                      ""
+                    )}
+                    {meal.name}
+                  </div>
+                }
+              />
             ))
           ) : (
             <Tab label="No meals" />
@@ -132,6 +165,7 @@ function NutritionTracker(props) {
                   data={meal}
                   type="nutrition"
                   clickDelete={props.clickDelete}
+                  classes={classes}
                 />
               </TabContainer>
             </div>

@@ -21,6 +21,16 @@ const styles = theme => ({
     paddingTop: 5,
     marginLeft: -16
   },
+  cancel: {
+    "&:hover": {
+      color: theme.palette.primary.dark
+    }
+  },
+  cancelTable: {
+    "&:hover": {
+      color: theme.palette.text.disabled
+    }
+  },
   textField: {
     width: 140
   },
@@ -152,6 +162,20 @@ class NutritionPanel extends Component {
     newArr[index].foodItem.splice(foodIndex, 1);
     this.setState({ mealsToAdd: newArr });
   };
+  //COME BACK AND FIGURE THIS OUT
+  deleteMeal = index => {
+    this.setState({ value: 0 }, () => {
+      let value = this.state.value;
+      let newArr = [...this.state.mealsToAdd];
+      newArr.splice(index, 1);
+      if (this.state.value > newArr.length - 1) {
+        value = newArr.length - 1;
+      }
+      this.setState({ mealsToAdd: newArr, value }, () => {
+        this.saveNutritionDay();
+      });
+    });
+  };
 
   selectChartTimeframe = event => {
     if (this.state.xAxis === "weekly") {
@@ -272,7 +296,7 @@ class NutritionPanel extends Component {
             let color = "";
             switch (this.state.yAxis) {
               case "calories":
-                color = "cadetblue";
+                color = "#232323";
                 break;
               case "fat":
                 color = "#FF6384";
@@ -306,7 +330,6 @@ class NutritionPanel extends Component {
       API.getMealsByDate(this.state.chartDate, localStorage.userId).then(
         res => {
           if (res.data[0]) {
-            console.log(res.data);
             let dailyData = [0, 0, 0, 0];
             res.data[0].meal.forEach(meal => {
               meal.foodItem.forEach(foodItem => {
@@ -519,6 +542,7 @@ class NutritionPanel extends Component {
             addFoodItem={this.addFoodItem}
             saveNutritionDay={this.saveNutritionDay}
             changeQuantity={this.changeQuantity}
+            deleteMeal={this.deleteMeal}
           />
         </Grid>
         <Grid item xs={12} md={this.props.xlNut ? 12 : 6}>
