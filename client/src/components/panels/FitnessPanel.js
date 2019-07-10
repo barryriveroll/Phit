@@ -20,6 +20,12 @@ const styles = theme => ({
     margin: theme.spacing.unit,
     minWidth: 120
   },
+  cancelTable: {
+    "&:hover": {
+      color: theme.palette.text.disabled,
+      cursor: "pointer"
+    }
+  },
   container: {
     display: "grid",
     gridTemplateColumns: "repeat(12, 1fr)",
@@ -412,6 +418,12 @@ class FitnessPanel extends Component {
       resistanceArrayCopy[id].weight.length - 1
     ] = 1;
     resistanceArrayCopy[id].reps[resistanceArrayCopy[id].reps.length - 1] = 1;
+    for (let i = 0; i < resistanceArrayCopy[id].weight.length; i++) {
+      if (resistanceArrayCopy[id].weight[i] === null) {
+        resistanceArrayCopy[id].weight = 1;
+        resistanceArrayCopy[id].reps = 1;
+      }
+    }
     this.setState({ resistanceToAdd: resistanceArrayCopy });
   };
 
@@ -548,9 +560,7 @@ class FitnessPanel extends Component {
       user: localStorage.userId,
       type: this.state.type
     }).then(res => {
-      console.log(res.data);
       let newChartData = { ...this.state.data };
-
       const dateArray = [
         moment()
           .day("Sunday")

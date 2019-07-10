@@ -85,6 +85,8 @@ const styles = theme => ({
   suggestionsContainerOpen: {
     position: "absolute",
     zIndex: 1500,
+    top: "auto",
+    bottom: "100%",
     marginTop: theme.spacing.unit,
     left: 0,
     right: 0
@@ -102,7 +104,6 @@ const styles = theme => ({
 class IntegrationAutosuggest extends React.Component {
   state = {
     single: "",
-    popper: "",
     suggestions: []
   };
 

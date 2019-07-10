@@ -71,7 +71,7 @@ function FitnessTracker(props) {
           onChange={props.handleChange}
           indicatorColor="primary"
           textColor="primary"
-          variant="scrollable"
+          variant="fullWidth"
           scrollButtons="auto"
         >
           <Tab label="Resistance" />
@@ -92,6 +92,7 @@ function FitnessTracker(props) {
         {value === 0 && (
           <TabContainer>
             <TrackerTable
+              classes={classes}
               fitness
               onChange={props.handleInputChange}
               clickDelete={props.clickDelete}

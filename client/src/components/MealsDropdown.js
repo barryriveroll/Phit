@@ -216,6 +216,7 @@ class IntegrationReactSelect extends React.Component {
   };
 
   handleChange = name => value => {
+    console.log(value);
     if (value) this.props.handleLoadMealChange(value);
     this.setState({
       [name]: value,
