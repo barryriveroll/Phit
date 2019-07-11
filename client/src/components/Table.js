@@ -141,22 +141,22 @@ function returnFitnessData(
           ),
           time: (
             <Input
-              style={{ boxSizing: "content-box" }}
               id={index}
               name="time"
               onChange={changeHandler("cardioToAdd")}
               value={exercise.time}
               type="number"
+              inputProps={{ style: { boxSizing: "content-box" } }}
             />
           ),
           distance: (
             <Input
-              style={{ boxSizing: "content-box" }}
               id={index}
               name="distance"
               onChange={changeHandler("cardioToAdd")}
               value={exercise.distance}
               type="number"
+              inputProps={{ style: { boxSizing: "content-box" } }}
             />
           )
         });
@@ -359,6 +359,7 @@ class TrackerTable extends React.Component {
     return (
       <>
         <ReactTable
+          noDataText="No data! :("
           collapseOnDataChange={false}
           data={
             this.props.fitness

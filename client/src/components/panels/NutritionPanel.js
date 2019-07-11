@@ -56,7 +56,7 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit,
     height: 400,
     [theme.breakpoints.down("md")]: {
-      height: "70vh"
+      height: 512
     },
     display: "flex",
     flexDirection: "column",
