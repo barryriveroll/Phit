@@ -24,9 +24,6 @@ function myFunction(x) {
   else return false;
 }
 let mobile = myFunction(x);
-// mobile = myFunction(x);
-
-// x.addListener(myFunction);
 
 function TabContainer(props) {
   return (
@@ -151,10 +148,9 @@ function NutritionTracker(props) {
               className={classes.tableScrollBar}
               key={index}
               style={{
-                flexGrow: 1,
-                flexDirection: "column",
                 overflowY: "auto",
                 overflowX: "hidden",
+                marginBottom: 5,
                 backgroundColor: "#00000017"
               }}
             >

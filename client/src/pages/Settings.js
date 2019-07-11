@@ -10,6 +10,8 @@ import Button from "@material-ui/core/Button";
 import Switch from "@material-ui/core/Switch";
 import FormControl from "@material-ui/core/FormControl";
 import { Link } from "react-router-dom";
+import CloseIcon from "@material-ui/icons/Close";
+import Fab from "@material-ui/core/Fab";
 
 const styles = theme => ({
   margin: {
@@ -94,6 +96,15 @@ class Settings extends Component {
         <CssBaseline />
         <Grid container justify="center">
           <Grid spacing={8} container style={{ width: 1170 }}>
+            <Fab
+              onClick={() => this.props.toggleSettings("right", false)}
+              style={{ position: "absolute", top: 8, right: 7 }}
+              size="medium"
+              color="secondary"
+              aria-label="Add"
+            >
+              <CloseIcon />
+            </Fab>
             <Typography className={classes.panelName} variant="h3" gutterBottom>
               Settings
             </Typography>

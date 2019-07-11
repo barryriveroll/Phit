@@ -17,6 +17,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
+import MoodIcon from "@material-ui/icons/Mood";
 
 //Modal
 const styles = {
@@ -27,6 +28,26 @@ const styles = {
     flex: 1
   }
 };
+
+let buttonColor = "";
+let disabled = false;
+let success = false;
+
+function returnSaveSuccessOrFailureDependingOnCertainConditions() {
+  if (success) {
+    return <MoodIcon />;
+  } else {
+    return "Save";
+  }
+}
+
+function returnButtonColor() {
+  if (success) {
+    return "#469640";
+  } else {
+    return "";
+  }
+}
 
 function Transition(props) {
   return <Slide direction="up" {...props} />;
@@ -39,7 +60,8 @@ class Meal extends Component {
     food: "",
     open: false,
     foodNames: "",
-    foodData: []
+    foodData: [],
+    disabled: false
   };
 
   fetchInstantData = data => {
@@ -72,6 +94,21 @@ class Meal extends Component {
         user: firebaseUser
       });
     });
+  };
+
+  clickSave = fn => {
+    fn();
+
+    disabled = true;
+    setTimeout(() => {
+      disabled = false;
+      success = true;
+    }, 47);
+
+    setTimeout(() => {
+      success = false;
+      this.setState({ done: true });
+    }, 3047);
   };
 
   onChange = (value, name) => {
@@ -154,13 +191,7 @@ class Meal extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <Grid
-        style={{ marginTop: 6 }}
-        container
-        spacing={8}
-        direction="row"
-        justify="space-between"
-      >
+      <Grid container spacing={8} direction="row" justify="space-between">
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}
@@ -232,17 +263,23 @@ class Meal extends Component {
                 onClick={this.handleSubmit}
                 disabled={this.state.food.length < 1}
               >
-                Nutrition Detail
+                Detail
               </Button>
             </Grid>
             <Grid item>
               <Button
+                style={{
+                  width: 70,
+                  height: 30,
+                  backgroundColor: returnButtonColor()
+                }}
+                disabled={disabled}
                 variant="contained"
                 size="small"
                 color="secondary"
-                onClick={this.props.saveNutritionDay}
+                onClick={() => this.clickSave(this.props.saveNutritionDay)}
               >
-                Save
+                {returnSaveSuccessOrFailureDependingOnCertainConditions()}
               </Button>
             </Grid>
           </Grid>

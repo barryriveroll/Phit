@@ -187,6 +187,7 @@ class FitnessReports extends Component {
           <FormControl disabled={!this.props.exercise}>
             <TextField
               id="date"
+              style={{ width: 120 }}
               value={this.props.chartWeek}
               name="workoutDate"
               onChange={this.props.selectWeek}

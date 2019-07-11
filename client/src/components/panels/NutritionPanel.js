@@ -168,9 +168,12 @@ class NutritionPanel extends Component {
       let value = this.state.value;
       let newArr = [...this.state.mealsToAdd];
       newArr.splice(index, 1);
+
       if (this.state.value > newArr.length - 1) {
         value = newArr.length - 1;
+        if (value < 0) value = 0;
       }
+
       this.setState({ mealsToAdd: newArr, value }, () => {
         this.saveNutritionDay();
       });

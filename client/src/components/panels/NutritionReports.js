@@ -3,6 +3,7 @@ import { Bar, Pie } from "react-chartjs-2";
 
 // Material UI imports
 import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -122,11 +123,11 @@ class NutritionReports extends React.Component {
         >
           Reports
         </Typography>
-        <div>
+        <Grid container justify="center">
           <FormControl style={{ float: "left", marginBottom: 18 }}>
             <InputLabel htmlFor="type-native-simple">Type</InputLabel>
             <Select
-              style={{ width: 120, marginRight: 15 }}
+              style={{ width: 100, marginRight: 15 }}
               native
               value={this.props.chartType}
               onChange={this.props.handleInputChange("chartType")}
@@ -144,7 +145,7 @@ class NutritionReports extends React.Component {
           <FormControl>
             <InputLabel htmlFor="type-native-simple">Timeframe</InputLabel>
             <Select
-              style={{ width: 120, marginRight: 15 }}
+              style={{ width: 100, marginRight: 15 }}
               native
               value={this.props.xAxis}
               onChange={this.props.handleInputChange("xAxis")}
@@ -184,7 +185,7 @@ class NutritionReports extends React.Component {
           >
             <InputLabel htmlFor="type-native-simple">Y-Axis</InputLabel>
             <Select
-              style={{ width: 120, marginRight: 15 }}
+              style={{ width: 100, marginRight: 15 }}
               native
               value={this.props.yAxis}
               onChange={this.props.handleInputChange("yAxis")}
@@ -216,7 +217,7 @@ class NutritionReports extends React.Component {
               options={pieOptions}
             />
           )}
-        </div>
+        </Grid>
       </Paper>
     );
   }

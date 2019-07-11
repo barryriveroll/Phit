@@ -102,6 +102,8 @@ const styles = theme => ({
 class FitnessPanel extends Component {
   state = {
     value: 0,
+    saving: false,
+    saveSuccess: false,
     errorMessage: "",
     fetchDropdownData: false,
     data: {
@@ -428,84 +430,97 @@ class FitnessPanel extends Component {
   };
 
   saveDay = () => {
-    let data = {
-      WorkOut: {
-        date: this.state.workoutDate,
-        week: moment(this.state.workoutDate, "YYYY-MM-DD").week(),
-        user: localStorage.userId,
-        resistance: [],
-        cardio: []
+    this.setState({ saving: true }, () => {
+      let data = {
+        WorkOut: {
+          date: this.state.workoutDate,
+          week: moment(this.state.workoutDate, "YYYY-MM-DD").week(),
+          user: localStorage.userId,
+          resistance: [],
+          cardio: []
+        }
+      };
+
+      if (this.state.woName) {
+        data.WorkOut["name"] = this.state.woName;
       }
-    };
 
-    if (this.state.woName) {
-      data.WorkOut["name"] = this.state.woName;
-    }
+      let resistanceNames = [...this.state.resistanceExerciseNames];
+      let cardioNames = [...this.state.cardioExerciseNames];
 
-    let resistanceNames = [...this.state.resistanceExerciseNames];
-    let cardioNames = [...this.state.cardioExerciseNames];
+      if (this.state.resistanceToAdd.length) {
+        this.state.resistanceToAdd.map(resistance => {
+          if (!resistanceNames.includes(resistance.name)) {
+            resistanceNames.push(resistance.name);
+          }
 
-    if (this.state.resistanceToAdd.length) {
-      this.state.resistanceToAdd.map(resistance => {
-        if (!resistanceNames.includes(resistance.name)) {
-          resistanceNames.push(resistance.name);
-        }
-
-        data.WorkOut.resistance.push({
-          name: resistance.name,
-          sets: parseInt(resistance.sets),
-          reps: resistance.reps,
-          weight: resistance.weight
-        });
-      });
-    }
-    if (this.state.cardioToAdd.length) {
-      this.state.cardioToAdd.map(cardio => {
-        if (!cardioNames.includes(cardio.name)) {
-          cardioNames.push(cardio.name);
-        }
-        data.WorkOut.cardio.push({
-          name: cardio.name,
-          distance: parseInt(cardio.distance),
-          time: parseInt(cardio.time)
-        });
-      });
-    }
-
-    this.setState({ fetchDropdownData: true, errorMessage: "" }, () => {
-      API.saveWorkOut(data.WorkOut).then(res => {
-        if (res.data.errors) {
-          this.setState({ errorMessage: "Missing workout info!" }, () => {
-            setTimeout(() => {
-              this.setState({ errorMessage: "" });
-            }, 2000);
+          data.WorkOut.resistance.push({
+            name: resistance.name,
+            sets: parseInt(resistance.sets),
+            reps: resistance.reps,
+            weight: resistance.weight
           });
-        } else {
-          if (res.data.upserted) {
-            API.pushWorkOut({
-              userId: localStorage.userId,
-              id: res.data.upserted[0]._id
-            });
+        });
+      }
+      if (this.state.cardioToAdd.length) {
+        this.state.cardioToAdd.map(cardio => {
+          if (!cardioNames.includes(cardio.name)) {
+            cardioNames.push(cardio.name);
           }
+          data.WorkOut.cardio.push({
+            name: cardio.name,
+            distance: parseInt(cardio.distance),
+            time: parseInt(cardio.time)
+          });
+        });
+      }
 
-          if (this.state.timeframe) {
-            this.getWorkOutByTimeframe(this.state.exercise);
-          }
-
-          this.setState(
-            {
-              resistanceExerciseNames: resistanceNames,
-              cardioExerciseNames: cardioNames,
-              fetchDropdownData: false,
-              errorMessage: "Saved workout!"
-            },
-            () => {
-              setTimeout(() => {
-                this.setState({ errorMessage: "" });
-              }, 2000);
+      this.setState({ fetchDropdownData: true, errorMessage: "" }, () => {
+        API.saveWorkOut(data.WorkOut).then(res => {
+          if (res.data.errors) {
+            this.setState(
+              {
+                errorMessage: "Missing workout info!",
+                saving: false,
+                saveSuccess: false,
+                buttonColor: "#cc3737"
+              },
+              () => {
+                setTimeout(() => {
+                  this.setState({ errorMessage: "", buttonColor: "" });
+                }, 3000);
+              }
+            );
+          } else {
+            if (res.data.upserted) {
+              API.pushWorkOut({
+                userId: localStorage.userId,
+                id: res.data.upserted[0]._id
+              });
             }
-          );
-        }
+
+            if (this.state.timeframe) {
+              this.getWorkOutByTimeframe(this.state.exercise);
+            }
+
+            this.setState(
+              {
+                resistanceExerciseNames: resistanceNames,
+                cardioExerciseNames: cardioNames,
+                fetchDropdownData: false,
+                errorMessage: "Saved workout!",
+                saving: false,
+                buttonColor: "#469640",
+                saveSuccess: true
+              },
+              () => {
+                setTimeout(() => {
+                  this.setState({ errorMessage: "", buttonColor: "" });
+                }, 3000);
+              }
+            );
+          }
+        });
       });
     });
   };
@@ -609,7 +624,7 @@ class FitnessPanel extends Component {
       for (let i = 0; i < res.data.length; i++) {
         const dateToFind = moment(res.data[i].date).format("MM-DD-YYYY");
         const id = dateArray.indexOf(dateToFind);
-        if (this.state.type === "resistance") {
+        if (this.state.type === "resistance" && this.state.exercise) {
           newData[id] = this.returnAverage(res.data[i].resistance.weight);
           lineData[id] = this.returnAverage(res.data[i].resistance.reps);
           line2Data[id] = res.data[i].resistance.sets;
@@ -702,6 +717,9 @@ class FitnessPanel extends Component {
         </Typography>
         <Grid item xs={12} md={this.props.xlFit ? 12 : 6}>
           <FitnessTracker
+            saving={this.state.saving}
+            buttonColor={this.state.buttonColor}
+            saveSuccess={this.state.saveSuccess}
             handleResistanceArrayChange={this.handleResistanceArrayChange}
             handleSetChange={this.handleSetChange}
             clickDelete={this.clickDelete}
