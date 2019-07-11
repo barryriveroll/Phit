@@ -12,6 +12,7 @@ let widthSizes = {
 let rows = 6;
 let tableHeight = "282px";
 let x = window.matchMedia("(max-width: 700px)");
+// let width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
 let test = { width: 300 };
 
@@ -103,12 +104,15 @@ function returnFitnessData(
           sets: (
             <Input
               id={index}
-              style={{ borderSizing: "border-box" }}
               name="sets"
               onChange={handleSetChange}
               value={exercise.sets}
               type="number"
-              inputProps={{ min: 1, defaultValue: 1 }}
+              inputProps={{
+                min: 1,
+                defaultValue: 1,
+                style: { boxSizing: "content-box" }
+              }}
             />
           )
         });
@@ -137,7 +141,7 @@ function returnFitnessData(
           ),
           time: (
             <Input
-              style={{ borderSizing: "border-box" }}
+              style={{ boxSizing: "content-box" }}
               id={index}
               name="time"
               onChange={changeHandler("cardioToAdd")}
@@ -147,7 +151,7 @@ function returnFitnessData(
           ),
           distance: (
             <Input
-              style={{ borderSizing: "border-box" }}
+              style={{ boxSizing: "content-box" }}
               id={index}
               name="distance"
               onChange={changeHandler("cardioToAdd")}
