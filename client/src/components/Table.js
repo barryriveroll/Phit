@@ -103,12 +103,16 @@ function returnFitnessData(
           sets: (
             <Input
               id={index}
-              style={{ borderSizing: "border-box" }}
+              // style={{ boxSizing: "border-box" }}
               name="sets"
               onChange={handleSetChange}
               value={exercise.sets}
               type="number"
-              inputProps={{ min: 1, defaultValue: 1 }}
+              inputProps={{
+                min: 1,
+                defaultValue: 1,
+                style: { boxSizing: "content-box" }
+              }}
             />
           )
         });
@@ -137,7 +141,7 @@ function returnFitnessData(
           ),
           time: (
             <Input
-              style={{ borderSizing: "border-box" }}
+              style={{ boxSizing: "border-box" }}
               id={index}
               name="time"
               onChange={changeHandler("cardioToAdd")}
@@ -147,7 +151,7 @@ function returnFitnessData(
           ),
           distance: (
             <Input
-              style={{ borderSizing: "border-box" }}
+              style={{ boxSizing: "border-box" }}
               id={index}
               name="distance"
               onChange={changeHandler("cardioToAdd")}
