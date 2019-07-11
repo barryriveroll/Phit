@@ -103,6 +103,7 @@ function returnFitnessData(
           sets: (
             <Input
               id={index}
+              style={{ borderSizing: "border-box" }}
               name="sets"
               onChange={handleSetChange}
               value={exercise.sets}
@@ -136,6 +137,7 @@ function returnFitnessData(
           ),
           time: (
             <Input
+              style={{ borderSizing: "border-box" }}
               id={index}
               name="time"
               onChange={changeHandler("cardioToAdd")}
@@ -145,6 +147,7 @@ function returnFitnessData(
           ),
           distance: (
             <Input
+              style={{ borderSizing: "border-box" }}
               id={index}
               name="distance"
               onChange={changeHandler("cardioToAdd")}
@@ -214,7 +217,7 @@ function columnResponsive(x, type) {
     }
   } else {
     rows = 3;
-    tableHeight = "170px";
+    tableHeight = "176px";
     switch (type) {
       case "nutrition":
         return { bigWidth: 135, smallWidth: 65 };

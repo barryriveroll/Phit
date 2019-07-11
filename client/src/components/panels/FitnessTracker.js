@@ -9,9 +9,10 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import TrackerTable from "../Table";
-import DatePickers from "../DatePicker";
 import Grid from "@material-ui/core/Grid";
 import WorkoutsDropdown from "../WorkoutsDropdown";
+import MoodIcon from "@material-ui/icons/Mood";
+import MoodBadIcon from "@material-ui/icons/MoodBad";
 
 function TabContainer(props) {
   return (
@@ -19,6 +20,21 @@ function TabContainer(props) {
       {props.children}
     </Typography>
   );
+}
+
+function returnSaveSuccessOrFailureDependingOnCertainConditions(
+  saveSuccess,
+  errorMessage
+) {
+  if (errorMessage) {
+    if (saveSuccess) {
+      return <MoodIcon />;
+    } else {
+      return <MoodBadIcon />;
+    }
+  } else {
+    return "Save";
+  }
 }
 
 function FitnessTracker(props) {
@@ -82,8 +98,6 @@ function FitnessTracker(props) {
       <div
         className={classes.tableScrollBar}
         style={{
-          flexGrow: 1,
-          flexDirection: "column",
           overflowY: "auto",
           overflowX: "hidden",
           backgroundColor: "#00000017"
@@ -116,10 +130,11 @@ function FitnessTracker(props) {
         )}
       </div>
       <Grid style={{ marginTop: 6 }} container>
-        <Grid item xs={7}>
+        <Grid item xs={9}>
           <Button
             style={{ marginRight: 6 }}
             color="primary"
+            size="small"
             variant="contained"
             onClick={props.handleClose("resistanceToAdd")}
           >
@@ -129,33 +144,31 @@ function FitnessTracker(props) {
           <Button
             color="primary"
             variant="contained"
+            size="small"
             onClick={props.handleClose("cardioToAdd")}
           >
             Add Cardio
           </Button>
         </Grid>
-        <Grid item xs={2}>
-          {/* Check for the first letter in error message, currently "Missing data..." */}
-          <Typography
-            variant="body1"
-            style={
-              props.errorMessage.charAt(0) === "M"
-                ? { color: "red", marginTop: 6 }
-                : { color: "#34c334", marginTop: 6 }
-            }
-          >
-            {props.errorMessage}
-          </Typography>
-        </Grid>
         <Grid item xs={3}>
           <Button
             variant="contained"
-            style={{ float: "right" }}
+            size="small"
+            style={{
+              width: 70,
+              height: 30,
+              float: "right",
+              backgroundColor: props.buttonColor
+            }}
             color="secondary"
             onClick={props.saveDay}
             className={classes.button}
+            disabled={props.saving}
           >
-            Save
+            {returnSaveSuccessOrFailureDependingOnCertainConditions(
+              props.saveSuccess,
+              props.errorMessage
+            )}
           </Button>
         </Grid>
       </Grid>

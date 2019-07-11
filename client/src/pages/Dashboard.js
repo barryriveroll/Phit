@@ -35,7 +35,7 @@ class Dashboard extends Component {
     );
   };
 
-  toggleSettings = (side, open) => () => {
+  toggleSettings = (side, open) => {
     this.setState({
       [side]: open
     });
@@ -68,7 +68,7 @@ class Dashboard extends Component {
                   <Tab
                     icon={<SettingsIcon />}
                     label={this.state.user.email}
-                    onClick={this.toggleSettings("right", true)}
+                    onClick={() => this.toggleSettings("right", true)}
                   />
                 </Tabs>
               ) : null}
@@ -150,7 +150,7 @@ class Dashboard extends Component {
         <Drawer
           anchor="right"
           open={this.state.right}
-          onClose={this.toggleSettings("right", false)}
+          onClose={() => this.toggleSettings("right", false)}
         >
           <div tabIndex={0} role="button">
             <div style={{ width: 350 }}>
