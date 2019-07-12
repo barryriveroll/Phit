@@ -148,6 +148,8 @@ function NutritionTracker(props) {
               className={classes.tableScrollBar}
               key={index}
               style={{
+                flexGrow: 1,
+                flexDirection: "column",
                 overflowY: "auto",
                 overflowX: "hidden",
                 marginBottom: 5,

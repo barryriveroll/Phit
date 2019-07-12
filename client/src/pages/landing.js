@@ -21,8 +21,6 @@ import Showcase from "../components/Showcase";
 import firebase from "firebase";
 import SimpleDialogDemo from "../components/Dialog";
 
-// const matches = ;
-
 const emotionClasses = {
   exampleBtn: css`
     width: 128px;
@@ -176,7 +174,6 @@ const styles = theme => ({
       padding: 30
     }
   },
-  fitness: {},
   exampleBtn: {
     width: 128,
     height: 128,
@@ -819,7 +816,7 @@ class SignIn extends React.Component {
           }}
         >
           <Grid
-            style={{ marginTop: 100, marginBottom: 350, zIndex: 100 }}
+            style={{ marginTop: 100, zIndex: 100 }}
             container
             className={classes.demo}
           >

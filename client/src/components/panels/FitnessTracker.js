@@ -98,6 +98,8 @@ function FitnessTracker(props) {
       <div
         className={classes.tableScrollBar}
         style={{
+          flexGrow: 1,
+          flexDirection: "column",
           overflowY: "auto",
           overflowX: "hidden",
           backgroundColor: "#00000017"

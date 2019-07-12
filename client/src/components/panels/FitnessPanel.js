@@ -411,7 +411,9 @@ class FitnessPanel extends Component {
   };
 
   handleSetChange = event => {
-    const { value, id } = event.currentTarget;
+    let { value, id } = event.currentTarget;
+    if (value < 1) value = 1;
+    if (value > 20) value = 20;
     let resistanceArrayCopy = [...this.state.resistanceToAdd];
     resistanceArrayCopy[id].weight.length = value;
     resistanceArrayCopy[id].reps.length = value;
