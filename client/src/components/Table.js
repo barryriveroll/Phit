@@ -110,6 +110,7 @@ function returnFitnessData(
               type="number"
               inputProps={{
                 min: 1,
+                max: 20,
                 defaultValue: 1,
                 style: { boxSizing: "content-box" }
               }}
@@ -381,7 +382,7 @@ class TrackerTable extends React.Component {
           }
           columns={returnColumns(this.props.type)}
           style={{
-            height: tableHeight,
+            // height: tableHeight,
             fontSize: 12,
             textAlign: "left"
           }}
@@ -401,6 +402,7 @@ class TrackerTable extends React.Component {
                           this.props.handleResistanceArrayChange,
                           this.props.handleSetChange
                         )}
+                        resizable={false}
                         minRows={this.props.data[row.index].sets}
                         columns={returnSubColumn()}
                         showPagination={false}
