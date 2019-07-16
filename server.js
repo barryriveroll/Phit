@@ -1,6 +1,5 @@
 const express = require("express");
 const path = require("path");
-// const PORT = 3001;
 const PORT = process.env.PORT || 3001;
 const app = express();
 const mongoose = require("mongoose");
@@ -20,10 +19,6 @@ app.use(routes);
 
 // Send every request to the React app
 // Define any API routes before this runs
-// app.get("/*", function(req, res) {
-//   res.sendFile(path.join(__dirname, "build", "index.html"));
-// });
-
 app.get("/*", function(req, res) {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
@@ -31,8 +26,8 @@ app.get("/*", function(req, res) {
 //setting up MongoDB
 var MONGODB_URI =
   "mongodb+srv://userTest:mongopassword2@phitdb-x1t0p.mongodb.net/PhitDB";
+// "mongodb://localhost/PHIT";
 
-//"mongodb://localhost/PHIT";
 mongoose
   .connect(MONGODB_URI)
   .then(() => console.log(`connected to mongoDB`))

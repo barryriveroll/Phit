@@ -26,6 +26,11 @@
     "autosuggest-highlight": "^3.1.1",
     "emotion": "^10.0.9",
     "express": "^4.16.3",
+    "express-fileupload": "^1.1.5",
+    "filepond": "^4.4.11",
+    "filepond-plugin-file-validate-size": "^2.2.0",
+    "filepond-plugin-image-exif-orientation": "^1.0.6",
+    "filepond-plugin-image-preview": "^4.2.1",
     "font-awesome": "^4.7.0",
     "i": "^0.3.6",
     "if-env": "^1.0.4",
@@ -34,10 +39,13 @@
     "react": "^16.8.6",
     "react-autosuggest": "^9.4.3",
     "react-dom": "^16.8.6",
+    "react-filepond": "^7.0.1",
     "react-fontawesome": "^1.6.1",
     "react-gif-player": "^0.4.2",
+    "react-images-upload": "^1.2.7",
     "react-select": "^2.4.2",
     "react-table": "^6.10.0",
+    "reactn": "^2.1.4",
     "typeface-roboto": "0.0.54"
   }
 }

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import API from "../utils/API";
-import auth from "../firebase.js";
+import { auth } from "../firebase.js";
 import Dropdown from "../../src/components/Dropdown";
 import Button from "@material-ui/core/Button";
 import { Grid } from "@material-ui/core";

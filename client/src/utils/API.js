@@ -54,6 +54,9 @@ export default {
     return axios.put("/api/users/settings/", setting);
   },
 
+  uploadPicture: function(picture) {
+    return axios.put("/api/users/upload/", picture);
+  },
   //--------------------------------------------------
   //--------------------MEAL--------------------------
   //--------------------------------------------------
@@ -73,5 +76,12 @@ export default {
   },
   saveWorkOut: function(data) {
     return axios.post("/api/workouts/savedworkouts", data);
+  },
+
+  //--------------------------------------------------
+  //--------------------Profile--------------------------
+  //--------------------------------------------------
+  findProfile: function(username) {
+    return axios.get("/api/users/profile/" + username);
   }
 };

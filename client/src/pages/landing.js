@@ -1,4 +1,4 @@
-import React from "react";
+import React, { setGlobal } from "reactn";
 import PropTypes from "prop-types";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -10,7 +10,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
-import auth from "../firebase";
+import { auth } from "../firebase";
 import API from "../utils/API";
 import Grid from "@material-ui/core/Grid";
 import landingBG from "../images/landingBG.jpg";
@@ -547,6 +547,7 @@ class SignIn extends React.Component {
 
         API.createUser({ email: this.state.email }).then(res => {
           localStorage.userId = res.data._id;
+          setGlobal({ username: res.data.username });
           //setTimeout(() => this.props.history.push("/dashboard"), 500);
         });
       })
@@ -573,6 +574,7 @@ class SignIn extends React.Component {
         });
         API.findUser(this.state.email).then(res => {
           localStorage.userId = res.data._id;
+          setGlobal({ username: res.data.username });
           //setTimeout(() => this.props.history.push("/dashboard"), 500);
         });
       })

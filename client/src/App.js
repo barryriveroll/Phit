@@ -1,10 +1,7 @@
-import React, { Fragment, Component } from "react";
-import auth from "./firebase";
+import React, { Fragment, Component, getGlobal } from "reactn";
+import { auth } from "./firebase";
 import API from "./utils/API";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Landing from "./pages/landing";
-import Dashboard from "./pages/Dashboard";
-import Settings from "./pages/Settings";
+import { Link, BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 import pink from "@material-ui/core/colors/pink";
@@ -12,6 +9,22 @@ import cyan from "@material-ui/core/colors/cyan";
 import { deepOrange, yellow } from "@material-ui/core/colors";
 import blueGrey from "@material-ui/core/colors/blueGrey";
 import { withStyles } from "@material-ui/core/styles";
+import ToolBar from "@material-ui/core/Toolbar";
+import SettingsIcon from "@material-ui/icons/Settings";
+import PersonIcon from "@material-ui/icons/Person";
+import InsertChartIcon from "@material-ui/icons/InsertChart";
+import Typography from "@material-ui/core/Typography";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import AppBar from "@material-ui/core/AppBar";
+import Drawer from "@material-ui/core/Drawer";
+import Fade from "@material-ui/core/Fade";
+
+//Pages
+import Landing from "./pages/landing";
+import Dashboard from "./pages/Dashboard";
+import Settings from "./pages/Settings";
+import Profile from "./pages/Profile";
 
 const theme = createMuiTheme({
   palette: {
@@ -50,15 +63,16 @@ const styles = theme => ({
 
 class App extends Component {
   state = {
-    value: 1,
+    value: 0,
     theme: theme,
     darkMode: true,
     topPanel: "fitness",
     xlFit: false,
-    xlNut: false
+    xlNut: false,
+    right: false
   };
 
-  handleChange = (event, value) => {
+  handleChange = value => {
     this.setState({ value });
   };
 
@@ -290,7 +304,7 @@ class App extends Component {
     localStorage.setItem("darkToggle", this.state.theme.palette.type);
   };
 
-  toggleSettings = (side, open) => () => {
+  toggleSettings = (side, open) => {
     this.setState({
       [side]: open
     });
@@ -302,6 +316,52 @@ class App extends Component {
     return (
       <Router>
         <MuiThemeProvider theme={theme}>
+          <AppBar position="static">
+            <ToolBar
+              style={{
+                justifyContent: "space-between"
+              }}
+            >
+              <Typography
+                variant="h2"
+                color="inherit"
+                style={{ fontFamily: "Lobster" }}
+              >
+                Phit
+              </Typography>
+              <div style={{ position: " absolute", left: "calc(50% - 160px)" }}>
+                {this.state.user ? (
+                  <Tabs value={this.state.value} centered>
+                    <Tab
+                      icon={<InsertChartIcon />}
+                      label="Dashboard"
+                      component={Link}
+                      to="/dashboard"
+                      onClick={() => this.handleChange(0)}
+                    />
+                    <Tab
+                      icon={<PersonIcon />}
+                      label="My Profile"
+                      component={Link}
+                      to={`/profile/${getGlobal().username}`}
+                      onClick={() => this.handleChange(1)}
+                    />
+                  </Tabs>
+                ) : null}
+              </div>
+              <div>
+                {this.state.user ? (
+                  <Tabs centered>
+                    <Tab
+                      icon={<SettingsIcon />}
+                      label={this.state.user}
+                      onClick={() => this.toggleSettings("right", true)}
+                    />
+                  </Tabs>
+                ) : null}
+              </div>
+            </ToolBar>
+          </AppBar>
           <div className="App">
             <Route
               path="/"
@@ -341,6 +401,18 @@ class App extends Component {
                     />
                     <Route
                       exact
+                      path="/profile/:username"
+                      render={() => (
+                        <Fade in={true}>
+                          <Profile
+                            theme={this.state.theme}
+                            signOut={this.signOut}
+                          />
+                        </Fade>
+                      )}
+                    />
+                    <Route
+                      exact
                       path="/"
                       render={() =>
                         this.state.verified ? (
@@ -366,6 +438,33 @@ class App extends Component {
                 </Fragment>
               )}
             />
+            <Drawer
+              anchor="right"
+              open={this.state.right}
+              onClose={() => this.toggleSettings("right", false)}
+            >
+              <div tabIndex={0} role="button">
+                <div style={{ width: 350 }}>
+                  <Settings
+                    currentUser={
+                      this.state.user ? this.state.user : "no user email"
+                    }
+                    toggleSettings={this.toggleSettings}
+                    signOut={this.signOut}
+                    handleSettingsChange={this.handleSettingsChange}
+                    topPanel={this.state.topPanel}
+                    orangeTheme={this.theme}
+                    pinkTheme={this.pinkTheme}
+                    greyTheme={this.greyTheme}
+                    cyanTheme={this.cyanTheme}
+                    switchUp={this.switchUp}
+                    theme={this.state.theme}
+                    xlNut={this.state.xlNut}
+                    xlFit={this.state.xlFit}
+                  />
+                </div>
+              </div>
+            </Drawer>
           </div>
         </MuiThemeProvider>
       </Router>
