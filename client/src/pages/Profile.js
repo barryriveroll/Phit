@@ -60,25 +60,33 @@ const styles = theme => ({
 });
 
 class Profile extends Component {
+  state = {
+    profilePicture: ""
+  };
+
   componentDidMount = () => {
     let username = this.props.match.params.username;
 
     API.findProfile(username).then(res => {
       if (res.data.length) {
-        setGlobal({ profilePicture: res.data[0].picture });
         if (res.data[0]._id === localStorage.userId) {
           monkeyWrench = true;
           cradle = res.data[0].picture;
           console.log(cradle);
         }
+        this.setState({ profilePicture: res.data[0].picture });
       }
-    });
-
-    auth.onAuthStateChanged(firebaseUser => {
-      this.setState({
-        user: firebaseUser
+      auth.onAuthStateChanged(firebaseUser => {
+        if (!firebaseUser.emailVerified) monkeyWrench = false;
+        this.setState({
+          user: firebaseUser
+        });
       });
     });
+  };
+
+  updatePicture = photoUrl => {
+    this.setState({ profilePicture: photoUrl });
   };
 
   render() {
@@ -93,6 +101,8 @@ class Profile extends Component {
             </Typography>
             <Grid item xs={12}>
               <PictureUploader
+                updatePicture={this.updatePicture}
+                profilePicture={this.state.profilePicture}
                 monkeyWrench={monkeyWrench}
                 cradle={cradle}
                 classes={classes}

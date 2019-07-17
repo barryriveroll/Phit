@@ -2,7 +2,9 @@ const db = require("../models");
 
 module.exports = {
   createUser: function(req, res) {
-    db.User.create(req.body).then(userData => res.json(userData));
+    db.User.create(req.body)
+      .then(userData => res.json(userData))
+      .catch(err => res.json(err));
   },
 
   findUser: function(req, res) {

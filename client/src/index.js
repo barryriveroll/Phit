@@ -1,9 +1,11 @@
 import React, { setGlobal } from "reactn";
 import { render } from "react-dom";
+import addReactNDevTools from "reactn-devtools";
 import App from "./App";
 
+addReactNDevTools();
+
 setGlobal({
-  profilePicture: "https://i.imgur.com/1vwfqhE.jpg",
   username: ""
 });
 

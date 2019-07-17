@@ -63,28 +63,25 @@ class PictureUploader extends Component {
           let username = this.props.match.params.username;
           API.findProfile(username)
             .then(res => {
-              if (res.data.length) {
+              if (
+                res.data.length &&
+                res.data[0].picture !== "https://i.imgur.com/1vwfqhE.jpg"
+              ) {
                 // Create a reference to the file to delete
-                var desertRef = storage.refFromURL(res.data[0].picture);
+                var profilePictureRef = storage.refFromURL(res.data[0].picture);
 
                 // Delete the file
-                desertRef.delete().catch(function(error) {
+                profilePictureRef.delete().catch(function(error) {
                   console.log(error); // Uh-oh, an error occurred!
                 });
               }
             })
             .then(() => {
               API.uploadPicture(picture);
-              setGlobal(
-                {
-                  profilePicture: downloadURL
-                },
-                () => {
-                  setTimeout(() => {
-                    this.setState({ editingPhoto: false, files: [] });
-                  }, 2000);
-                }
-              );
+              this.props.updatePicture(downloadURL);
+              setTimeout(() => {
+                this.setState({ editingPhoto: false, files: [] });
+              }, 2000);
             });
         });
       });
@@ -116,7 +113,7 @@ class PictureUploader extends Component {
         </Typography>
         <div style={{ position: "relative" }}>
           <img
-            src={getGlobal().profilePicture}
+            src={this.props.profilePicture}
             alt="place"
             style={{ width: 300, height: 300, borderRadius: 4 }}
           />
