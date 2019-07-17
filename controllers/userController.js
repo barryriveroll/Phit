@@ -72,5 +72,11 @@ module.exports = {
         res.json(user);
       })
       .catch(err => console.log(err));
+  },
+  updateProfileAbout: function(req, res) {
+    console.log(req.body);
+    db.User.findByIdAndUpdate(req.body.id, req.body.updateProfile).catch(err =>
+      console.log(err)
+    );
   }
 };

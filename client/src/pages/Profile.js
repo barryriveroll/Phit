@@ -1,5 +1,6 @@
-import React, { Component, Fragment, setGlobal } from "reactn";
+import React, { Component, Fragment } from "reactn";
 import PictureUploader from "../components/profile/PictureUploader";
+import About from "../components/profile/About";
 import { auth } from "../firebase";
 import "./profile.css";
 import { withRouter } from "react-router-dom";
@@ -37,6 +38,17 @@ const styles = theme => ({
     width: 300,
     height: 300
   },
+  paperTwo: {
+    padding: theme.spacing.unit * 2,
+    color: theme.palette.text.secondary,
+    whiteSpace: "nowrap",
+    marginBottom: theme.spacing.unit,
+    display: "flex",
+    flexDirection: "column",
+    position: "relative",
+    width: 300,
+    height: 300
+  },
 
   divider: {
     margin: `${theme.spacing.unit * 2}px 0`
@@ -51,11 +63,25 @@ const styles = theme => ({
     fontWeight: 300,
     zIndex: 10
   },
+  panelHeaderTwo: {
+    fontFamily: "'Lobster', cursive",
+    position: "absolute",
+    top: -20,
+    left: 13,
+    fontSize: "1.5em",
+    textShadow: "1px 1px 1px " + theme.palette.secondary.contrastText,
+    fontWeight: 300,
+    zIndex: 10
+  },
   panelName: {
     width: "100%",
     marginTop: 20,
     fontFamily: "'Lobster', cursive",
     textAlign: "center"
+  },
+  textField: {
+    marginLeft: 5,
+    marginRight: 5
   }
 });
 
@@ -95,11 +121,21 @@ class Profile extends Component {
       <Fragment {...this.props}>
         <CssBaseline />
         <Grid container justify="center">
-          <Grid container style={{ maxWidth: 1170 }} spacing={8}>
+          <Grid
+            direction="row"
+            container
+            style={{ maxWidth: 1170 }}
+            spacing={8}
+          >
             <Typography className={classes.panelName} variant="h3" gutterBottom>
               Profile
             </Typography>
-            <Grid item xs={12}>
+            <Grid
+              style={{ display: "flex", justifyContent: "center" }}
+              item
+              xs={12}
+              md={4}
+            >
               <PictureUploader
                 updatePicture={this.updatePicture}
                 profilePicture={this.state.profilePicture}
@@ -107,6 +143,23 @@ class Profile extends Component {
                 cradle={cradle}
                 classes={classes}
               />
+            </Grid>
+            <Grid
+              style={{ display: "flex", justifyContent: "center" }}
+              item
+              xs={12}
+              md={4}
+            >
+              <About classes={classes} />
+            </Grid>
+            {/* Remove this one */}
+            <Grid
+              style={{ display: "flex", justifyContent: "center" }}
+              item
+              xs={12}
+              md={4}
+            >
+              <About classes={classes} />
             </Grid>
           </Grid>
         </Grid>

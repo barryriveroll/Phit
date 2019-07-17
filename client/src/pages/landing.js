@@ -20,6 +20,7 @@ import LandingChart from "../components/LandingChart";
 import Showcase from "../components/Showcase";
 import firebase from "firebase";
 import SimpleDialogDemo from "../components/Dialog";
+import regex from "regex-username";
 
 const emotionClasses = {
   exampleBtn: css`
@@ -294,6 +295,13 @@ class SignIn extends React.Component {
     const name = e.target.name;
     const value = e.target.value;
     this.setState({ [name]: value });
+    if (name === "username") {
+      if (regex().test(value)) {
+        this.setState({ usernameError: null });
+      } else {
+        this.setState({ usernameError: "Invalid username" });
+      }
+    }
   };
 
   handleExampleClick = event => {
@@ -728,6 +736,7 @@ class SignIn extends React.Component {
                         Unique Username
                       </InputLabel>
                       <Input
+                        inputProps={{ maxLength: 20 }}
                         id="username"
                         value={this.state.username}
                         onChange={this.handleChange}

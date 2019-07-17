@@ -14,10 +14,36 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     max: 20,
-    min: 3,
+    min: 2,
     trim: true,
     unique: true,
     uniqueCaseInsensitive: true
+  },
+  aboutBlurb: {
+    type: String,
+    maxlength: 240,
+    default: "No about information provided",
+    trim: true
+  },
+  socialInstagram: {
+    type: String,
+    maxlength: 240,
+    trim: true
+  },
+  socialFacebook: {
+    type: String,
+    maxlength: 240,
+    trim: true
+  },
+  socialTwitter: {
+    type: String,
+    maxlength: 240,
+    trim: true
+  },
+  socialYouTube: {
+    type: String,
+    maxlength: 240,
+    trim: true
   }
 });
 
