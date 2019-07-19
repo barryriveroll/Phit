@@ -21,6 +21,7 @@ export default class SocialInput extends Component {
               placeholder={this.props.socialName}
               name={this.props.inputName}
               onChange={this.props.handleChange}
+              value={this.props.socialValue}
             />
           </Grid>
         </Grid>

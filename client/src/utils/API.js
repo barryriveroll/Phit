@@ -85,5 +85,12 @@ export default {
   },
   updateProfileAbout: function(username, updateProfile) {
     return axios.put("/api/users/profile/" + username, updateProfile);
+  },
+
+  //--------------------------------------------------
+  //--------------------Reports--------------------------
+  //--------------------------------------------------
+  submitReport: function(report) {
+    return axios.post("/api/report/submit", report);
   }
 };

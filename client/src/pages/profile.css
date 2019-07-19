@@ -5,3 +5,11 @@
 
 .filepond--panel-center {
 }
+
+.social-link :visited {
+  text-decoration: none;
+}
+
+.social-disabled {
+  color: #00000078;
+}

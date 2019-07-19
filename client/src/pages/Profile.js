@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "reactn";
+import React, { Component, Fragment, getGlobal } from "reactn";
 import PictureUploader from "../components/profile/PictureUploader";
 import About from "../components/profile/About";
 import { auth } from "../firebase";
@@ -10,6 +10,7 @@ import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import API from "../utils/API";
+import Report from "../components/profile/Report";
 
 let monkeyWrench = false;
 let cradle = "";
@@ -41,7 +42,7 @@ const styles = theme => ({
   paperTwo: {
     padding: theme.spacing.unit * 2,
     color: theme.palette.text.secondary,
-    whiteSpace: "nowrap",
+    // whiteSpace: "nowrap",
     marginBottom: theme.spacing.unit,
     display: "flex",
     flexDirection: "column",
@@ -87,7 +88,15 @@ const styles = theme => ({
 
 class Profile extends Component {
   state = {
-    profilePicture: ""
+    profilePicture: "",
+    profileAbout: {
+      aboutBlurb: "",
+      socialFacebook: "",
+      socialInstagram: "",
+      socialYouTube: "",
+      socialTwitter: ""
+    },
+    editingAbout: false
   };
 
   componentDidMount = () => {
@@ -95,12 +104,19 @@ class Profile extends Component {
 
     API.findProfile(username).then(res => {
       if (res.data.length) {
+        let profileAbout = {
+          aboutBlurb: res.data[0].aboutBlurb,
+          socialFacebook: res.data[0].socialFacebook,
+          socialInstagram: res.data[0].socialInstagram,
+          socialYouTube: res.data[0].socialYouTube,
+          socialTwitter: res.data[0].socialTwitter
+        };
+
         if (res.data[0]._id === localStorage.userId) {
           monkeyWrench = true;
           cradle = res.data[0].picture;
-          console.log(cradle);
         }
-        this.setState({ profilePicture: res.data[0].picture });
+        this.setState({ profilePicture: res.data[0].picture, profileAbout });
       }
       auth.onAuthStateChanged(firebaseUser => {
         if (!firebaseUser.emailVerified) monkeyWrench = false;
@@ -113,6 +129,33 @@ class Profile extends Component {
 
   updatePicture = photoUrl => {
     this.setState({ profilePicture: photoUrl });
+  };
+
+  handleChange = event => {
+    const { name, value } = event.target;
+    let profileAbout = { ...this.state.profileAbout };
+    profileAbout[name] = value;
+    this.setState({ profileAbout });
+  };
+
+  editAboutButton = () => {
+    this.setState({ editingAbout: !this.state.editingAbout });
+  };
+
+  updateProfileAbout = () => {
+    let username = getGlobal().username;
+    let updatedData = {
+      id: localStorage.userId,
+      updateProfile: {
+        aboutBlurb: this.state.profileAbout.aboutBlurb,
+        socialInstagram: this.state.profileAbout.socialInstagram,
+        socialYouTube: this.state.profileAbout.socialYouTube,
+        socialFacebook: this.state.profileAbout.socialFacebook,
+        socialTwitter: this.state.profileAbout.socialTwitter
+      }
+    };
+    API.updateProfileAbout(username, updatedData);
+    this.setState({ editingAbout: false });
   };
 
   render() {
@@ -150,7 +193,15 @@ class Profile extends Component {
               xs={12}
               md={4}
             >
-              <About classes={classes} />
+              <About
+                monkeyWrench={monkeyWrench}
+                profileAbout={this.state.profileAbout}
+                classes={classes}
+                handleChange={this.handleChange}
+                updateProfileAbout={this.updateProfileAbout}
+                editingAbout={this.state.editingAbout}
+                editAboutButton={this.editAboutButton}
+              />
             </Grid>
             {/* Remove this one */}
             <Grid
@@ -162,6 +213,7 @@ class Profile extends Component {
               <About classes={classes} />
             </Grid>
           </Grid>
+          <Report />
         </Grid>
       </Fragment>
     );
