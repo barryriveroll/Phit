@@ -78,10 +78,12 @@ module.exports = {
       })
       .catch(err => console.log(err));
   },
+
   updateProfileAbout: function(req, res) {
-    console.log(req.body);
-    db.User.findByIdAndUpdate(req.body.id, req.body.updateProfile).catch(err =>
-      console.log(err)
-    );
+    db.User.findByIdAndUpdate(req.body.id, req.body.updateProfile)
+      .then(data => {
+        res.json({ "🙄": "Stop looking for this 😤" });
+      })
+      .catch(err => console.log(err));
   }
 };

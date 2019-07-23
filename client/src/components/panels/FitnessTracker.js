@@ -79,7 +79,11 @@ function FitnessTracker(props) {
               shrink: true
             }}
           />
-          <SharedDialogWorkout classes={classes} />
+          <SharedDialogWorkout
+            resistanceToAdd={props.resistanceToAdd}
+            workoutName={props.woName}
+            classes={classes}
+          />
         </Grid>
       </Grid>
       <AppBar position="static" color="default">

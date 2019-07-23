@@ -133,14 +133,13 @@ class Profile extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.match.params.username !== this.state.currentUser) {
+    if (prevProps.match.params.username !== this.global.username) {
       this.fetchUserData();
     }
   }
 
   fetchUserData = () => {
     let username = this.props.match.params.username;
-
     API.findProfile(username).then(res => {
       if (res.data.length) {
         let profileAbout = {
@@ -155,10 +154,12 @@ class Profile extends Component {
           monkeyWrench = true;
           cradle = res.data[0].picture;
         }
+
         this.setState({ profilePicture: res.data[0].picture, profileAbout });
       }
       auth.onAuthStateChanged(firebaseUser => {
         if (!firebaseUser.emailVerified) monkeyWrench = false;
+
         this.setState({
           user: firebaseUser,
           currentUser: username
@@ -183,7 +184,7 @@ class Profile extends Component {
   };
 
   updateProfileAbout = () => {
-    let username = getGlobal().username;
+    let username = this.global.username;
     let updatedData = {
       id: localStorage.userId,
       updateProfile: {

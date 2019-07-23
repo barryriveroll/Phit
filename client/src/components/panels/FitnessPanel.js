@@ -3,6 +3,7 @@ import FitnessTracker from "./FitnessTracker";
 import FitnessReports from "./FitnessReports";
 import moment from "moment";
 import API from "../../utils/API";
+import { Slider } from "material-ui-slider";
 
 // Material UI imports
 import { withStyles } from "@material-ui/core/styles";
@@ -418,6 +419,7 @@ class FitnessPanel extends Component {
 
   handleSetChange = event => {
     let { value, id } = event.currentTarget;
+    console.log(value);
     value = parseInt(value);
     if (value < 1) value = 1;
     if (value > 20) value = 20;
@@ -430,8 +432,8 @@ class FitnessPanel extends Component {
     } else {
       resistanceArrayCopy[id].weight.length = value;
       resistanceArrayCopy[id].reps.length = value;
-      resistanceArrayCopy[id].sets = value;
     }
+    resistanceArrayCopy[id].sets = value;
     this.setState({ resistanceToAdd: resistanceArrayCopy });
   };
 
