@@ -1,10 +1,10 @@
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment } from "reactn";
 import { auth } from "../firebase.js";
 
 //Panel imports
 import FitnessPanel from "../components/panels/FitnessPanel";
 import NutritionPanel from "../components/panels/NutritionPanel";
-
+import Loading from "../components/Loading";
 // Material UI imports
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
@@ -12,7 +12,6 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import AppBar from "@material-ui/core/AppBar";
 import Paper from "@material-ui/core/Paper";
-import NotFound from "../components/NotFound.js";
 
 let x = window.matchMedia("(max-width: 700px)");
 
@@ -39,70 +38,86 @@ class Dashboard extends Component {
     return (
       <React.Fragment>
         <CssBaseline />
-
-        {x.matches ? (
-          <Fragment>
+        <div
+          style={
+            this.global.exerciseReady && this.global.nutritionReady
+              ? { display: "inherit" }
+              : { display: "none" }
+          }
+        >
+          {x.matches ? (
             <Fragment>
-              <Paper style={{ flexGrow: 1 }}>
-                <AppBar position="static" color="default">
-                  <Tabs
-                    value={this.state.value}
-                    onChange={this.handleChange}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    scrollButtons="auto"
-                    centered
-                  >
-                    <Tab label="Nutrition" />
-                    <Tab label="Fitness" />
-                  </Tabs>
-                </AppBar>
-              </Paper>
+              <Fragment>
+                <Paper style={{ flexGrow: 1 }}>
+                  <AppBar position="static" color="default">
+                    <Tabs
+                      value={this.state.value}
+                      onChange={this.handleChange}
+                      indicatorColor="primary"
+                      textColor="primary"
+                      scrollButtons="auto"
+                      centered
+                    >
+                      <Tab label="Nutrition" />
+                      <Tab label="Fitness" />
+                    </Tabs>
+                  </AppBar>
+                </Paper>
+                <Grid container spacing={0} justify="center" {...this.props}>
+                  {this.state.value === 0 && (
+                    <NutritionPanel
+                      xlNut={this.props.xlNut}
+                      theme={this.props.theme}
+                    />
+                  )}
+                  {this.state.value === 1 && (
+                    <FitnessPanel
+                      xlFit={this.props.xlFit}
+                      theme={this.props.theme}
+                    />
+                  )}
+                </Grid>
+              </Fragment>
+            </Fragment>
+          ) : (
+            <Fragment>
               <Grid container spacing={0} justify="center" {...this.props}>
-                {this.state.value === 0 && (
-                  <NutritionPanel
-                    xlNut={this.props.xlNut}
-                    theme={this.props.theme}
-                  />
-                )}
-                {this.state.value === 1 && (
-                  <FitnessPanel
-                    xlFit={this.props.xlFit}
-                    theme={this.props.theme}
-                  />
+                {this.props.topPanel === "fitness" ? (
+                  <Fragment>
+                    <FitnessPanel
+                      xlFit={this.props.xlFit}
+                      theme={this.props.theme}
+                    />
+                    <NutritionPanel
+                      xlNut={this.props.xlNut}
+                      theme={this.props.theme}
+                    />
+                  </Fragment>
+                ) : (
+                  <Fragment>
+                    <NutritionPanel
+                      xlNut={this.props.xlNut}
+                      theme={this.props.theme}
+                    />
+                    <FitnessPanel
+                      xlFit={this.props.xlFit}
+                      theme={this.props.theme}
+                    />
+                  </Fragment>
                 )}
               </Grid>
             </Fragment>
-          </Fragment>
-        ) : (
-          <Fragment>
-            <Grid container spacing={0} justify="center" {...this.props}>
-              {this.props.topPanel === "fitness" ? (
-                <Fragment>
-                  <FitnessPanel
-                    xlFit={this.props.xlFit}
-                    theme={this.props.theme}
-                  />
-                  <NutritionPanel
-                    xlNut={this.props.xlNut}
-                    theme={this.props.theme}
-                  />
-                </Fragment>
-              ) : (
-                <Fragment>
-                  <NutritionPanel
-                    xlNut={this.props.xlNut}
-                    theme={this.props.theme}
-                  />
-                  <FitnessPanel
-                    xlFit={this.props.xlFit}
-                    theme={this.props.theme}
-                  />
-                </Fragment>
-              )}
-            </Grid>
-          </Fragment>
-        )}
+          )}
+        </div>
+        <div
+          style={
+            this.global.exerciseReady && this.global.nutritionReady
+              ? { display: "none" }
+              : { display: "flex" }
+          }
+        >
+          <Loading />
+        </div>
       </React.Fragment>
     );
   }

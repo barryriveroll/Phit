@@ -53,7 +53,7 @@ module.exports = {
       });
   },
   remove: function(req, res) {
-    db.Nutrition.findById({ _id: req.params.id })
+    db.Nutrition.findById(req.params.id)
       .then(dbModel => dbModel.remove())
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));

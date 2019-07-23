@@ -103,7 +103,11 @@ function NutritionTracker(props) {
           />
         </Grid>
       </Grid>
-      <AppBar position="static" color="default">
+      <AppBar
+        position="static"
+        color="default"
+        classes={{ root: { overflowX: "hidden !important" } }}
+      >
         <Tabs
           value={value}
           onChange={props.handleChange}
@@ -111,6 +115,7 @@ function NutritionTracker(props) {
           textColor="primary"
           variant="scrollable"
           scrollButtons="auto"
+          // classes={{ overflowX: "hidden !important" }}
         >
           {props.mealsToAdd.length ? (
             props.mealsToAdd.map((meal, index) => (

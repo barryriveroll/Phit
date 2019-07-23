@@ -96,7 +96,7 @@ class PictureUploader extends Component {
   };
 
   componentDidMount = () => {
-    username = this.props.match.params.username;
+    // username = this.props.match.params.username;
   };
 
   render() {
@@ -109,7 +109,7 @@ class PictureUploader extends Component {
           className={classes.panelHeader}
           color="secondary"
         >
-          {username}
+          {this.props.currentUser}
         </Typography>
         <div style={{ position: "relative" }}>
           <img

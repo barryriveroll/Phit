@@ -592,15 +592,21 @@ class SignIn extends React.Component {
     auth
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(res => {
-        this.props.updateVerified(res.user.emailVerified);
-        this.setState({
-          errors: null,
-          emailVerified: res.user.emailVerified
-        });
-        API.findUser(this.state.email).then(res => {
-          localStorage.userId = res.data._id;
-          setGlobal({ username: res.data.username });
-          //setTimeout(() => this.props.history.push("/dashboard"), 500);
+        API.findUser(this.state.email).then(response => {
+          localStorage.userId = response.data._id;
+          this.setState({
+            errors: null,
+            emailVerified: res.user.emailVerified
+          });
+          setGlobal(
+            {
+              username: response.data.username,
+              userId: response.data._id
+            },
+            () => {
+              this.props.updateVerified(res.user.emailVerified);
+            }
+          );
         });
       })
       .catch(error => {

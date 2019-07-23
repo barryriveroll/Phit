@@ -75,7 +75,7 @@ class Report extends Component {
             <DialogContent>
               <DialogContentText>
                 See something malicious, offensive, or something you wouldn't
-                want gradma to see? Let us know.
+                want grandma to see? Let us know.
               </DialogContentText>
               <FormControl style={{ paddingTop: 8 }} fullWidth>
                 <InputLabel htmlFor="age-simple">*Report Catagories</InputLabel>

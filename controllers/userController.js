@@ -1,4 +1,5 @@
 const db = require("../models");
+const ObjectId = require("mongodb").ObjectID;
 
 module.exports = {
   createUser: function(req, res) {
@@ -8,9 +9,9 @@ module.exports = {
   },
 
   findUser: function(req, res) {
-    db.User.findOne({ email: req.params.email }).then(dbData =>
-      res.json(dbData)
-    );
+    db.User.findOne({ email: req.params.email })
+      .then(dbData => res.json(dbData))
+      .catch(err => console.log(err));
   },
   pushWorkOut: function(req, res) {
     db.User.findByIdAndUpdate(req.body.userId, {
@@ -20,9 +21,13 @@ module.exports = {
       .catch(err => console.log(err));
   },
   findUserWorkOuts: function(req, res) {
-    db.User.find({ _id: req.params.id })
-      .populate("workouts")
-      .then(data => res.json(data));
+    console.log(req.params.id);
+    if (req.params.id !== "null") {
+      db.User.find({ _id: ObjectId(req.params.id) })
+        .populate("workouts")
+        .then(data => res.json(data))
+        .catch(err => console.log(err));
+    }
   },
   findWorkOutsByWeek: function(req, res) {
     let { week, name, user, type } = req.params;
