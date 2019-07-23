@@ -1,4 +1,4 @@
-import React from "react";
+import React, { setGlobal } from "reactn";
 import PropTypes from "prop-types";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -10,7 +10,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
-import auth from "../firebase";
+import { auth } from "../firebase";
 import API from "../utils/API";
 import Grid from "@material-ui/core/Grid";
 import landingBG from "../images/landingBG.jpg";
@@ -20,6 +20,7 @@ import LandingChart from "../components/LandingChart";
 import Showcase from "../components/Showcase";
 import firebase from "firebase";
 import SimpleDialogDemo from "../components/Dialog";
+import regex from "regex-username";
 
 const emotionClasses = {
   exampleBtn: css`
@@ -165,6 +166,11 @@ const styles = theme => ({
   submit: {
     marginTop: theme.spacing.unit * 3
   },
+  signInText: {
+    "&:hover": {
+      color: "rgb(168, 68, 102) !important"
+    }
+  },
   phitlosophy: {},
   calorie: {
     display: "flex",
@@ -217,6 +223,8 @@ class SignIn extends React.Component {
   state = {
     email: "",
     password: "",
+    username: "",
+    alreadyUser: false,
     errors: null,
     isPie: false,
     exampleData: {
@@ -287,6 +295,13 @@ class SignIn extends React.Component {
     const name = e.target.name;
     const value = e.target.value;
     this.setState({ [name]: value });
+    if (name === "username") {
+      if (regex().test(value)) {
+        this.setState({ usernameError: null });
+      } else {
+        this.setState({ usernameError: "Invalid username" });
+      }
+    }
   };
 
   handleExampleClick = event => {
@@ -519,12 +534,6 @@ class SignIn extends React.Component {
     this.setState({ exampleData: newData, options: newOptions, isPie });
   };
 
-  // createAndVerify = event => {
-  //   event.preventDefault();
-  //  this.createAccount();
-  //  this.verifyUser();
-  // };
-
   verifyUser = () => {
     this.setState({ showModal: true });
     let verifiedUser = firebase.auth().currentUser;
@@ -538,27 +547,44 @@ class SignIn extends React.Component {
 
   createAccount = event => {
     event.preventDefault();
-    auth
-      .createUserWithEmailAndPassword(this.state.email, this.state.password)
-      .then(res => {
-        this.setState({
-          errors: null
-        });
 
-        API.createUser({ email: this.state.email }).then(res => {
-          localStorage.userId = res.data._id;
-          //setTimeout(() => this.props.history.push("/dashboard"), 500);
+    API.createUser({
+      email: this.state.email,
+      username: this.state.username
+    }).then(res => {
+      let usernameError = "";
+      if (res.data.errors) {
+        usernameError = res.data.errors.username.message;
+      }
+      localStorage.userId = res.data._id;
+      setGlobal({ username: res.data.username });
+      console.log(res.data);
+      auth
+        .createUserWithEmailAndPassword(this.state.email, this.state.password)
+        .then(res => {
+          if (usernameError) {
+            res.user.delete();
+            this.setState({ usernameError });
+          } else {
+            console.log("then");
+            this.setState({
+              errors: null,
+              email: "",
+              password: "",
+              username: "",
+              usernameError: null
+            });
+            this.verifyUser();
+          }
+        })
+        .catch(error => {
+          console.log("catch");
+          this.setState({
+            errors: error.message,
+            usernameError
+          });
         });
-      })
-      .catch(error => {
-        this.setState({
-          errors: error.message
-        });
-      })
-      .then(() => {
-        this.setState({ email: "", password: "" });
-        this.verifyUser();
-      });
+    });
   };
 
   signIn = event => {
@@ -573,6 +599,7 @@ class SignIn extends React.Component {
         });
         API.findUser(this.state.email).then(res => {
           localStorage.userId = res.data._id;
+          setGlobal({ username: res.data.username });
           //setTimeout(() => this.props.history.push("/dashboard"), 500);
         });
       })
@@ -581,6 +608,10 @@ class SignIn extends React.Component {
           errors: error.message
         });
       });
+  };
+
+  changeComp = () => {
+    this.setState({ alreadyUser: !this.state.alreadyUser });
   };
 
   signOut = event => {
@@ -625,7 +656,12 @@ class SignIn extends React.Component {
                   Sign In
                 </Typography>
                 <form className={classes.form}>
-                  <FormControl margin="normal" required fullWidth>
+                  <FormControl
+                    margin="normal"
+                    required
+                    fullWidth
+                    style={{ position: "relative" }}
+                  >
                     <InputLabel htmlFor="email">
                       Verifiable Email Address
                     </InputLabel>
@@ -637,13 +673,16 @@ class SignIn extends React.Component {
                       autoComplete="email"
                       autoFocus
                     />
+
                     <div
                       style={{
                         color: "red",
                         paddingTop: 10,
                         fontFamily: "Helvetica",
                         fontSize: 12,
-                        textAlign: "center"
+                        textAlign: "center",
+                        position: "absolute",
+                        bottom: -15
                       }}
                     >
                       {this.state.errors}
@@ -652,7 +691,12 @@ class SignIn extends React.Component {
                         : null}
                     </div>
                   </FormControl>
-                  <FormControl margin="normal" required fullWidth>
+                  <FormControl
+                    margin="normal"
+                    required
+                    fullWidth
+                    style={{ position: "relative" }}
+                  >
                     <InputLabel htmlFor="password">Password</InputLabel>
                     <Input
                       name="password"
@@ -670,7 +714,9 @@ class SignIn extends React.Component {
                           paddingTop: 10,
                           fontFamily: "Helvetica",
                           fontSize: 12,
-                          textAlign: "center"
+                          textAlign: "center",
+                          position: "absolute",
+                          bottom: -15
                         }}
                       >
                         Password Must Be at Least 6 Characters
@@ -679,31 +725,98 @@ class SignIn extends React.Component {
                       ""
                     )}
                   </FormControl>
-                  <Grid container spacing={8}>
-                    <Grid item xs={6} md={6}>
-                      <Button
-                        style={{ fontSize: "0.85rem" }}
-                        onClick={this.createAccount}
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
+                  {!this.state.alreadyUser ? (
+                    <FormControl
+                      margin="normal"
+                      required
+                      fullWidth
+                      style={{ position: "relative" }}
+                    >
+                      <InputLabel htmlFor="username">
+                        Unique Username
+                      </InputLabel>
+                      <Input
+                        inputProps={{ maxLength: 20 }}
+                        id="username"
+                        value={this.state.username}
+                        onChange={this.handleChange}
+                        name="username"
+                        autoFocus
+                      />
+                      <div
+                        style={{
+                          color: "red",
+                          paddingTop: 10,
+                          fontFamily: "Helvetica",
+                          fontSize: 12,
+                          textAlign: "center",
+                          position: "absolute",
+                          bottom: -15
+                        }}
                       >
-                        Create Account
-                      </Button>
+                        {this.state.usernameError}
+                      </div>
+                    </FormControl>
+                  ) : null}
+
+                  <Grid container spacing={8} justify="center">
+                    <Grid item xs={6}>
+                      {!this.state.alreadyUser ? (
+                        <Button
+                          style={{ fontSize: "0.85rem" }}
+                          type="submit"
+                          onClick={this.createAccount}
+                          variant="contained"
+                          color="primary"
+                          className={classes.submit}
+                        >
+                          Create Account
+                        </Button>
+                      ) : (
+                        <Button
+                          style={{ fontSize: "0.85rem", marginTop: 96 }}
+                          type="submit"
+                          onClick={this.signIn}
+                          variant="outlined"
+                          color="primary"
+                          className={classes.submit}
+                        >
+                          Welcome Back!
+                        </Button>
+                      )}
                     </Grid>
-                    <Grid item xs={6} md={6}>
-                      <Button
-                        onClick={this.signIn}
-                        type="submit"
-                        style={{ fontSize: "0.85rem" }}
-                        fullWidth
-                        variant="outlined"
-                        color="primary"
-                        className={classes.submit}
-                      >
-                        Sign In
-                      </Button>
+                    <Grid item xs={10}>
+                      {!this.state.alreadyUser ? (
+                        <Typography
+                          onClick={this.changeComp}
+                          type="submit"
+                          style={{
+                            fontSize: "0.85rem",
+                            textAlign: "center",
+                            cursor: "pointer"
+                          }}
+                          variant="body1"
+                          color="primary"
+                          className={classes.signInText}
+                        >
+                          Already have an account? Sign in here
+                        </Typography>
+                      ) : (
+                        <Typography
+                          onClick={this.changeComp}
+                          type="submit"
+                          style={{
+                            fontSize: "0.85rem",
+                            textAlign: "center",
+                            cursor: "pointer"
+                          }}
+                          variant="body1"
+                          color="primary"
+                          className={classes.signInText}
+                        >
+                          Oops! Take me back
+                        </Typography>
+                      )}
                     </Grid>
                   </Grid>
                 </form>

@@ -5,25 +5,24 @@ export default {
   //--------------------WORKOUTS----------------------
   //--------------------------------------------------
 
-  // Gets all WorkOuts
   getAllWorkOuts: function() {
     return axios.get("/api/workouts");
   },
   getWorkOutById: function(id) {
     return axios.get("/api/workouts/find/" + id);
   },
-  // Gets all WorkOuts
+
   getSavedWorkOuts: function() {
     return axios.get("/api/workouts/saved");
   },
   getWorkOutsByDate: function(date, id) {
     return axios.get(`/api/workouts/${date}&${id}`);
   },
-  //Push workout to User object
+
   pushWorkOut: function(data) {
     return axios.put("/api/users/push", data);
   },
-  //add single exercise
+
   addExercise: function(data) {
     return axios.post("/api/workouts", data);
   },
@@ -53,18 +52,17 @@ export default {
   updateSettings: function(setting) {
     return axios.put("/api/users/settings/", setting);
   },
-
   //--------------------------------------------------
   //--------------------MEAL--------------------------
   //--------------------------------------------------
-  // Saves meal to the database
+
   saveMeal: function(mealData) {
     return axios.post("/api/meals", mealData);
   },
   getMealNames: function(user) {
     return axios.get(`/api/meals/user/${user}`);
   },
-  //Gets all Meal
+
   getMeal: function(id) {
     return axios.get("/api/meals/find/" + id);
   },
@@ -73,5 +71,26 @@ export default {
   },
   saveWorkOut: function(data) {
     return axios.post("/api/workouts/savedworkouts", data);
+  },
+
+  //--------------------------------------------------
+  //--------------------Profile--------------------------
+  //--------------------------------------------------
+
+  findProfile: function(username) {
+    return axios.get("/api/users/profile/" + username);
+  },
+  uploadPicture: function(picture) {
+    return axios.put("/api/users/upload/", picture);
+  },
+  updateProfileAbout: function(username, updateProfile) {
+    return axios.put("/api/users/profile/" + username, updateProfile);
+  },
+
+  //--------------------------------------------------
+  //--------------------Reports--------------------------
+  //--------------------------------------------------
+  submitReport: function(report) {
+    return axios.post("/api/report/submit", report);
   }
 };

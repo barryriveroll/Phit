@@ -14,4 +14,12 @@ router
 router.route("/settings").put(userController.updateSettings);
 
 router.route("/workouts/:id").get(userController.findUserWorkOuts);
+
+router.route("/upload").put(userController.uploadPicture);
+
+router
+  .route("/profile/:username")
+  .get(userController.findProfile)
+  .put(userController.updateProfileAbout);
+
 module.exports = router;

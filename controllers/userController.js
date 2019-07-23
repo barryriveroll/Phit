@@ -2,7 +2,9 @@ const db = require("../models");
 
 module.exports = {
   createUser: function(req, res) {
-    db.User.create(req.body).then(userData => res.json(userData));
+    db.User.create(req.body)
+      .then(userData => res.json(userData))
+      .catch(err => res.json(err));
   },
 
   findUser: function(req, res) {
@@ -56,5 +58,25 @@ module.exports = {
     })
       .then(data => res.json(data))
       .catch(err => console.log(err));
+  },
+
+  uploadPicture: function(req, res) {
+    db.User.findByIdAndUpdate(req.body.id, {
+      picture: req.body.photo
+    }).catch(err => console.log(err));
+  },
+
+  findProfile: function(req, res) {
+    db.User.find({ username: req.params.username })
+      .then(user => {
+        res.json(user);
+      })
+      .catch(err => console.log(err));
+  },
+  updateProfileAbout: function(req, res) {
+    console.log(req.body);
+    db.User.findByIdAndUpdate(req.body.id, req.body.updateProfile).catch(err =>
+      console.log(err)
+    );
   }
 };
