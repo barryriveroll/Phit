@@ -44,7 +44,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     maxlength: 240,
     trim: true
-  }
+  },
+  shareAllMeals: { type: Boolean, default: false },
+  shareAllWorkouts: { type: Boolean, default: false }
 });
 
 const User = mongoose.model(

@@ -83,21 +83,24 @@ class App extends Component {
 
   componentDidMount = () => {
     auth.onAuthStateChanged(firebaseUser => {
-      this.setState({
-        user: firebaseUser.email,
-        verified: firebaseUser.emailVerified
-      });
       //USER AUTH STUFF
       if (firebaseUser) {
         API.findUser(firebaseUser.email).then(res => {
           if (res.data) {
+            localStorage.userId = res.data._id;
+            this.setState({
+              user: firebaseUser.email,
+              verified: firebaseUser.emailVerified
+            });
             setGlobal({ username: res.data.username });
             this.setState(
               {
                 topPanel: res.data.topPanel,
                 darkMode: res.data.darkMode,
                 xlFit: res.data.xlFit,
-                xlNut: res.data.xlNut
+                xlNut: res.data.xlNut,
+                shareAllWorkouts: res.data.shareAllWorkouts,
+                shareAllMeals: res.data.shareAllMeals
               },
               () => {
                 switch (res.data.theme) {
@@ -288,9 +291,7 @@ class App extends Component {
       id: localStorage.userId
     });
 
-    if (setting === "xlNut") this.setState({ xlNut: value });
-    if (setting === "xlFit") this.setState({ xlFit: value });
-    if (setting === "topPanel") this.setState({ topPanel: value });
+    this.setState({ [setting]: value });
   };
 
   setLocalTheme = () => {
@@ -399,7 +400,7 @@ class App extends Component {
                       render={() => (
                         <Fade in={true}>
                           <Profile
-                            key={Math.random()}
+                            // key={Math.random()}
                             theme={this.state.theme}
                             signOut={this.signOut}
                           />
@@ -459,6 +460,8 @@ class App extends Component {
                     theme={this.state.theme}
                     xlNut={this.state.xlNut}
                     xlFit={this.state.xlFit}
+                    shareAllMeals={this.state.shareAllMeals}
+                    shareAllWorkouts={this.state.shareAllWorkouts}
                   />
                 </div>
               </div>

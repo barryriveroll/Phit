@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, setGlobal } from "reactn";
 import FitnessTracker from "./FitnessTracker";
 import FitnessReports from "./FitnessReports";
 import moment from "moment";
@@ -101,6 +101,7 @@ const styles = theme => ({
 
 class FitnessPanel extends Component {
   state = {
+    open: false,
     value: 0,
     saving: false,
     saveSuccess: false,
@@ -316,6 +317,10 @@ class FitnessPanel extends Component {
     this.setState(state => ({ open: !state.open }));
   };
 
+  toggleShareDialog = () => {
+    this.setState({ open: !this.state.open });
+  };
+
   handleClose = name => event => {
     let joined;
     let value = 0;
@@ -346,6 +351,7 @@ class FitnessPanel extends Component {
   };
 
   componentDidMount = () => {
+    setGlobal({ exerciseReady: false });
     API.findUserWorkOuts(localStorage.userId).then(res => {
       let savedArray = res.data[0].workouts.filter(workout => workout.name);
       this.setState(
@@ -412,21 +418,19 @@ class FitnessPanel extends Component {
 
   handleSetChange = event => {
     let { value, id } = event.currentTarget;
+    value = parseInt(value);
     if (value < 1) value = 1;
     if (value > 20) value = 20;
     let resistanceArrayCopy = [...this.state.resistanceToAdd];
-    resistanceArrayCopy[id].weight.length = value;
-    resistanceArrayCopy[id].reps.length = value;
-    resistanceArrayCopy[id].sets = value;
-    resistanceArrayCopy[id].weight[
-      resistanceArrayCopy[id].weight.length - 1
-    ] = 1;
-    resistanceArrayCopy[id].reps[resistanceArrayCopy[id].reps.length - 1] = 1;
-    for (let i = 0; i < resistanceArrayCopy[id].weight.length; i++) {
-      if (resistanceArrayCopy[id].weight[i] === null) {
-        resistanceArrayCopy[id].weight = 1;
-        resistanceArrayCopy[id].reps = 1;
+    if (value > resistanceArrayCopy[id].sets) {
+      for (let i = resistanceArrayCopy[id].sets; i < value; i++) {
+        resistanceArrayCopy[id].weight.push(1);
+        resistanceArrayCopy[id].reps.push(1);
       }
+    } else {
+      resistanceArrayCopy[id].weight.length = value;
+      resistanceArrayCopy[id].reps.length = value;
+      resistanceArrayCopy[id].sets = value;
     }
     this.setState({ resistanceToAdd: resistanceArrayCopy });
   };
@@ -528,6 +532,7 @@ class FitnessPanel extends Component {
   };
 
   returnWorkoutsByDate = date => {
+    console.log(this.global.userId);
     this.setState({ workoutDate: date }, () => {
       API.getWorkOutsByDate(this.state.workoutDate, localStorage.userId).then(
         res => {
@@ -553,17 +558,27 @@ class FitnessPanel extends Component {
               });
             }
 
-            this.setState({
-              resistanceToAdd: newWorkOutState.resistanceToAdd,
-              cardioToAdd: newWorkOutState.cardioToAdd,
-              selectedWorkout: res.data[0].name ? res.data[0].name : "None"
-            });
+            this.setState(
+              {
+                resistanceToAdd: newWorkOutState.resistanceToAdd,
+                cardioToAdd: newWorkOutState.cardioToAdd,
+                selectedWorkout: res.data[0].name ? res.data[0].name : "None"
+              },
+              () => {
+                setGlobal({ exerciseReady: true });
+              }
+            );
           } else {
-            this.setState({
-              resistanceToAdd: [],
-              cardioToAdd: [],
-              selectedWorkout: "None"
-            });
+            this.setState(
+              {
+                resistanceToAdd: [],
+                cardioToAdd: [],
+                selectedWorkout: "None"
+              },
+              () => {
+                setGlobal({ exerciseReady: true });
+              }
+            );
           }
         }
       );
@@ -750,6 +765,7 @@ class FitnessPanel extends Component {
             open={open}
             handleLoadWorkoutChange={this.handleLoadWorkoutChange}
             handleChange={this.handleTabChange}
+            toggleShareDialog={this.toggleShareDialog}
           />
         </Grid>
         <Grid item xs={12} md={this.props.xlFit ? 12 : 6}>

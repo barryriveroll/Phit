@@ -11,6 +11,8 @@ import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import API from "../utils/API";
 import Report from "../components/profile/Report";
+import Loading from "../components/Loading";
+import SharedWorkouts from "../components/profile/SharedWorkouts";
 
 let monkeyWrench = false;
 let cradle = "";
@@ -50,7 +52,19 @@ const styles = theme => ({
     width: 300,
     height: 300
   },
-
+  paperThree: {
+    padding: theme.spacing.unit * 2,
+    color: theme.palette.text.secondary,
+    whiteSpace: "nowrap",
+    marginBottom: theme.spacing.unit,
+    height: 400,
+    [theme.breakpoints.down("md")]: {
+      height: 512
+    },
+    display: "flex",
+    flexDirection: "column",
+    position: "relative"
+  },
   divider: {
     margin: `${theme.spacing.unit * 2}px 0`
   },
@@ -83,6 +97,13 @@ const styles = theme => ({
   textField: {
     marginLeft: 5,
     marginRight: 5
+  },
+  chips: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  chip: {
+    margin: 2
   }
 });
 
@@ -100,6 +121,24 @@ class Profile extends Component {
   };
 
   componentDidMount = () => {
+    this.fetchUserData();
+  };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.match.params.username !== prevState.currentUser) {
+      return { currentUser: nextProps.currentUser };
+    } else {
+      return null;
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.match.params.username !== this.state.currentUser) {
+      this.fetchUserData();
+    }
+  }
+
+  fetchUserData = () => {
     let username = this.props.match.params.username;
 
     API.findProfile(username).then(res => {
@@ -121,7 +160,8 @@ class Profile extends Component {
       auth.onAuthStateChanged(firebaseUser => {
         if (!firebaseUser.emailVerified) monkeyWrench = false;
         this.setState({
-          user: firebaseUser
+          user: firebaseUser,
+          currentUser: username
         });
       });
     });
@@ -180,6 +220,7 @@ class Profile extends Component {
               md={4}
             >
               <PictureUploader
+                currentUser={this.state.currentUser}
                 updatePicture={this.updatePicture}
                 profilePicture={this.state.profilePicture}
                 monkeyWrench={monkeyWrench}
@@ -212,8 +253,11 @@ class Profile extends Component {
             >
               <About classes={classes} />
             </Grid>
+            <Grid item md={6} xs={12}>
+              <SharedWorkouts classes={classes} />
+            </Grid>
+            <Report />
           </Grid>
-          <Report />
         </Grid>
       </Fragment>
     );

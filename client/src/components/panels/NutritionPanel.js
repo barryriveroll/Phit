@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, setGlobal } from "reactn";
 import NutritionTracker from "./NutritionTracker";
 import NutritionReports from "./NutritionReports";
 import moment from "moment";
@@ -153,6 +153,7 @@ class NutritionPanel extends Component {
   };
 
   componentDidMount = () => {
+    setGlobal({ nutritionReady: false });
     this.selectMealsByDate(this.state.nutritionDate);
     this.getNutritionByTimeframe();
   };
@@ -220,6 +221,7 @@ class NutritionPanel extends Component {
     if (this.state.xAxis === "weekly") {
       API.getMealsByDate(this.state.chartWeek, localStorage.userId).then(
         res => {
+          setGlobal({ nutritionReady: true });
           if (this.state.chartType === "pieChart") {
             newChartData.labels = ["Fat", "Carbs", "Protein"];
 
@@ -332,6 +334,7 @@ class NutritionPanel extends Component {
     } else if (this.state.xAxis === "daily") {
       API.getMealsByDate(this.state.chartDate, localStorage.userId).then(
         res => {
+          setGlobal({ nutritionReady: true });
           if (res.data[0]) {
             let dailyData = [0, 0, 0, 0];
             res.data[0].meal.forEach(meal => {

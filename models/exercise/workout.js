@@ -60,12 +60,14 @@ const workOutSchema = new mongoose.Schema({
     max: 250,
     trim: true
   },
+  //Nested resistance schema, requried if no cardio data
   resistance: {
     type: [resistanceSchema],
     required: function() {
       return !this.cardio;
     }
   },
+  //Nested cardio schema, requried if no resistance data
   cardio: {
     type: [cardioSchema],
     required: function() {

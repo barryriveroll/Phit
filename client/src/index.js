@@ -6,7 +6,28 @@ import App from "./App";
 addReactNDevTools();
 
 setGlobal({
-  username: ""
+  username: "",
+  nutritionReady: false,
+  exerciseReady: false,
+  emailVerified: false,
+  userId: "",
+  firebaseUser: {},
+  globalTags: [
+    "Fat Burning",
+    "Muscle Building",
+    "Toning",
+    "Resistance & Cardio"
+  ],
+  resistanceTags: [
+    "Chest",
+    "Back",
+    "Shoulders",
+    "Arms",
+    "Legs",
+    "Core",
+    "Full Body"
+  ],
+  cardioTags: ["High Intensity", "Low Impact", "Endurance", "Interval"]
 });
 
 render(<App />, document.getElementById("root"));

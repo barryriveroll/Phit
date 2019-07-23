@@ -13,6 +13,7 @@ import Grid from "@material-ui/core/Grid";
 import WorkoutsDropdown from "../WorkoutsDropdown";
 import MoodIcon from "@material-ui/icons/Mood";
 import MoodBadIcon from "@material-ui/icons/MoodBad";
+import SharedDialogWorkout from "../SharedDialogWorkout";
 
 function TabContainer(props) {
   return (
@@ -39,7 +40,6 @@ function returnSaveSuccessOrFailureDependingOnCertainConditions(
 
 function FitnessTracker(props) {
   const { value, classes } = props;
-  const [selectedDate, handleDateChange] = useState(new Date());
   return (
     <Paper className={props.xlFit ? classes.xlPaperHeight : classes.paper}>
       <Typography
@@ -79,6 +79,7 @@ function FitnessTracker(props) {
               shrink: true
             }}
           />
+          <SharedDialogWorkout classes={classes} />
         </Grid>
       </Grid>
       <AppBar position="static" color="default">
