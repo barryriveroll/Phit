@@ -5,7 +5,7 @@ export default function WeightToggler() {
   return (
     <Slider
       defaultValue={30}
-      getAriaValueText={"text"}
+      //   getAriaValueText={"text"}
       aria-labelledby="discrete-slider"
       valueLabelDisplay="auto"
       step={10}

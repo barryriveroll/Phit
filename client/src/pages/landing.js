@@ -747,7 +747,6 @@ class SignIn extends React.Component {
                         value={this.state.username}
                         onChange={this.handleChange}
                         name="username"
-                        autoFocus
                       />
                       <div
                         style={{

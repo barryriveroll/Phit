@@ -71,7 +71,7 @@ function returnSubData(index, resistanceToAdd) {
     exerciseSubData.push({
       set: `Set ${i + 1}`,
       reps: dataCopy[index].reps[i],
-      weight: "FUCK YOU"
+      weight: <WeightToggler />
     });
   }
 
