@@ -9,6 +9,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
 import withStyles from "@material-ui/core/styles/withStyles";
 import { auth } from "../firebase";
 import API from "../utils/API";
@@ -88,7 +89,7 @@ const styles = theme => ({
     [theme.breakpoints.down("xs")]: {
       marginTop: "10px"
     },
-    marginTop: "200px"
+    marginTop: "140px"
   },
   background: {
     background: `linear-gradient(rgba(84, 138, 130, 0.43), rgba(105, 89, 94, 0.6)), url(${landingBG})`,
@@ -191,7 +192,8 @@ const styles = theme => ({
   },
   exampleText: {
     marginBottom: -12,
-    textAlign: "center"
+    textAlign: "center",
+    display: "block"
   },
   btnContainer: {
     display: "flex",
@@ -764,8 +766,17 @@ class SignIn extends React.Component {
                     </FormControl>
                   ) : null}
 
-                  <Grid container spacing={8} justify="center">
-                    <Grid item xs={6}>
+                  <Grid
+                    container
+                    direction="column"
+                    spacing={1}
+                    justify="center"
+                  >
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
                       {!this.state.alreadyUser ? (
                         <Button
                           style={{ fontSize: "0.85rem" }}
@@ -789,8 +800,12 @@ class SignIn extends React.Component {
                           Welcome Back!
                         </Button>
                       )}
-                    </Grid>
-                    <Grid item xs={10}>
+                    </Box>
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
                       {!this.state.alreadyUser ? (
                         <Typography
                           onClick={this.changeComp}
@@ -822,7 +837,7 @@ class SignIn extends React.Component {
                           Oops! Take me back
                         </Typography>
                       )}
-                    </Grid>
+                    </Box>
                   </Grid>
                 </form>
               </Paper>
@@ -830,11 +845,15 @@ class SignIn extends React.Component {
           </Grid>
         </Grid>
         {/* Calorie & phitlosophy */}
-        <Grid container className={classes.featureContainer} spacing={32}>
+        <Grid container className={classes.featureContainer} spacing={5}>
           <Grid item sm={6}>
             <Typography
               variant="h3"
-              style={{ textAlign: "center", marginTop: "calc(65% - 170px)" }}
+              style={{
+                textAlign: "center",
+                marginTop: "calc(65% - 170px)",
+                marginBottom: 20
+              }}
             >
               The <span style={{ fontFamily: "lobster" }}>Phit</span> Philosophy
             </Typography>
@@ -915,7 +934,10 @@ class SignIn extends React.Component {
                 <Typography variant="overline" className={classes.exampleText}>
                   Example 3
                 </Typography>
-                <Typography variant="caption" style={{ textAlign: "center" }}>
+                <Typography
+                  variant="caption"
+                  style={{ textAlign: "center", display: "block" }}
+                >
                   Daily Macros
                 </Typography>
               </div>
@@ -933,11 +955,7 @@ class SignIn extends React.Component {
             marginTop: 50
           }}
         >
-          <Grid
-            style={{ marginTop: 100, zIndex: 100 }}
-            container
-            className={classes.demo}
-          >
+          <Grid container className={classes.demo}>
             <Grid item xs={12} sm={12}>
               <Typography variant="h2" className={classes.featureHeader}>
                 <span

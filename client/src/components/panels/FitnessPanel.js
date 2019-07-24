@@ -272,9 +272,9 @@ class FitnessPanel extends Component {
     API.getWorkOutById(workout.value).then(res => {
       const newResistance = [];
       const newCardio = [];
-
-      if (res.data[0].resistance) {
-        res.data[0].resistance.forEach(exercise => {
+      console.log(res.data);
+      if (res.data.resistance) {
+        res.data.resistance.forEach(exercise => {
           newResistance.push({
             name: exercise.name,
             weight: exercise.weight,
@@ -284,8 +284,8 @@ class FitnessPanel extends Component {
         });
       }
 
-      if (res.data[0].cardio) {
-        res.data[0].cardio.forEach(exercise => {
+      if (res.data.cardio) {
+        res.data.cardio.forEach(exercise => {
           newCardio.push({
             name: exercise.name,
             time: exercise.time,
@@ -296,6 +296,10 @@ class FitnessPanel extends Component {
 
       this.setState({ resistanceToAdd: newResistance, cardioToAdd: newCardio });
     });
+  };
+
+  handleWorkoutChange = newValue => {
+    this.setState({ woName: newValue });
   };
 
   handleChange = name => event => {
@@ -730,7 +734,7 @@ class FitnessPanel extends Component {
     const { anchorEl, open } = this.state;
 
     return (
-      <Grid container spacing={8} className={classes.demo}>
+      <Grid container spacing={1} className={classes.demo}>
         <Typography className={classes.panelName} variant="h3" gutterBottom>
           Fitness
         </Typography>
@@ -767,6 +771,7 @@ class FitnessPanel extends Component {
             open={open}
             handleLoadWorkoutChange={this.handleLoadWorkoutChange}
             handleChange={this.handleTabChange}
+            handleWorkoutChange={this.handleWorkoutChange}
             toggleShareDialog={this.toggleShareDialog}
           />
         </Grid>

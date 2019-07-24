@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Meal from "../../pages/Meal";
 import DatePickers from "../DatePicker";
-import IntegrationReactSelect from "../MealsDropdown";
+import MealsDropdown from "../tracking/MealsDropdown";
 
 // Material UI imports
 import CancelIcon from "@material-ui/icons/Cancel";
@@ -16,6 +16,7 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
 import TrackerTable from "../Table";
+import MoodIcon from "@material-ui/icons/Mood";
 
 let x = window.matchMedia("(max-width: 700px)");
 
@@ -24,6 +25,8 @@ function myFunction(x) {
   else return false;
 }
 let mobile = myFunction(x);
+let disabled = false;
+let success = false;
 
 function TabContainer(props) {
   return (
@@ -33,7 +36,41 @@ function TabContainer(props) {
   );
 }
 
+function returnButtonColor() {
+  if (success) {
+    return "#469640";
+  } else {
+    return "";
+  }
+}
+
+function returnSaveSuccessOrFailureDependingOnCertainConditions() {
+  if (success) {
+    return <MoodIcon />;
+  } else {
+    return "Save";
+  }
+}
+
+const clickSave = (fn, setDone) => {
+  fn();
+  setDone(false);
+
+  disabled = true;
+  setTimeout(() => {
+    disabled = false;
+    success = true;
+  }, 47);
+
+  setTimeout(() => {
+    success = false;
+    setDone(true);
+  }, 3047);
+};
+
 function NutritionTracker(props) {
+  const [done, setDone] = useState(false);
+  const [count, setCount] = useState(0);
   const { value, classes } = props;
 
   return (
@@ -48,13 +85,14 @@ function NutritionTracker(props) {
       >
         Tracking
       </Typography>
-      <Grid spacing={16} container>
-        <Grid item xs={5} sm={5}>
-          <IntegrationReactSelect
+      <Grid spacing={1} container>
+        <Grid item xs={6}>
+          <MealsDropdown
             fetchDropdownData={props.fetchDropdownData}
+            handleChange={props.handleMealChange}
             handleLoadMealChange={props.handleLoadMealChange}
           />
-          <TextField
+          {/* <TextField
             fullWidth
             id="filled-dense"
             value={props.mealName}
@@ -64,43 +102,32 @@ function NutritionTracker(props) {
             style={{ padding: 0 }}
             margin="dense"
             variant="filled"
-          />
-        </Grid>
-        <Grid item xs={2} sm={2}>
-          <FormControl>
-            <Button
-              disabled={!props.mealToLoad}
-              variant="contained"
-              size="small"
-              color="primary"
-              className={classes.margin}
-              onClick={props.addMeal}
-            >
-              Load
-            </Button>
-            <Button
-              variant="contained"
-              size="small"
-              color="primary"
-              disabled={props.mealName.trim().length < 2}
-              className={classes.margin}
-              onClick={props.addMeal}
-            >
-              Add
-            </Button>
-          </FormControl>
+          /> */}
         </Grid>
 
-        <Grid item xs={5} sm={5}>
-          <DatePickers
+        <Grid item xs={6}>
+          <TextField
+            id="date"
+            fullWidth
+            value={props.nutritionDate}
+            name="nutritionDate"
+            onChange={props.selectDate}
+            label="Nutrition Date"
+            type="date"
+            className={classes.textField}
+            variant="filled"
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+          {/* <DatePickers
             //margin="dense"
             label="Meal Date"
-            variant="filled"
             //style={{ width: 200 }}
             value={props.nutritionDate}
             changeHandler={props.selectDate}
             name="nutritionDate"
-          />
+          /> */}
         </Grid>
       </Grid>
       <AppBar style={{ height: 48 }} position="static" color="default">
@@ -169,12 +196,43 @@ function NutritionTracker(props) {
             </div>
           )
       )}
+
       {props.mealsToAdd.length ? (
         <Meal
           addFoodItem={props.addFoodItem}
           saveNutritionDay={props.saveNutritionDay}
         />
       ) : null}
+      <Grid container justify="space-between" style={{ paddingTop: 10 }}>
+        <Button
+          style={{
+            width: 70,
+            height: 30
+          }}
+          variant="contained"
+          size="small"
+          color="primary"
+          // disabled={props.mealName.trim().length < 2}
+          // className={classes.margin}
+          onClick={props.addMeal}
+        >
+          Add
+        </Button>
+        <Button
+          style={{
+            width: 70,
+            height: 30,
+            backgroundColor: returnButtonColor()
+          }}
+          disabled={disabled}
+          variant="contained"
+          size="small"
+          color="secondary"
+          onClick={() => clickSave(props.saveNutritionDay, setDone)}
+        >
+          {returnSaveSuccessOrFailureDependingOnCertainConditions()}
+        </Button>
+      </Grid>
     </Paper>
   );
 }

@@ -31,9 +31,6 @@ const styles = theme => ({
       color: theme.palette.text.disabled
     }
   },
-  textField: {
-    width: 140
-  },
   margin: {
     margin: theme.spacing.unit,
     [theme.breakpoints.down("xs")]: {
@@ -412,6 +409,10 @@ class NutritionPanel extends Component {
     this.setState({ value });
   };
 
+  handleMealChange = newValue => {
+    this.setState({ mealName: newValue });
+  };
+
   changeQuantity = event => {
     const { name, id, value } = event.target;
     let newFoodToAdd = [...this.state.mealsToAdd];
@@ -420,7 +421,9 @@ class NutritionPanel extends Component {
   };
 
   handleLoadMealChange = meal => {
-    this.setState({ mealToLoad: meal });
+    this.setState({ mealToLoad: meal }, () => {
+      this.addMeal();
+    });
   };
 
   handleInputChange = name => event => {
@@ -434,7 +437,10 @@ class NutritionPanel extends Component {
   addMeal = () => {
     let mealArray = [...this.state.mealsToAdd];
     mealArray.push({
-      name: this.state.mealToLoad.label || this.state.mealName,
+      name:
+        this.state.mealToLoad.label ||
+        this.state.mealName ||
+        `Meal #${mealArray.length + 1}`,
       foodItem: []
     });
 
@@ -459,7 +465,8 @@ class NutritionPanel extends Component {
     this.setState({
       mealsToAdd: mealArray,
       mealName: "",
-      mealToLoad: { label: null }
+      mealToLoad: { label: null },
+      value: mealArray.length - 1
     });
   };
 
@@ -525,7 +532,7 @@ class NutritionPanel extends Component {
     const { classes } = this.props;
 
     return (
-      <Grid container spacing={8} className={classes.demo}>
+      <Grid container spacing={1} className={classes.demo}>
         <Typography className={classes.panelName} variant="h3" gutterBottom>
           Nutrition
         </Typography>
@@ -539,6 +546,7 @@ class NutritionPanel extends Component {
             fetchDropdownData={this.state.fetchDropdownData}
             value={this.state.value}
             handleChange={this.handleChange}
+            handleMealChange={this.handleMealChange}
             mealsToAdd={this.state.mealsToAdd}
             handleInputChange={this.handleInputChange}
             mealName={this.state.mealName}

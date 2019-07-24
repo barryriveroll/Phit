@@ -10,7 +10,7 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import TrackerTable from "../Table";
 import Grid from "@material-ui/core/Grid";
-import WorkoutsDropdown from "../WorkoutsDropdown";
+import WorkoutsDropdown from "../tracking/WorkoutsDropdown";
 import MoodIcon from "@material-ui/icons/Mood";
 import MoodBadIcon from "@material-ui/icons/MoodBad";
 import SharedDialogWorkout from "../SharedDialogWorkout";
@@ -49,40 +49,28 @@ function FitnessTracker(props) {
       >
         Tracking
       </Typography>
-      <Grid justify="space-between" container>
+      <Grid justify="space-between" container spacing={1}>
         <Grid item xs={6}>
           <WorkoutsDropdown
             handleLoadWorkoutChange={props.handleLoadWorkoutChange}
-            fetchDropdownData={props.fetchDropdownData}
-          />
-          <TextField
-            fullWidth
-            id="outlined-name"
-            label="Name"
-            value={props.woName}
-            onChange={props.handleNameChange}
-            className={classes.textField}
-            margin="dense"
-            variant="filled"
+            // woName={props.woName}
+            handleChange={props.handleWorkoutChange}
           />
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={6}>
           <TextField
             id="date"
+            fullWidth
             value={props.workoutDate}
             name="workoutDate"
             onChange={props.selectDate}
             label="Workout Date"
             type="date"
             className={classes.textField}
+            variant="filled"
             InputLabelProps={{
               shrink: true
             }}
-          />
-          <SharedDialogWorkout
-            resistanceToAdd={props.resistanceToAdd}
-            workoutName={props.woName}
-            classes={classes}
           />
         </Grid>
       </Grid>
@@ -137,7 +125,7 @@ function FitnessTracker(props) {
         )}
       </div>
       <Grid style={{ marginTop: 6 }} container>
-        <Grid item xs={9}>
+        <Grid item xs={6}>
           <Button
             style={{ marginRight: 6 }}
             color="primary"
@@ -157,6 +145,14 @@ function FitnessTracker(props) {
             Add Cardio
           </Button>
         </Grid>
+        <Grid item xs={3}>
+          <SharedDialogWorkout
+            resistanceToAdd={props.resistanceToAdd}
+            workoutName={props.woName}
+            classes={classes}
+          />
+        </Grid>
+
         <Grid item xs={3}>
           <Button
             variant="contained"

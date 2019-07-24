@@ -191,7 +191,13 @@ class Meal extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <Grid container spacing={8} direction="row" justify="space-between">
+      <Grid
+        container
+        spacing={1}
+        direction="row"
+        alignItems="flex-end"
+        justify="flex-end"
+      >
         <Dialog
           open={this.state.open}
           onClose={this.handleClose}
@@ -247,26 +253,25 @@ class Meal extends Component {
             ))}
           </List>
         </Dialog>
-        <Grid item md={6} xs={6}>
+        <Grid item xs={10}>
           <Dropdown
             fetchInstantData={this.fetchInstantData}
             onChange={this.onChange}
           />
         </Grid>
-        <Grid item xs={6}>
-          <Grid container justify="space-between">
-            <Grid item>
-              <Button
-                variant="contained"
-                size="small"
-                color="primary"
-                onClick={this.handleSubmit}
-                disabled={this.state.food.length < 1}
-              >
-                Detail
-              </Button>
-            </Grid>
-            <Grid item>
+        <Grid item xs={2}>
+          <Button
+            style={{ float: "right" }}
+            variant="contained"
+            size="small"
+            color="primary"
+            onClick={this.handleSubmit}
+            disabled={this.state.food.length < 1}
+          >
+            Detail
+          </Button>
+
+          {/* <Grid item>
               <Button
                 style={{
                   width: 70,
@@ -281,8 +286,7 @@ class Meal extends Component {
               >
                 {returnSaveSuccessOrFailureDependingOnCertainConditions()}
               </Button>
-            </Grid>
-          </Grid>
+            </Grid> */}
         </Grid>
       </Grid>
     );
