@@ -27,6 +27,13 @@ const styles = theme => ({
       cursor: "pointer"
     }
   },
+  addSpan: {
+    position: "absolute",
+    top: -15,
+    right: -1,
+    fontSize: 24,
+    textShadow: "1px 1px 1px #00000099"
+  },
   container: {
     display: "grid",
     gridTemplateColumns: "repeat(12, 1fr)",
@@ -495,7 +502,7 @@ class FitnessPanel extends Component {
                 errorMessage: "Missing workout info!",
                 saving: false,
                 saveSuccess: false,
-                buttonColor: "#cc3737"
+                buttonColor: "indianred"
               },
               () => {
                 setTimeout(() => {
@@ -522,7 +529,7 @@ class FitnessPanel extends Component {
                 fetchDropdownData: false,
                 errorMessage: "Saved workout!",
                 saving: false,
-                buttonColor: "#469640",
+                buttonColor: "#5ccd8f",
                 saveSuccess: true
               },
               () => {

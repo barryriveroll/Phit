@@ -201,7 +201,7 @@ export default function MealsDropdown(props) {
           id: "react-autosuggest-popper",
           label: "Meal Name",
           //   placeholder: "With Popper",
-          value: state.popper,
+          value: props.mealName,
           onChange: handleChange("popper", props.handleChange),
 
           inputRef: node => {

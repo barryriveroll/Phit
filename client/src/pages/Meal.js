@@ -18,6 +18,8 @@ import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 import MoodIcon from "@material-ui/icons/Mood";
+import Fab from "@material-ui/core/Fab";
+import Icon from "@material-ui/core/Icon";
 
 //Modal
 const styles = {
@@ -125,15 +127,14 @@ class Meal extends Component {
       .catch(err => console.log(err));
   }
 
-  handleSubmit = async event => {
+  handleSubmit = async foodSearchQuery => {
     this.handleClickOpen();
     this.setState({ foodData: [] });
-    event.preventDefault();
-
+    document.getElementById("foodSearchInput").setAttribute("value", "");
     const APP_ID = "eb95abc3";
     const APP_KEY = "368d7805ed86900874f9dc4fb92aba0f";
 
-    let foodSearchQuery = document.getElementById("foodSearchInput").value;
+    // let foodSearchQuery = document.getElementById("foodSearchInput").value;
     for (let i = 0; i < 5; i++) {
       const response = await fetch(
         "https://trackapi.nutritionix.com/v2/natural/nutrients",
@@ -253,25 +254,25 @@ class Meal extends Component {
             ))}
           </List>
         </Dialog>
-        <Grid item xs={10}>
+        <Grid item xs={12}>
           <Dropdown
             fetchInstantData={this.fetchInstantData}
             onChange={this.onChange}
+            handleSubmit={this.handleSubmit}
           />
         </Grid>
-        <Grid item xs={2}>
-          <Button
-            style={{ float: "right" }}
-            variant="contained"
+        {/* <Grid item xs={2}> */}
+        {/* <Fab
+            style={{ float: "right", width: 40, height: 40 }}
             size="small"
             color="primary"
             onClick={this.handleSubmit}
-            disabled={this.state.food.length < 1}
+            disabled={this.state.food.length < 3}
           >
-            Detail
-          </Button>
+            <Icon>search</Icon>
+          </Fab> */}
 
-          {/* <Grid item>
+        {/* <Grid item>
               <Button
                 style={{
                   width: 70,
@@ -287,7 +288,7 @@ class Meal extends Component {
                 {returnSaveSuccessOrFailureDependingOnCertainConditions()}
               </Button>
             </Grid> */}
-        </Grid>
+        {/* </Grid> */}
       </Grid>
     );
   }

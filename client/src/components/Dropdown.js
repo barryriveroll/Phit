@@ -130,6 +130,10 @@ class IntegrationAutosuggest extends React.Component {
     });
   };
 
+  clickFoodItem = (handleSubmit, label) => {
+    this.setState({ single: "" }, () => handleSubmit(label));
+  };
+
   getSuggestionsFromAPI = async event => {
     const APP_ID = "eb95abc3";
     const APP_KEY = "368d7805ed86900874f9dc4fb92aba0f";
@@ -178,7 +182,7 @@ class IntegrationAutosuggest extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, handleSubmit } = this.props;
 
     const autosuggestProps = {
       renderInputComponent,
@@ -197,7 +201,6 @@ class IntegrationAutosuggest extends React.Component {
             classes,
             id: "foodSearchInput",
             placeholder: searchEx[Math.floor(Math.random() * searchEx.length)],
-
             value: this.state.single,
             onChange: this.handleChange("single")
           }}
@@ -208,7 +211,18 @@ class IntegrationAutosuggest extends React.Component {
             suggestion: classes.suggestion
           }}
           renderSuggestionsContainer={options => (
-            <Paper {...options.containerProps} square>
+            <Paper
+              onClick={() =>
+                this.clickFoodItem(
+                  handleSubmit,
+                  options.children.props.items[
+                    options.children.props.highlightedItemIndex
+                  ].label
+                )
+              }
+              {...options.containerProps}
+              square
+            >
               {options.children}
             </Paper>
           )}

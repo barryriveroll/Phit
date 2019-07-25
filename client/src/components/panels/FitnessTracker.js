@@ -14,13 +14,11 @@ import WorkoutsDropdown from "../tracking/WorkoutsDropdown";
 import MoodIcon from "@material-ui/icons/Mood";
 import MoodBadIcon from "@material-ui/icons/MoodBad";
 import SharedDialogWorkout from "../SharedDialogWorkout";
+import Fab from "@material-ui/core/Fab";
+import Icon from "@material-ui/core/Icon";
 
 function TabContainer(props) {
-  return (
-    <Typography component="div" style={{ padding: 5 }}>
-      {props.children}
-    </Typography>
-  );
+  return <Typography component="div">{props.children}</Typography>;
 }
 
 function returnSaveSuccessOrFailureDependingOnCertainConditions(
@@ -34,7 +32,7 @@ function returnSaveSuccessOrFailureDependingOnCertainConditions(
       return <MoodBadIcon />;
     }
   } else {
-    return "Save";
+    return <Icon>save</Icon>;
   }
 }
 
@@ -126,24 +124,25 @@ function FitnessTracker(props) {
       </div>
       <Grid style={{ marginTop: 6 }} container>
         <Grid item xs={6}>
-          <Button
-            style={{ marginRight: 6 }}
+          <Fab
+            style={{ marginRight: 6, height: 40, width: 40 }}
             color="primary"
             size="small"
-            variant="contained"
             onClick={props.handleClose("resistanceToAdd")}
           >
-            Add Resistance
-          </Button>
+            <span className={classes.addSpan}>+ </span>
+            <Icon>fitness_center</Icon>
+          </Fab>
 
-          <Button
+          <Fab
             color="primary"
-            variant="contained"
+            style={{ height: 40, width: 40 }}
             size="small"
             onClick={props.handleClose("cardioToAdd")}
           >
-            Add Cardio
-          </Button>
+            <span className={classes.addSpan}>+ </span>
+            <Icon>directions_run</Icon>
+          </Fab>
         </Grid>
         <Grid item xs={3}>
           <SharedDialogWorkout
@@ -154,25 +153,24 @@ function FitnessTracker(props) {
         </Grid>
 
         <Grid item xs={3}>
-          <Button
-            variant="contained"
+          <Fab
             size="small"
             style={{
-              width: 70,
-              height: 30,
+              width: 40,
+              height: 40,
               float: "right",
               backgroundColor: props.buttonColor
             }}
             color="secondary"
             onClick={props.saveDay}
-            className={classes.button}
+            // className={classes.button}
             disabled={props.saving}
           >
             {returnSaveSuccessOrFailureDependingOnCertainConditions(
               props.saveSuccess,
               props.errorMessage
             )}
-          </Button>
+          </Fab>
         </Grid>
       </Grid>
     </Paper>

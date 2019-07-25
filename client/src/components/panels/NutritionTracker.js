@@ -17,6 +17,9 @@ import FormControl from "@material-ui/core/FormControl";
 import Grid from "@material-ui/core/Grid";
 import TrackerTable from "../Table";
 import MoodIcon from "@material-ui/icons/Mood";
+import Fab from "@material-ui/core/Fab";
+import Icon from "@material-ui/core/Icon";
+import FontAwesome from "react-fontawesome";
 
 let x = window.matchMedia("(max-width: 700px)");
 
@@ -29,11 +32,7 @@ let disabled = false;
 let success = false;
 
 function TabContainer(props) {
-  return (
-    <Typography component="div" style={{ padding: 5 }}>
-      {props.children}
-    </Typography>
-  );
+  return <Typography component="div">{props.children}</Typography>;
 }
 
 function returnButtonColor() {
@@ -48,7 +47,7 @@ function returnSaveSuccessOrFailureDependingOnCertainConditions() {
   if (success) {
     return <MoodIcon />;
   } else {
-    return "Save";
+    return <Icon>save</Icon>;
   }
 }
 
@@ -88,6 +87,7 @@ function NutritionTracker(props) {
       <Grid spacing={1} container>
         <Grid item xs={6}>
           <MealsDropdown
+            mealName={props.mealName}
             fetchDropdownData={props.fetchDropdownData}
             handleChange={props.handleMealChange}
             handleLoadMealChange={props.handleLoadMealChange}
@@ -151,8 +151,22 @@ function NutritionTracker(props) {
                         onClick={() => props.deleteMeal(index)}
                         style={
                           mobile
-                            ? { float: "left", marginRight: 5 }
-                            : { position: "absolute", left: 0 }
+                            ? {
+                                display:
+                                  props.mealsToAdd.length === 1
+                                    ? "none"
+                                    : "inherit",
+                                float: "left",
+                                marginRight: 5
+                              }
+                            : {
+                                display:
+                                  props.mealsToAdd.length === 1
+                                    ? "none"
+                                    : "inherit",
+                                position: "absolute",
+                                left: 0
+                              }
                         }
                       />
                     ) : (
@@ -197,14 +211,37 @@ function NutritionTracker(props) {
           )
       )}
 
-      {props.mealsToAdd.length ? (
+      {/* {props.mealsToAdd.length ? (
         <Meal
           addFoodItem={props.addFoodItem}
           saveNutritionDay={props.saveNutritionDay}
         />
-      ) : null}
+      ) : null} */}
       <Grid container justify="space-between" style={{ paddingTop: 10 }}>
-        <Button
+        <Grid item xs={2}>
+          <Fab
+            style={{
+              width: 40,
+              height: 40
+            }}
+            size="small"
+            color="primary"
+            // disabled={props.mealName.trim().length < 2}
+            // className={classes.margin}
+            onClick={props.addMeal}
+          >
+            <span className={classes.addSpan}>+ </span>
+            <FontAwesome name="utensils" size="2x" style={{ fontSize: 20 }} />
+          </Fab>
+        </Grid>
+        <Grid item xs={8}>
+          <Meal
+            addFoodItem={props.addFoodItem}
+            saveNutritionDay={props.saveNutritionDay}
+          />
+        </Grid>
+
+        {/* <Button
           style={{
             width: 70,
             height: 30
@@ -217,21 +254,23 @@ function NutritionTracker(props) {
           onClick={props.addMeal}
         >
           Add
-        </Button>
-        <Button
-          style={{
-            width: 70,
-            height: 30,
-            backgroundColor: returnButtonColor()
-          }}
-          disabled={disabled}
-          variant="contained"
-          size="small"
-          color="secondary"
-          onClick={() => clickSave(props.saveNutritionDay, setDone)}
-        >
-          {returnSaveSuccessOrFailureDependingOnCertainConditions()}
-        </Button>
+        </Button> */}
+        <Grid item xs={2}>
+          <Fab
+            style={{
+              float: "right",
+              width: 40,
+              height: 40,
+              backgroundColor: returnButtonColor()
+            }}
+            disabled={disabled}
+            size="small"
+            color="secondary"
+            onClick={() => clickSave(props.saveNutritionDay, setDone)}
+          >
+            {returnSaveSuccessOrFailureDependingOnCertainConditions()}
+          </Fab>
+        </Grid>
       </Grid>
     </Paper>
   );
