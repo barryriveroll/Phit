@@ -149,6 +149,7 @@ function FitnessTracker(props) {
             resistanceToAdd={props.resistanceToAdd}
             workoutName={props.woName}
             classes={classes}
+            handleChange={props.handleShareChange}
           />
         </Grid>
 

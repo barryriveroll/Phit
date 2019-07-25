@@ -27,7 +27,8 @@ setGlobal({
     "Core",
     "Full Body"
   ],
-  cardioTags: ["High Intensity", "Low Impact", "Endurance", "Interval"]
+  cardioTags: ["High Intensity", "Low Impact", "Endurance", "Interval"],
+  sharedResistanceWeightProgress: []
 });
 
 render(<App />, document.getElementById("root"));

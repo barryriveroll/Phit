@@ -149,40 +149,6 @@ class Settings extends Component {
                     </Button>
                   </FormControl>
                 </Grid>
-                {/* <Grid item xs={12}>
-                  <Typography inline variant="body1" gutterBottom>
-                    Share All Meals
-                  </Typography>
-
-                  <Switch
-                    defaultChecked={this.props.shareAllMeals}
-                    value="checkedG"
-                    onClick={() =>
-                      this.props.handleSettingsChange(
-                        "shareAllMeals",
-                        !this.props.shareAllMeals
-                      )
-                    }
-                    color="secondary"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography inline variant="body1" gutterBottom>
-                    Share All Workouts
-                  </Typography>
-
-                  <Switch
-                    defaultChecked={this.props.shareAllWorkouts}
-                    value="checkedH"
-                    onClick={() =>
-                      this.props.handleSettingsChange(
-                        "shareAllWorkouts",
-                        !this.props.shareAllWorkouts
-                      )
-                    }
-                    color="secondary"
-                  />
-                </Grid> */}
               </Paper>
             </Grid>
             <Grid item xs={12}>

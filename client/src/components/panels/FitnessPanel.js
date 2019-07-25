@@ -3,7 +3,6 @@ import FitnessTracker from "./FitnessTracker";
 import FitnessReports from "./FitnessReports";
 import moment from "moment";
 import API from "../../utils/API";
-import { Slider } from "material-ui-slider";
 
 // Material UI imports
 import { withStyles } from "@material-ui/core/styles";
@@ -545,7 +544,6 @@ class FitnessPanel extends Component {
   };
 
   returnWorkoutsByDate = date => {
-    console.log(this.global.userId);
     this.setState({ workoutDate: date }, () => {
       API.getWorkOutsByDate(this.state.workoutDate, localStorage.userId).then(
         res => {

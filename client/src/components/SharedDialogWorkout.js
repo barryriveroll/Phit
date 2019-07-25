@@ -2,20 +2,16 @@ import React, { Component, getGlobal, setGlobal } from "reactn";
 import Button from "@material-ui/core/Button";
 import moment from "moment";
 
-import FormControl from "@material-ui/core/FormControl";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import InputLabel from "@material-ui/core/InputLabel";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
+
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Fab from "@material-ui/core/Fab";
 import ShareIcon from "@material-ui/icons/Share";
-import SharedTable from "../components/profile/SharedTable";
+
 import AppBar from "@material-ui/core/AppBar";
 import Tab from "@material-ui/core/Tab";
 import Tabs from "@material-ui/core/Tabs";
@@ -35,14 +31,6 @@ class SharedDialogWorkout extends Component {
     value: 0,
     resistanceToShare: []
   };
-
-  // GetFormattedDate = () => {
-  //   var todayTime = new Date();
-  //   var month = format(todayTime.getMonth() + 1);
-  //   var day = format(todayTime.getDate());
-  //   var year = format(todayTime.getFullYear());
-  //   return month + "/" + day + "/" + year;
-  // };
 
   toggleDialog = () => {
     this.setState({
@@ -64,6 +52,11 @@ class SharedDialogWorkout extends Component {
 
   handleTabChange = (event, value) => {
     this.setState({ value });
+  };
+
+  handleWorkoutNameChange = event => {
+    const { value } = event.target;
+    this.setState({ sharedWorkoutName: value });
   };
 
   render() {
@@ -99,6 +92,7 @@ class SharedDialogWorkout extends Component {
                 <TextField
                   id="name"
                   defaultValue={this.props.workoutName}
+                  onChange={this.handleWorkoutNameChange}
                   variant="filled"
                   fullWidth
                   name="name"
