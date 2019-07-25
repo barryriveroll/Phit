@@ -22,7 +22,29 @@ module.exports = {
   },
   findMealNames: function(req, res) {
     const { user } = req.params;
-    db.Nutrition.find({ user }).then(mealData => res.json(mealData));
+    db.Nutrition.find({ user })
+      .sort({ date: -1 })
+      .then(mealData => {
+        let nameArray = [];
+        let idArray = [];
+
+        mealData.forEach(day => {
+          if (day.meal) {
+            day.meal.forEach(meal => {
+              if (!nameArray.includes(meal.name)) {
+                nameArray.push(meal.name);
+                idArray.push(meal._id);
+              }
+            });
+          }
+        });
+
+        var mealNames = nameArray.map(function(name, index) {
+          return { name: name, _id: idArray[index] };
+        });
+
+        res.json(mealNames);
+      });
   },
   findByDate: function(req, res) {
     let timeFrame = "";

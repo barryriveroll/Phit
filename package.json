@@ -38,6 +38,7 @@
     "font-awesome": "^4.7.0",
     "i": "^0.3.6",
     "if-env": "^1.0.4",
+    "material-ui-slider": "^3.0.8",
     "mongoose": "^5.4.19",
     "mongoose-unique-validator": "^2.0.3",
     "nodemailer": "^6.3.0",

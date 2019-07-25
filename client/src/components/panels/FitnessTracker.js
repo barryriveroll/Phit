@@ -10,17 +10,15 @@ import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import TrackerTable from "../Table";
 import Grid from "@material-ui/core/Grid";
-import WorkoutsDropdown from "../WorkoutsDropdown";
+import WorkoutsDropdown from "../tracking/WorkoutsDropdown";
 import MoodIcon from "@material-ui/icons/Mood";
 import MoodBadIcon from "@material-ui/icons/MoodBad";
 import SharedDialogWorkout from "../SharedDialogWorkout";
+import Fab from "@material-ui/core/Fab";
+import Icon from "@material-ui/core/Icon";
 
 function TabContainer(props) {
-  return (
-    <Typography component="div" style={{ padding: 5 }}>
-      {props.children}
-    </Typography>
-  );
+  return <Typography component="div">{props.children}</Typography>;
 }
 
 function returnSaveSuccessOrFailureDependingOnCertainConditions(
@@ -34,7 +32,7 @@ function returnSaveSuccessOrFailureDependingOnCertainConditions(
       return <MoodBadIcon />;
     }
   } else {
-    return "Save";
+    return <Icon>save</Icon>;
   }
 }
 
@@ -49,37 +47,29 @@ function FitnessTracker(props) {
       >
         Tracking
       </Typography>
-      <Grid justify="space-between" container>
+      <Grid justify="space-between" container spacing={1}>
         <Grid item xs={6}>
           <WorkoutsDropdown
             handleLoadWorkoutChange={props.handleLoadWorkoutChange}
-            fetchDropdownData={props.fetchDropdownData}
-          />
-          <TextField
-            fullWidth
-            id="outlined-name"
-            label="Name"
-            value={props.woName}
-            onChange={props.handleNameChange}
-            className={classes.textField}
-            margin="dense"
-            variant="filled"
+            // woName={props.woName}
+            handleChange={props.handleWorkoutChange}
           />
         </Grid>
-        <Grid item xs={5}>
+        <Grid item xs={6}>
           <TextField
             id="date"
+            fullWidth
             value={props.workoutDate}
             name="workoutDate"
             onChange={props.selectDate}
             label="Workout Date"
             type="date"
             className={classes.textField}
+            variant="filled"
             InputLabelProps={{
               shrink: true
             }}
           />
-          <SharedDialogWorkout classes={classes} />
         </Grid>
       </Grid>
       <AppBar position="static" color="default">
@@ -133,46 +123,54 @@ function FitnessTracker(props) {
         )}
       </div>
       <Grid style={{ marginTop: 6 }} container>
-        <Grid item xs={9}>
-          <Button
-            style={{ marginRight: 6 }}
+        <Grid item xs={6}>
+          <Fab
+            style={{ marginRight: 6, height: 40, width: 40 }}
             color="primary"
             size="small"
-            variant="contained"
             onClick={props.handleClose("resistanceToAdd")}
           >
-            Add Resistance
-          </Button>
+            <span className={classes.addSpan}>+ </span>
+            <Icon>fitness_center</Icon>
+          </Fab>
 
-          <Button
+          <Fab
             color="primary"
-            variant="contained"
+            style={{ height: 40, width: 40 }}
             size="small"
             onClick={props.handleClose("cardioToAdd")}
           >
-            Add Cardio
-          </Button>
+            <span className={classes.addSpan}>+ </span>
+            <Icon>directions_run</Icon>
+          </Fab>
         </Grid>
         <Grid item xs={3}>
-          <Button
-            variant="contained"
+          <SharedDialogWorkout
+            resistanceToAdd={props.resistanceToAdd}
+            workoutName={props.woName}
+            classes={classes}
+          />
+        </Grid>
+
+        <Grid item xs={3}>
+          <Fab
             size="small"
             style={{
-              width: 70,
-              height: 30,
+              width: 40,
+              height: 40,
               float: "right",
               backgroundColor: props.buttonColor
             }}
             color="secondary"
             onClick={props.saveDay}
-            className={classes.button}
+            // className={classes.button}
             disabled={props.saving}
           >
             {returnSaveSuccessOrFailureDependingOnCertainConditions(
               props.saveSuccess,
               props.errorMessage
             )}
-          </Button>
+          </Fab>
         </Grid>
       </Grid>
     </Paper>

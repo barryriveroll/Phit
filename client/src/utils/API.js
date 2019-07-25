@@ -78,6 +78,7 @@ export default {
   //--------------------------------------------------
 
   findProfile: function(username) {
+    console.log(`2: ${new Date().getTime()}`);
     return axios.get("/api/users/profile/" + username);
   },
   uploadPicture: function(picture) {

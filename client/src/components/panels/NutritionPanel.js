@@ -21,6 +21,13 @@ const styles = theme => ({
     paddingTop: 5,
     marginLeft: -16
   },
+  addSpan: {
+    position: "absolute",
+    top: -15,
+    right: -1,
+    fontSize: 24,
+    textShadow: "1px 1px 1px #00000099"
+  },
   cancel: {
     "&:hover": {
       color: theme.palette.primary.dark
@@ -30,9 +37,6 @@ const styles = theme => ({
     "&:hover": {
       color: theme.palette.text.disabled
     }
-  },
-  textField: {
-    width: 140
   },
   margin: {
     margin: theme.spacing.unit,
@@ -409,7 +413,23 @@ class NutritionPanel extends Component {
   };
 
   handleChange = (event, value) => {
-    this.setState({ value });
+    let mealName = "";
+
+    if (!this.state.mealsToAdd[value].name.includes("Meal #")) {
+      mealName = this.state.mealsToAdd[value].name;
+    }
+
+    this.setState({ value, mealName });
+  };
+
+  handleMealChange = newValue => {
+    let mealsToAdd = [...this.state.mealsToAdd];
+
+    newValue.length
+      ? (mealsToAdd[this.state.value].name = newValue)
+      : (mealsToAdd[this.state.value].name = `Meal #${this.state.value + 1}`);
+
+    this.setState({ mealName: newValue, mealsToAdd });
   };
 
   changeQuantity = event => {
@@ -420,7 +440,10 @@ class NutritionPanel extends Component {
   };
 
   handleLoadMealChange = meal => {
-    this.setState({ mealToLoad: meal });
+    console.log(meal);
+    this.setState({ mealToLoad: meal }, () => {
+      this.addMeal();
+    });
   };
 
   handleInputChange = name => event => {
@@ -433,40 +456,51 @@ class NutritionPanel extends Component {
 
   addMeal = () => {
     let mealArray = [...this.state.mealsToAdd];
-    mealArray.push({
-      name: this.state.mealToLoad.label || this.state.mealName,
-      foodItem: []
-    });
 
     if (this.state.mealToLoad.label) {
       API.getMeal(this.state.mealToLoad.value).then(res => {
-        res.data[0].meal.foodItem.forEach(foodItem => {
-          mealArray[mealArray.length - 1].foodItem.push({
-            name: foodItem.name,
-            carbohydrates: foodItem.carbohydrates,
-            fats: foodItem.fats,
-            protein: foodItem.protein,
-            calories: foodItem.calories,
-            servingQty: foodItem.servingQty,
-            servingUnit: foodItem.servingUnit
-          });
-        });
+        mealArray[this.state.value].foodItem = [];
+        mealArray[this.state.value].name = res.data[0].meal.name;
 
-        this.setState({ value: mealArray.length - 1 });
+        if (res.data[0].meal.foodItem.length) {
+          res.data[0].meal.foodItem.forEach(foodItem => {
+            mealArray[this.state.value].foodItem.push({
+              name: foodItem.name,
+              carbohydrates: foodItem.carbohydrates,
+              fats: foodItem.fats,
+              protein: foodItem.protein,
+              calories: foodItem.calories,
+              servingQty: foodItem.servingQty,
+              servingUnit: foodItem.servingUnit
+            });
+          });
+        }
+
+        this.setState({
+          mealsToAdd: mealArray,
+          mealName: res.data[0].meal.name,
+          mealToLoad: { label: null }
+        });
+      });
+    } else {
+      mealArray.push({
+        name: `Meal #${mealArray.length + 1}`,
+        foodItem: []
+      });
+      this.setState({
+        mealsToAdd: mealArray,
+        mealName: "",
+        mealToLoad: { label: null },
+        value: mealArray.length - 1
       });
     }
-
-    this.setState({
-      mealsToAdd: mealArray,
-      mealName: "",
-      mealToLoad: { label: null }
-    });
   };
 
   selectMealsByDate = date => {
     this.setState({ nutritionDate: date, value: 0 }, () => {
       API.getMealsByDate(this.state.nutritionDate, localStorage.userId).then(
         res => {
+          console.log(res.data);
           if (res.data.length) {
             const newMealsArr = [...res.data[0].meal];
 
@@ -475,7 +509,7 @@ class NutritionPanel extends Component {
             });
           } else {
             this.setState({
-              mealsToAdd: [],
+              mealsToAdd: [{ name: "Meal #1", foodItem: [] }],
               mealName: ""
             });
           }
@@ -525,7 +559,7 @@ class NutritionPanel extends Component {
     const { classes } = this.props;
 
     return (
-      <Grid container spacing={8} className={classes.demo}>
+      <Grid container spacing={1} className={classes.demo}>
         <Typography className={classes.panelName} variant="h3" gutterBottom>
           Nutrition
         </Typography>
@@ -539,6 +573,7 @@ class NutritionPanel extends Component {
             fetchDropdownData={this.state.fetchDropdownData}
             value={this.state.value}
             handleChange={this.handleChange}
+            handleMealChange={this.handleMealChange}
             mealsToAdd={this.state.mealsToAdd}
             handleInputChange={this.handleInputChange}
             mealName={this.state.mealName}

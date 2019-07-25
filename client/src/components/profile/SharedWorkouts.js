@@ -22,7 +22,13 @@ function TabContainer(props) {
 
 export default class SharedWorkouts extends Component {
   state = {
-    value: 0
+    value: 0,
+    resistanceToShare: []
+  };
+
+  handleChange = event => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
   };
 
   handleTabChange = (event, value) => {
@@ -65,7 +71,7 @@ export default class SharedWorkouts extends Component {
           {this.state.value === 0 && (
             <TabContainer>
               <TagSelector resistance classes={classes} />
-              <SharedTable />
+              <SharedTable handleChange={this.handleChange} />
             </TabContainer>
           )}
           {this.state.value === 1 && (

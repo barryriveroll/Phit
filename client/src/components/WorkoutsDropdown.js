@@ -16,7 +16,7 @@ const styles = theme => ({
   },
   input: {
     display: "flex",
-    padding: 0,
+    paddingTop: 19,
     paddingLeft: 12
   },
   valueContainer: {
@@ -67,7 +67,8 @@ function Control(props) {
     <TextField
       fullWidth
       variant="filled"
-      onChange={() => handleInputChange("value")}
+      onChange={() => console.log(props)}
+      value={props.woName}
       InputProps={{
         inputComponent,
         inputProps: {
@@ -81,6 +82,10 @@ function Control(props) {
     />
   );
 }
+
+const handleTextChange = event => {
+  console.log(event.target.value);
+};
 
 const handleInputChange = property => event => {
   this.props.handleLoadMealChange();

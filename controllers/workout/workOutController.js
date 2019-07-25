@@ -36,17 +36,38 @@ module.exports = {
   },
 
   saveWorkOut: function(req, res) {
-    db.WorkOut.updateOne(
-      { date: req.body.date, user: req.body.user },
-      { $set: req.body },
-      { upsert: true, runValidators: true }
-    )
-      .then(dbData => {
-        res.json(dbData);
-      })
-      .catch(err => {
-        console.log(err);
-        res.send(err);
+    if (req.body.name) {
+      db.WorkOut.updateOne(
+        { name: req.body.name, user: req.body.user },
+        { $set: { name: null } }
+      ).then(result => {
+        console.log(result);
+        db.WorkOut.updateOne(
+          { date: req.body.date, user: req.body.user },
+          { $set: req.body },
+          { upsert: true, runValidators: true }
+        )
+          .then(dbData => {
+            res.json(dbData);
+          })
+          .catch(err => {
+            console.log(err);
+            res.send(err);
+          });
       });
+    } else {
+      db.WorkOut.updateOne(
+        { date: req.body.date, user: req.body.user },
+        { $set: req.body },
+        { upsert: true, runValidators: true }
+      )
+        .then(dbData => {
+          res.json(dbData);
+        })
+        .catch(err => {
+          console.log(err);
+          res.send(err);
+        });
+    }
   }
 };

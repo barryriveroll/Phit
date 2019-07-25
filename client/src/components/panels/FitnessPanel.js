@@ -3,6 +3,7 @@ import FitnessTracker from "./FitnessTracker";
 import FitnessReports from "./FitnessReports";
 import moment from "moment";
 import API from "../../utils/API";
+import { Slider } from "material-ui-slider";
 
 // Material UI imports
 import { withStyles } from "@material-ui/core/styles";
@@ -25,6 +26,13 @@ const styles = theme => ({
       color: theme.palette.text.disabled,
       cursor: "pointer"
     }
+  },
+  addSpan: {
+    position: "absolute",
+    top: -15,
+    right: -1,
+    fontSize: 24,
+    textShadow: "1px 1px 1px #00000099"
   },
   container: {
     display: "grid",
@@ -271,9 +279,9 @@ class FitnessPanel extends Component {
     API.getWorkOutById(workout.value).then(res => {
       const newResistance = [];
       const newCardio = [];
-
-      if (res.data[0].resistance) {
-        res.data[0].resistance.forEach(exercise => {
+      console.log(res.data);
+      if (res.data.resistance) {
+        res.data.resistance.forEach(exercise => {
           newResistance.push({
             name: exercise.name,
             weight: exercise.weight,
@@ -283,8 +291,8 @@ class FitnessPanel extends Component {
         });
       }
 
-      if (res.data[0].cardio) {
-        res.data[0].cardio.forEach(exercise => {
+      if (res.data.cardio) {
+        res.data.cardio.forEach(exercise => {
           newCardio.push({
             name: exercise.name,
             time: exercise.time,
@@ -295,6 +303,10 @@ class FitnessPanel extends Component {
 
       this.setState({ resistanceToAdd: newResistance, cardioToAdd: newCardio });
     });
+  };
+
+  handleWorkoutChange = newValue => {
+    this.setState({ woName: newValue });
   };
 
   handleChange = name => event => {
@@ -418,6 +430,7 @@ class FitnessPanel extends Component {
 
   handleSetChange = event => {
     let { value, id } = event.currentTarget;
+    console.log(value);
     value = parseInt(value);
     if (value < 1) value = 1;
     if (value > 20) value = 20;
@@ -430,8 +443,8 @@ class FitnessPanel extends Component {
     } else {
       resistanceArrayCopy[id].weight.length = value;
       resistanceArrayCopy[id].reps.length = value;
-      resistanceArrayCopy[id].sets = value;
     }
+    resistanceArrayCopy[id].sets = value;
     this.setState({ resistanceToAdd: resistanceArrayCopy });
   };
 
@@ -489,7 +502,7 @@ class FitnessPanel extends Component {
                 errorMessage: "Missing workout info!",
                 saving: false,
                 saveSuccess: false,
-                buttonColor: "#cc3737"
+                buttonColor: "indianred"
               },
               () => {
                 setTimeout(() => {
@@ -516,7 +529,7 @@ class FitnessPanel extends Component {
                 fetchDropdownData: false,
                 errorMessage: "Saved workout!",
                 saving: false,
-                buttonColor: "#469640",
+                buttonColor: "#5ccd8f",
                 saveSuccess: true
               },
               () => {
@@ -728,7 +741,7 @@ class FitnessPanel extends Component {
     const { anchorEl, open } = this.state;
 
     return (
-      <Grid container spacing={8} className={classes.demo}>
+      <Grid container spacing={1} className={classes.demo}>
         <Typography className={classes.panelName} variant="h3" gutterBottom>
           Fitness
         </Typography>
@@ -765,6 +778,7 @@ class FitnessPanel extends Component {
             open={open}
             handleLoadWorkoutChange={this.handleLoadWorkoutChange}
             handleChange={this.handleTabChange}
+            handleWorkoutChange={this.handleWorkoutChange}
             toggleShareDialog={this.toggleShareDialog}
           />
         </Grid>
