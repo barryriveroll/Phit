@@ -405,8 +405,23 @@ class FitnessPanel extends Component {
   };
 
   handleResistanceArrayChange = (type, exerciseId) => event => {
-    const { value, id } = event.currentTarget;
+    let { value, id } = event.currentTarget;
     let newRez = [...this.state.resistanceToAdd];
+    if (type === "weight") {
+      if (value > 1500) {
+        value = 1500;
+      }
+      if (value < 1) {
+        value = 1;
+      }
+    } else {
+      if (value > 500) {
+        value = 500;
+      }
+      if (value < 1) {
+        value = 1;
+      }
+    }
     newRez[exerciseId][type][id] = parseInt(value);
     this.setState({ resistanceToAdd: newRez });
   };
