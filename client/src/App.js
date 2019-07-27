@@ -132,11 +132,12 @@ class App extends Component {
   };
 
   signOut = event => {
+    setGlobal({ userId: null });
     this.setState(
       { user: null, value: 0, darkMode: true, verified: false },
       () => {
         auth.signOut();
-        localStorage.userId = null;
+        localStorage.setItem("userId", null);
         this.pinkTheme();
       }
     );

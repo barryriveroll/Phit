@@ -59,7 +59,7 @@ const styles = theme => ({
     fontFamily: "'Lobster', cursive",
     position: "absolute",
     top: -20,
-    fontSize: "1.5em",
+    fontSize: 24,
     textShadow: "1px 1px 1px " + theme.palette.secondary.contrastText,
     fontWeight: 300
   },

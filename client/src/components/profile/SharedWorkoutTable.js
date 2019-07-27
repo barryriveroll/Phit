@@ -31,9 +31,23 @@ class SharedWorkoutTable extends React.Component {
     sharedCardio: []
   };
 
+  componentDidMount = () => {
+    let dataCopy = [...this.props.resistanceToAdd];
+    let exerciseSubData = [];
+
+    for (let i = 0; i < dataCopy[index].sets; i++) {}
+  };
+
   handleChange = event => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
+  };
+
+  handleSliderWeightChange = index => (event, value) => {
+    let sharedArray = [...this.global.sharedResistanceWeightProgress];
+
+    sharedArray[index] = value;
+    setGlobal({ sharedResistanceWeightProgress: sharedArray });
   };
 
   handleExerciseNameChange = event => {
@@ -44,12 +58,21 @@ class SharedWorkoutTable extends React.Component {
   };
 
   handleNestedSetChange = event => {
+    let globalCopy = [...this.global.sharedResistanceWeightProgress];
     let sharedResistance = [...this.state.sharedResistance];
     let { value, id } = event.target;
     if (value > 20) value = 20;
     if (value < 1) value = 1;
     sharedResistance[id].sets = value;
 
+    if (globalCopy.length < value) {
+      for (let i = globalCopy.length; i < value; i++) {
+        globalCopy.push(20);
+      }
+    } else {
+      globalCopy.length = value;
+    }
+    setGlobal({ sharedResistanceWeightProgress: globalCopy });
     this.setState({ sharedResistance });
   };
 
@@ -82,6 +105,7 @@ class SharedWorkoutTable extends React.Component {
           <Input
             id={index}
             name="sets"
+            fullWidth
             onChange={this.handleNestedSetChange}
             value={parseInt(this.state.sharedResistance[index].sets)}
             type="number"
@@ -102,16 +126,15 @@ class SharedWorkoutTable extends React.Component {
   returnSubData = index => {
     let dataCopy = [...this.props.resistanceToAdd];
     let exerciseSubData = [];
-    let wieghtProgress = [];
 
     for (let i = 0; i < dataCopy[index].sets; i++) {
-      wieghtProgress.push(20);
       exerciseSubData.push({
         set: `Set ${i + 1}`,
         reps: (
           <Input
             id={index}
             name="reps"
+            fullWidth
             onChange={this.handleNestedRepChange(i)}
             value={parseInt(this.state.sharedResistance[index].reps[i])}
             type="number"
@@ -125,10 +148,15 @@ class SharedWorkoutTable extends React.Component {
         ),
 
         // dataCopy[index].reps[i],
-        weight: <WeightToggler index={i} />
+        weight: (
+          <WeightToggler
+            handleSliderWeightChange={this.handleSliderWeightChange}
+            index={i}
+          />
+        )
       });
     }
-    setGlobal({ sharedResistanceWeightProgress: wieghtProgress });
+
     return exerciseSubData;
   };
 

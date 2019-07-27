@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import deburr from "lodash/deburr";
 import Autosuggest from "react-autosuggest";
 import match from "autosuggest-highlight/match";
@@ -10,11 +10,11 @@ import Popper from "@material-ui/core/Popper";
 import { makeStyles } from "@material-ui/core/styles";
 import API from "../../utils/API";
 
-let suggestions = updateDropdownSuggestions();
+let suggestions = [];
 
 function updateDropdownSuggestions() {
   let workoutSuggestions = [];
-  API.findUserWorkOuts(localStorage.userId).then(res => {
+  API.findUserWorkOuts(localStorage.getItem("userId")).then(res => {
     if (res.data.length) {
       for (let i = 0; i < res.data[0].workouts.length; i++) {
         if (res.data[0].workouts[i].name) {
@@ -136,6 +136,10 @@ export default function WorkoutsDropdown(props) {
     single: "",
     popper: ""
   });
+
+  useEffect(() => {
+    suggestions = updateDropdownSuggestions();
+  }, []);
 
   const [stateSuggestions, setSuggestions] = React.useState([]);
 

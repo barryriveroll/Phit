@@ -37,7 +37,7 @@ function TabContainer(props) {
 
 function returnButtonColor() {
   if (success) {
-    return "#469640";
+    return "#5ccd8f";
   } else {
     return "";
   }

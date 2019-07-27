@@ -22,6 +22,7 @@ const styles = theme => ({
     marginLeft: -16
   },
   addSpan: {
+    color: "white !important",
     position: "absolute",
     top: -15,
     right: -1,
@@ -101,7 +102,7 @@ const styles = theme => ({
     fontFamily: "'Lobster', cursive",
     position: "absolute",
     top: -20,
-    fontSize: "1.5em",
+    fontSize: 24,
     textShadow: "1px 1px 1px " + theme.palette.secondary.contrastText,
     fontWeight: 300
   },
@@ -433,8 +434,18 @@ class NutritionPanel extends Component {
   };
 
   changeQuantity = event => {
-    const { name, id, value } = event.target;
+    let { name, id, value } = event.target;
+    console.log(value);
     let newFoodToAdd = [...this.state.mealsToAdd];
+    if (value > 100) {
+      value = 100;
+    }
+    if (value < 0) {
+      value = 0;
+    }
+    if (value === "") {
+      value = 1;
+    }
     newFoodToAdd[name].foodItem[id].servingQty = parseInt(value);
     this.setState({ mealsToAdd: newFoodToAdd });
   };

@@ -1,4 +1,4 @@
-import React from "react";
+import React from "reactn";
 import PropTypes from "prop-types";
 import Select from "react-select";
 import { withStyles } from "@material-ui/core/styles";
@@ -187,7 +187,7 @@ class WorkoutsDropdown extends React.Component {
   };
 
   updateDropdownSuggestions = () => {
-    API.findUserWorkOuts(localStorage.userId).then(res => {
+    API.findUserWorkOuts(this.global.userId).then(res => {
       let suggestions = [];
       if (res.data.length) {
         for (let i = 0; i < res.data[0].workouts.length; i++) {

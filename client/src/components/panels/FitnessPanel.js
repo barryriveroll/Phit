@@ -27,6 +27,7 @@ const styles = theme => ({
     }
   },
   addSpan: {
+    color: "white !important",
     position: "absolute",
     top: -15,
     right: -1,
@@ -77,7 +78,7 @@ const styles = theme => ({
     fontFamily: "'Lobster', cursive",
     position: "absolute",
     top: -20,
-    fontSize: "1.5em",
+    fontSize: 24,
     textShadow: "1px 1px 1px " + theme.palette.secondary.contrastText,
     fontWeight: 300
   },
@@ -415,8 +416,8 @@ class FitnessPanel extends Component {
         value = 1;
       }
     } else {
-      if (value > 500) {
-        value = 500;
+      if (value > 100) {
+        value = 100;
       }
       if (value < 1) {
         value = 1;

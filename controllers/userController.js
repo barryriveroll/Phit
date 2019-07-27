@@ -21,7 +21,7 @@ module.exports = {
       .catch(err => console.log(err));
   },
   findUserWorkOuts: function(req, res) {
-    console.log(req.params.id);
+    console.log("userworkkouts!!!" + req.params.id);
     if (req.params.id !== "null") {
       db.User.find({ _id: ObjectId(req.params.id) })
         .populate("workouts")

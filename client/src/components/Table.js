@@ -92,7 +92,7 @@ function returnFitnessData(
 
               <Input
                 id={index}
-                fullWidth
+                // fullWidth
                 name="name"
                 onChange={changeHandler("resistanceToAdd")}
                 value={exercise.name}
@@ -104,6 +104,7 @@ function returnFitnessData(
           sets: (
             <Input
               id={index}
+              fullWidth
               name="sets"
               onChange={handleSetChange}
               value={exercise.sets}
@@ -132,7 +133,7 @@ function returnFitnessData(
 
               <Input
                 id={index}
-                fullWidth
+                // fullWidth
                 name="name"
                 onChange={changeHandler("cardioToAdd")}
                 value={exercise.name}
