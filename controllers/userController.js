@@ -21,7 +21,6 @@ module.exports = {
       .catch(err => console.log(err));
   },
   findUserWorkOuts: function(req, res) {
-    console.log("userworkkouts!!!" + req.params.id);
     if (req.params.id !== "null") {
       db.User.find({ _id: ObjectId(req.params.id) })
         .populate("workouts")
@@ -50,6 +49,28 @@ module.exports = {
           {
             $match: {
               $and: [{ "cardio.name": name }, { week: week }, { user: user }]
+            }
+          }
+        ]).then(workOutData => res.json(workOutData));
+  },
+
+  findWorkOutsByMonth: function(req, res) {
+    let { month, name, user, type } = req.params;
+    month = parseInt(month);
+    type === "resistance"
+      ? db.WorkOut.aggregate([
+          { $unwind: "$resistance" },
+          {
+            $match: {
+              $and: [{ "resistance.name": name }, { month }, { user }]
+            }
+          }
+        ]).then(workOutData => res.json(workOutData))
+      : db.WorkOut.aggregate([
+          { $unwind: "$cardio" },
+          {
+            $match: {
+              $and: [{ "cardio.name": name }, { month }, { user }]
             }
           }
         ]).then(workOutData => res.json(workOutData));

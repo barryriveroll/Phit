@@ -36,12 +36,12 @@ module.exports = {
   },
 
   saveWorkOut: function(req, res) {
+    req.body["month"] = parseInt(req.body.date.slice(5, 7));
     if (req.body.name) {
       db.WorkOut.updateOne(
         { name: req.body.name, user: req.body.user },
         { $set: { name: null } }
       ).then(result => {
-        console.log(result);
         db.WorkOut.updateOne(
           { date: req.body.date, user: req.body.user },
           { $set: req.body },

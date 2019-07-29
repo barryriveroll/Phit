@@ -179,7 +179,7 @@ export default function WorkoutsDropdown(props) {
           id: "react-autosuggest-popper",
           label: "Workout Name",
           //   placeholder: "With Popper",
-          value: state.popper,
+          value: props.woName,
           onChange: handleChange("popper", props.handleChange),
 
           inputRef: node => {

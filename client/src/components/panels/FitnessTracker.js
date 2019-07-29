@@ -51,8 +51,8 @@ function FitnessTracker(props) {
         <Grid item xs={6}>
           <WorkoutsDropdown
             handleLoadWorkoutChange={props.handleLoadWorkoutChange}
-            // woName={props.woName}
             handleChange={props.handleWorkoutChange}
+            woName={props.woName}
           />
         </Grid>
         <Grid item xs={6}>

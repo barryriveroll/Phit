@@ -31,7 +31,7 @@ export default function Loading() {
         </div>
       </div>
       <a
-        style={{ textDecoration: "none" }}
+        style={{ textDecoration: "none", color: "inherit" }}
         className="aTag"
         href="https://loading.io/spinner/double-ring"
         target="_blank"

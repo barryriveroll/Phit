@@ -49,6 +49,12 @@ export default {
     );
   },
 
+  workOutByMonth: function(data) {
+    return axios.get(
+      `/api/users/month/${data.month}&${data.type}&${data.name}&${data.user}`
+    );
+  },
+
   updateSettings: function(setting) {
     return axios.put("/api/users/settings/", setting);
   },
@@ -78,7 +84,6 @@ export default {
   //--------------------------------------------------
 
   findProfile: function(username) {
-    console.log(`2: ${new Date().getTime()}`);
     return axios.get("/api/users/profile/" + username);
   },
   uploadPicture: function(picture) {

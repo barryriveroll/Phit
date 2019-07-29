@@ -516,7 +516,8 @@ class NutritionPanel extends Component {
             const newMealsArr = [...res.data[0].meal];
 
             this.setState({
-              mealsToAdd: newMealsArr
+              mealsToAdd: newMealsArr,
+              mealName: res.data[0].meal[0].name || ""
             });
           } else {
             this.setState({
@@ -602,7 +603,7 @@ class NutritionPanel extends Component {
             chartDate={this.state.chartDate}
             chartWeek={this.state.chartWeek}
             selectChartTimeframe={this.selectChartTimeframe}
-            textColor={this.props.theme.typography.body1.color}
+            textColor={this.props.theme.palette.text.primary}
             classes={classes}
             xlNut={this.props.xlNut}
             handleInputChange={this.handleInputChange}

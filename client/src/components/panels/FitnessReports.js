@@ -185,20 +185,7 @@ class FitnessReports extends Component {
             </Select>
           </FormControl>
           <FormControl disabled={!this.props.exercise}>
-            <TextField
-              id="date"
-              style={{ width: 120 }}
-              value={this.props.chartWeek}
-              name="workoutDate"
-              onChange={this.props.selectWeek}
-              label=" "
-              type="week"
-              className={classes.textField}
-              InputLabelProps={{
-                shrink: true
-              }}
-            />
-            {/* <InputLabel htmlFor="timeframe-native-simple">Timeframe</InputLabel>
+            <InputLabel htmlFor="timeframe-native-simple">Timeframe</InputLabel>
             <Select
               style={{ width: 120, marginRight: 15 }}
               native
@@ -210,10 +197,25 @@ class FitnessReports extends Component {
               }}
             >
               <option value="" />
-              <option value={"thisWeek"}>This Week</option>
-              <option value={"thisMonth"}>This Month</option>
-              <option value={"thisYear"}>This Year</option>
-            </Select> */}
+              <option value={"thisWeek"}>Weekly</option>
+              <option value={"thisMonth"}>Monthly</option>
+            </Select>
+          </FormControl>
+          <FormControl>
+            <TextField
+              disabled={!this.props.timeframe || !this.props.exercise}
+              id="date"
+              style={{ width: 120 }}
+              value={this.props.chartWeek}
+              name="workoutDate"
+              onChange={this.props.selectWeek}
+              label=" "
+              type={this.props.timeframe === "thisWeek" ? "week" : "month"}
+              className={classes.textField}
+              InputLabelProps={{
+                shrink: true
+              }}
+            />
           </FormControl>
         </Grid>
 

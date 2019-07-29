@@ -31,12 +31,12 @@ class SharedWorkoutTable extends React.Component {
     sharedCardio: []
   };
 
-  componentDidMount = () => {
-    let dataCopy = [...this.props.resistanceToAdd];
-    let exerciseSubData = [];
+  // componentDidMount = () => {
+  //   let dataCopy = [...this.props.resistanceToAdd];
+  //   let exerciseSubData = [];
 
-    for (let i = 0; i < dataCopy[index].sets; i++) {}
-  };
+  //   for (let i = 0; i < dataCopy[index].sets; i++) {}
+  // };
 
   handleChange = event => {
     const { name, value } = event.target;

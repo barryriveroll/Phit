@@ -117,29 +117,38 @@ class Profile extends Component {
       socialYouTube: "",
       socialTwitter: ""
     },
-    editingAbout: false
+    editingAbout: false,
+    stopBreaking: false
   };
 
   componentDidMount = () => {
+    console.log("CDM");
     this.fetchUserData();
   };
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (nextProps.match.params.username !== prevState.currentUser) {
-      return { currentUser: nextProps.currentUser };
+      return {
+        currentUser: nextProps.match.params.username,
+        stopBreaking: false
+      };
     } else {
       return null;
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.match.params.username !== this.global.username) {
+    if (
+      prevProps.match.params.username !== this.global.username &&
+      !this.state.stopBreaking
+    ) {
       this.fetchUserData();
     }
   }
 
   fetchUserData = () => {
     let username = this.props.match.params.username;
+    console.log(username);
     API.findProfile(username).then(res => {
       if (res.data.length) {
         let profileAbout = {
@@ -155,14 +164,18 @@ class Profile extends Component {
           cradle = res.data[0].picture;
         }
 
-        this.setState({ profilePicture: res.data[0].picture, profileAbout });
+        this.setState({
+          profilePicture: res.data[0].picture,
+          profileAbout
+        });
       }
       auth.onAuthStateChanged(firebaseUser => {
         if (!firebaseUser.emailVerified) monkeyWrench = false;
 
         this.setState({
-          user: firebaseUser,
-          currentUser: username
+          // user: firebaseUser,
+          currentUser: username,
+          stopBreaking: true
         });
       });
     });
@@ -202,7 +215,7 @@ class Profile extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <Fragment {...this.props}>
+      <Fragment>
         <CssBaseline />
         <Grid container justify="center">
           <Grid
