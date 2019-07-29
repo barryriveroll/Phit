@@ -11,6 +11,10 @@ router
   .route("/week/:week&:type&:name&:user")
   .get(userController.findWorkOutsByWeek);
 
+router
+  .route("/month/:month&:type&:name&:user")
+  .get(userController.findWorkOutsByMonth);
+
 router.route("/settings").put(userController.updateSettings);
 
 router.route("/workouts/:id").get(userController.findUserWorkOuts);

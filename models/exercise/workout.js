@@ -54,6 +54,7 @@ const cardioSchema = new mongoose.Schema({
 const workOutSchema = new mongoose.Schema({
   date: { type: String },
   week: { type: Number },
+  month: { type: Number },
   user: { type: String },
   name: {
     type: String,

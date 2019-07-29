@@ -3,7 +3,6 @@ import FitnessTracker from "./FitnessTracker";
 import FitnessReports from "./FitnessReports";
 import moment from "moment";
 import API from "../../utils/API";
-import { Slider } from "material-ui-slider";
 
 // Material UI imports
 import { withStyles } from "@material-ui/core/styles";
@@ -28,6 +27,7 @@ const styles = theme => ({
     }
   },
   addSpan: {
+    color: "white !important",
     position: "absolute",
     top: -15,
     right: -1,
@@ -78,7 +78,7 @@ const styles = theme => ({
     fontFamily: "'Lobster', cursive",
     position: "absolute",
     top: -20,
-    fontSize: "1.5em",
+    fontSize: 24,
     textShadow: "1px 1px 1px " + theme.palette.secondary.contrastText,
     fontWeight: 300
   },
@@ -265,7 +265,7 @@ class FitnessPanel extends Component {
   clickExerciseName = name => event => {
     const { value } = event.target;
     this.setState({ [name]: value, canClickDetail: false }, () => {
-      if (this.state.timeframe) {
+      if (this.state.timeframe && this.state.exercise) {
         this.getWorkOutByTimeframe(this.state.exercise);
       }
     });
@@ -279,7 +279,6 @@ class FitnessPanel extends Component {
     API.getWorkOutById(workout.value).then(res => {
       const newResistance = [];
       const newCardio = [];
-      console.log(res.data);
       if (res.data.resistance) {
         res.data.resistance.forEach(exercise => {
           newResistance.push({
@@ -406,8 +405,23 @@ class FitnessPanel extends Component {
   };
 
   handleResistanceArrayChange = (type, exerciseId) => event => {
-    const { value, id } = event.currentTarget;
+    let { value, id } = event.currentTarget;
     let newRez = [...this.state.resistanceToAdd];
+    if (type === "weight") {
+      if (value > 1500) {
+        value = 1500;
+      }
+      if (value < 1) {
+        value = 1;
+      }
+    } else {
+      if (value > 100) {
+        value = 100;
+      }
+      if (value < 1) {
+        value = 1;
+      }
+    }
     newRez[exerciseId][type][id] = parseInt(value);
     this.setState({ resistanceToAdd: newRez });
   };
@@ -430,7 +444,7 @@ class FitnessPanel extends Component {
 
   handleSetChange = event => {
     let { value, id } = event.currentTarget;
-    console.log(value);
+
     value = parseInt(value);
     if (value < 1) value = 1;
     if (value > 20) value = 20;
@@ -461,7 +475,7 @@ class FitnessPanel extends Component {
       };
 
       if (this.state.woName) {
-        data.WorkOut["name"] = this.state.woName;
+        data.WorkOut["name"] = this.state.woName.toLowerCase();
       }
 
       let resistanceNames = [...this.state.resistanceExerciseNames];
@@ -470,11 +484,11 @@ class FitnessPanel extends Component {
       if (this.state.resistanceToAdd.length) {
         this.state.resistanceToAdd.map(resistance => {
           if (!resistanceNames.includes(resistance.name)) {
-            resistanceNames.push(resistance.name);
+            resistanceNames.push(resistance.name.toLowerCase());
           }
 
           data.WorkOut.resistance.push({
-            name: resistance.name,
+            name: resistance.name.toLowerCase(),
             sets: parseInt(resistance.sets),
             reps: resistance.reps,
             weight: resistance.weight
@@ -484,10 +498,10 @@ class FitnessPanel extends Component {
       if (this.state.cardioToAdd.length) {
         this.state.cardioToAdd.map(cardio => {
           if (!cardioNames.includes(cardio.name)) {
-            cardioNames.push(cardio.name);
+            cardioNames.push(cardio.name.toLowerCase());
           }
           data.WorkOut.cardio.push({
-            name: cardio.name,
+            name: cardio.name.toLowerCase(),
             distance: parseInt(cardio.distance),
             time: parseInt(cardio.time)
           });
@@ -545,7 +559,6 @@ class FitnessPanel extends Component {
   };
 
   returnWorkoutsByDate = date => {
-    console.log(this.global.userId);
     this.setState({ workoutDate: date }, () => {
       API.getWorkOutsByDate(this.state.workoutDate, localStorage.userId).then(
         res => {
@@ -575,7 +588,8 @@ class FitnessPanel extends Component {
               {
                 resistanceToAdd: newWorkOutState.resistanceToAdd,
                 cardioToAdd: newWorkOutState.cardioToAdd,
-                selectedWorkout: res.data[0].name ? res.data[0].name : "None"
+                selectedWorkout: res.data[0].name ? res.data[0].name : "None",
+                woName: res.data[0].name || ""
               },
               () => {
                 setGlobal({ exerciseReady: true });
@@ -586,7 +600,8 @@ class FitnessPanel extends Component {
               {
                 resistanceToAdd: [],
                 cardioToAdd: [],
-                selectedWorkout: "None"
+                selectedWorkout: "None",
+                woName: ""
               },
               () => {
                 setGlobal({ exerciseReady: true });
@@ -599,98 +614,175 @@ class FitnessPanel extends Component {
   };
 
   getWorkOutByTimeframe = exercise => {
-    API.workOutByWeek({
-      week: this.state.chartWeek,
+    console.log({
+      month: this.state.chartMonth,
       name: exercise,
       user: localStorage.userId,
       type: this.state.type
-    }).then(res => {
-      let newChartData = { ...this.state.data };
-      const dateArray = [
-        moment()
-          .day("Sunday")
-          .week(this.state.chartWeek)
-          .format("MM-DD-YYYY"),
-        moment()
-          .day("Monday")
-          .week(this.state.chartWeek)
-          .format("MM-DD-YYYY"),
-        moment()
-          .day("Tuesday")
-          .week(this.state.chartWeek)
-          .format("MM-DD-YYYY"),
-        moment()
-          .day("Wednesday")
-          .week(this.state.chartWeek)
-          .format("MM-DD-YYYY"),
-        moment()
-          .day("Thursday")
-          .week(this.state.chartWeek)
-          .format("MM-DD-YYYY"),
-        moment()
-          .day("Friday")
-          .week(this.state.chartWeek)
-          .format("MM-DD-YYYY"),
-        moment()
-          .day("Saturday")
-          .week(this.state.chartWeek)
-          .format("MM-DD-YYYY")
-      ];
-
-      newChartData.labels = [
-        ["Sunday", dateArray[0]],
-        ["Monday", dateArray[1]],
-        ["Tuesday", dateArray[2]],
-        ["Wednesday", dateArray[3]],
-        ["Thursday", dateArray[4]],
-        ["Friday", dateArray[5]],
-        ["Saturday", dateArray[6]]
-      ];
-
-      let newData = [null, null, null, null, null, null, null];
-      let lineData = [null, null, null, null, null, null, null];
-      let line2Data = [null, null, null, null, null, null, null];
-
-      for (let i = 0; i < res.data.length; i++) {
-        const dateToFind = moment(res.data[i].date).format("MM-DD-YYYY");
-        const id = dateArray.indexOf(dateToFind);
-        if (this.state.type === "resistance" && this.state.exercise) {
-          newData[id] = this.returnAverage(res.data[i].resistance.weight);
-          lineData[id] = this.returnAverage(res.data[i].resistance.reps);
-          line2Data[id] = res.data[i].resistance.sets;
-          newChartData.datasets[2].label = "Weight";
-          newChartData.datasets[0].label = "Reps";
-          newChartData.datasets[1].label = "Sets";
-        } else if (this.state.type === "cardio") {
-          newData[id] = res.data[i].cardio.distance;
-          lineData[id] = res.data[i].cardio["time"];
-          newChartData.datasets[2].label = "Distance";
-          newChartData.datasets[0].label = "Time";
-        }
-      }
-
-      newChartData.datasets[2].data = newData;
-      newChartData.datasets[0].data = lineData;
-      newChartData.datasets[1].data = line2Data;
-
-      let queryData = [...res.data];
-      queryData.forEach(data => {
-        if (data.cardio) {
-          data.cardio = [];
-        }
-      });
-
-      let canClickDetail = false;
-      if (this.state.type === "resistance") {
-        canClickDetail = true;
-      }
-
-      this.setState({
-        data: newChartData,
-        queryData,
-        canClickDetail
-      });
     });
+    if (this.state.timeframe === "thisMonth") {
+      API.workOutByMonth({
+        month: this.state.chartMonth,
+        name: exercise,
+        user: localStorage.userId,
+        type: this.state.type
+      }).then(res => {
+        console.log(res.data);
+        let newChartData = { ...this.state.data };
+
+        newChartData.labels = [
+          "Week 1",
+          "Week 2",
+          "Week 3",
+          "Week 4",
+          "Week 5"
+        ];
+
+        let newData = [0, 0, 0, 0, 0];
+        let lineData = [0, 0, 0, 0, 0];
+        let line2Data = [null, null, null, null, null];
+        let weekInMonth = [
+          moment(`2019-${this.state.chartMonth}-01`).week(),
+          moment(`2019-${this.state.chartMonth}-08`).week(),
+          moment(`2019-${this.state.chartMonth}-15`).week(),
+          moment(`2019-${this.state.chartMonth}-22`).week(),
+          moment(`2019-${this.state.chartMonth}-29`).week()
+        ];
+        console.log(weekInMonth);
+        let bigOlWeekArray = [[], [], [], [], []];
+
+        for (let i = 0; i < res.data.length; i++) {
+          const id = weekInMonth.indexOf(res.data[i].week);
+          bigOlWeekArray[id].push(res.data[i]);
+        }
+
+        for (let i = 0; i < bigOlWeekArray.length; i++) {
+          for (let j = 0; j < bigOlWeekArray[i].length; j++) {
+            if (this.state.type === "resistance" && this.state.exercise) {
+              newData[i] += this.returnSum(
+                bigOlWeekArray[i][j].resistance.weight
+              );
+
+              lineData[i] += this.returnSum(
+                bigOlWeekArray[i][j].resistance.reps
+              );
+
+              //lol
+              line2Data[i] += bigOlWeekArray[i][j].resistance.sets;
+              newChartData.datasets[2].label = "Weight";
+              newChartData.datasets[0].label = "Reps";
+              newChartData.datasets[1].label = "Sets";
+            } else if (this.state.type === "cardio") {
+              newData[i] += bigOlWeekArray[i][j].cardio.distance;
+              lineData[i] += bigOlWeekArray[i][j].cardio["time"];
+              newChartData.datasets[2].label = "Distance";
+              newChartData.datasets[0].label = "Time";
+            }
+          }
+        }
+        newChartData.datasets[2].data = newData;
+        newChartData.datasets[0].data = lineData;
+        newChartData.datasets[1].data = line2Data;
+
+        this.setState({
+          data: newChartData
+        });
+      });
+    } else if (this.state.timeframe === "thisWeek") {
+      API.workOutByWeek({
+        week: this.state.chartWeek,
+        name: exercise,
+        user: localStorage.userId,
+        type: this.state.type
+      }).then(res => {
+        console.log(res.data);
+        let newChartData = { ...this.state.data };
+        const dateArray = [
+          moment()
+            .day("Sunday")
+            .week(this.state.chartWeek)
+            .format("MM-DD-YYYY"),
+          moment()
+            .day("Monday")
+            .week(this.state.chartWeek)
+            .format("MM-DD-YYYY"),
+          moment()
+            .day("Tuesday")
+            .week(this.state.chartWeek)
+            .format("MM-DD-YYYY"),
+          moment()
+            .day("Wednesday")
+            .week(this.state.chartWeek)
+            .format("MM-DD-YYYY"),
+          moment()
+            .day("Thursday")
+            .week(this.state.chartWeek)
+            .format("MM-DD-YYYY"),
+          moment()
+            .day("Friday")
+            .week(this.state.chartWeek)
+            .format("MM-DD-YYYY"),
+          moment()
+            .day("Saturday")
+            .week(this.state.chartWeek)
+            .format("MM-DD-YYYY")
+        ];
+
+        newChartData.labels = [
+          ["Sunday", dateArray[0]],
+          ["Monday", dateArray[1]],
+          ["Tuesday", dateArray[2]],
+          ["Wednesday", dateArray[3]],
+          ["Thursday", dateArray[4]],
+          ["Friday", dateArray[5]],
+          ["Saturday", dateArray[6]]
+        ];
+
+        let newData = [null, null, null, null, null, null, null];
+        let lineData = [null, null, null, null, null, null, null];
+        let line2Data = [null, null, null, null, null, null, null];
+
+        for (let i = 0; i < res.data.length; i++) {
+          const dateToFind = moment(res.data[i].date).format("MM-DD-YYYY");
+          const id = dateArray.indexOf(dateToFind);
+          if (this.state.type === "resistance" && this.state.exercise) {
+            newData[id] = this.returnAverage(res.data[i].resistance.weight);
+            lineData[id] = this.returnAverage(res.data[i].resistance.reps);
+            line2Data[id] = res.data[i].resistance.sets;
+            newChartData.datasets[2].label = "Weight";
+            newChartData.datasets[0].label = "Reps";
+            newChartData.datasets[1].label = "Sets";
+          } else if (this.state.type === "cardio") {
+            newData[id] = res.data[i].cardio.distance;
+            lineData[id] = res.data[i].cardio["time"];
+            newChartData.datasets[2].label = "Distance";
+            newChartData.datasets[0].label = "Time";
+          }
+        }
+
+        newChartData.datasets[2].data = newData;
+        newChartData.datasets[0].data = lineData;
+        newChartData.datasets[1].data = line2Data;
+
+        let queryData = [...res.data];
+        queryData.forEach(data => {
+          if (data.cardio) {
+            data.cardio = [];
+          }
+        });
+
+        let canClickDetail = false;
+        if (this.state.type === "resistance") {
+          canClickDetail = true;
+        }
+
+        this.setState({
+          data: newChartData,
+          queryData,
+          canClickDetail
+        });
+      });
+    }
   };
 
   returnAverage = arr => {
@@ -700,6 +792,15 @@ class FitnessPanel extends Component {
     }
 
     return (sum / arr.length).toFixed(0);
+  };
+
+  returnSum = arr => {
+    let sum = 0;
+    for (let i = 0; i < arr.length; i++) {
+      sum += arr[i];
+    }
+
+    return parseInt(sum.toFixed(0));
   };
 
   clickSavedWorkout = event => {
@@ -719,14 +820,23 @@ class FitnessPanel extends Component {
   };
 
   selectWeek = event => {
-    let week = event.target.value.split("W")[1];
-    if (week === undefined) week = 52;
+    console.log(event.target.value);
+    let week = moment().week();
+    let month = moment().month();
+
+    if (this.state.timeframe === "thisMonth") {
+      month = event.target.value.slice(5, 7);
+    } else {
+      week = event.target.value.split("W")[1];
+      if (week === undefined) week = 52;
+    }
+
     this.setState(
       {
         chartWeek: week,
-        timeframe: "thisWeek",
         detailView: false,
-        detailIndex: null
+        detailIndex: null,
+        chartMonth: month
       },
       () => this.getWorkOutByTimeframe(this.state.exercise)
     );
@@ -814,7 +924,7 @@ class FitnessPanel extends Component {
               exercise={this.state.exercise}
               yAxis={this.state.yAxis}
               timeframe={this.state.timeframe}
-              textColor={this.props.theme.typography.body1.color}
+              textColor={this.props.theme.palette.text.primary}
             />
           </Paper>
         </Grid>

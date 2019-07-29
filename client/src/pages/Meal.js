@@ -230,20 +230,24 @@ class Meal extends Component {
                 >
                   <ListItemText primary={food.foodItem[0].name} />
 
-                  <div style={{ color: "white", width: "150px" }}>
-                    <Typography>
+                  <div style={{ width: "150px" }}>
+                    <Typography style={{ display: "block" }}>
                       Calories: {food.foodItem[0].calories}
                     </Typography>
 
-                    <Typography>Protien: {food.foodItem[0].protein}</Typography>
+                    <Typography style={{ display: "block" }}>
+                      Protien: {food.foodItem[0].protein}
+                    </Typography>
 
-                    <Typography>
+                    <Typography style={{ display: "block" }}>
                       Carbohydrates: {food.foodItem[0].carbohydrates}
                     </Typography>
 
-                    <Typography>Fats: {food.foodItem[0].fats}</Typography>
+                    <Typography style={{ display: "block" }}>
+                      Fats: {food.foodItem[0].fats}
+                    </Typography>
 
-                    <Typography>
+                    <Typography style={{ display: "block" }}>
                       Serving Info: {food.foodItem[0].servingQty}{" "}
                       {food.foodItem[0].servingUnit}
                     </Typography>

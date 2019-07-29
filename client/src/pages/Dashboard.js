@@ -4,7 +4,7 @@ import { auth } from "../firebase.js";
 //Panel imports
 import FitnessPanel from "../components/panels/FitnessPanel";
 import NutritionPanel from "../components/panels/NutritionPanel";
-import Loading from "../components/Loading";
+
 // Material UI imports
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
@@ -12,7 +12,7 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import AppBar from "@material-ui/core/AppBar";
 import Paper from "@material-ui/core/Paper";
-
+import Loading from "../components/Loading";
 let x = window.matchMedia("(max-width: 700px)");
 
 class Dashboard extends Component {

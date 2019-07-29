@@ -51,8 +51,9 @@ function FitnessTracker(props) {
         <Grid item xs={6}>
           <WorkoutsDropdown
             handleLoadWorkoutChange={props.handleLoadWorkoutChange}
-            // woName={props.woName}
             handleChange={props.handleWorkoutChange}
+            woName={props.woName}
+            fetchDropdownData={props.fetchDropdownData}
           />
         </Grid>
         <Grid item xs={6}>
@@ -144,15 +145,16 @@ function FitnessTracker(props) {
             <Icon>directions_run</Icon>
           </Fab>
         </Grid>
-        <Grid item xs={3}>
+        {/* <Grid item xs={3}>
           <SharedDialogWorkout
             resistanceToAdd={props.resistanceToAdd}
             workoutName={props.woName}
             classes={classes}
+            handleChange={props.handleShareChange}
           />
-        </Grid>
+        </Grid> */}
 
-        <Grid item xs={3}>
+        <Grid item xs={6}>
           <Fab
             size="small"
             style={{

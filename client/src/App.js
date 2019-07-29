@@ -132,11 +132,12 @@ class App extends Component {
   };
 
   signOut = event => {
+    setGlobal({ userId: null });
     this.setState(
       { user: null, value: 0, darkMode: true, verified: false },
       () => {
         auth.signOut();
-        localStorage.userId = null;
+        localStorage.setItem("userId", null);
         this.pinkTheme();
       }
     );
@@ -333,7 +334,7 @@ class App extends Component {
                 >
                   Phit
                 </Typography>
-                <div
+                {/* <div
                   style={{ position: " absolute", left: "calc(50% - 160px)" }}
                 >
                   {this.state.user ? (
@@ -354,7 +355,7 @@ class App extends Component {
                       />
                     </Tabs>
                   ) : null}
-                </div>
+                </div> */}
                 <div>
                   {this.state.user ? (
                     <Tabs centered>

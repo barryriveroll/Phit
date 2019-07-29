@@ -22,6 +22,7 @@ const styles = theme => ({
     marginLeft: -16
   },
   addSpan: {
+    color: "white !important",
     position: "absolute",
     top: -15,
     right: -1,
@@ -101,7 +102,7 @@ const styles = theme => ({
     fontFamily: "'Lobster', cursive",
     position: "absolute",
     top: -20,
-    fontSize: "1.5em",
+    fontSize: 24,
     textShadow: "1px 1px 1px " + theme.palette.secondary.contrastText,
     fontWeight: 300
   },
@@ -433,8 +434,18 @@ class NutritionPanel extends Component {
   };
 
   changeQuantity = event => {
-    const { name, id, value } = event.target;
+    let { name, id, value } = event.target;
+    console.log(value);
     let newFoodToAdd = [...this.state.mealsToAdd];
+    if (value > 100) {
+      value = 100;
+    }
+    if (value < 0) {
+      value = 0;
+    }
+    if (value === "") {
+      value = 1;
+    }
     newFoodToAdd[name].foodItem[id].servingQty = parseInt(value);
     this.setState({ mealsToAdd: newFoodToAdd });
   };
@@ -460,7 +471,7 @@ class NutritionPanel extends Component {
     if (this.state.mealToLoad.label) {
       API.getMeal(this.state.mealToLoad.value).then(res => {
         mealArray[this.state.value].foodItem = [];
-        mealArray[this.state.value].name = res.data[0].meal.name;
+        mealArray[this.state.value].name = res.data[0].meal.name.toLowerCase();
 
         if (res.data[0].meal.foodItem.length) {
           res.data[0].meal.foodItem.forEach(foodItem => {
@@ -478,7 +489,7 @@ class NutritionPanel extends Component {
 
         this.setState({
           mealsToAdd: mealArray,
-          mealName: res.data[0].meal.name,
+          mealName: res.data[0].meal.name.toLowerCase(),
           mealToLoad: { label: null }
         });
       });
@@ -505,7 +516,8 @@ class NutritionPanel extends Component {
             const newMealsArr = [...res.data[0].meal];
 
             this.setState({
-              mealsToAdd: newMealsArr
+              mealsToAdd: newMealsArr,
+              mealName: res.data[0].meal[0].name || ""
             });
           } else {
             this.setState({
@@ -548,6 +560,9 @@ class NutritionPanel extends Component {
           meal: this.state.mealsToAdd
         }
       };
+      for (let i = 0; i < data.Nutrition.meal.length; i++) {
+        data.Nutrition.meal[i].name = data.Nutrition.meal[i].name.toLowerCase();
+      }
       API.saveMeal(data.Nutrition).then(res => {
         this.getNutritionByTimeframe();
         this.setState({ fetchDropdownData: false });
@@ -591,7 +606,7 @@ class NutritionPanel extends Component {
             chartDate={this.state.chartDate}
             chartWeek={this.state.chartWeek}
             selectChartTimeframe={this.selectChartTimeframe}
-            textColor={this.props.theme.typography.body1.color}
+            textColor={this.props.theme.palette.text.primary}
             classes={classes}
             xlNut={this.props.xlNut}
             handleInputChange={this.handleInputChange}
