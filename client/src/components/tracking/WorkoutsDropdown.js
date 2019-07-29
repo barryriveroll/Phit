@@ -139,7 +139,7 @@ export default function WorkoutsDropdown(props) {
 
   useEffect(() => {
     suggestions = updateDropdownSuggestions();
-  }, []);
+  }, [props.fetchDropdownData]);
 
   const [stateSuggestions, setSuggestions] = React.useState([]);
 

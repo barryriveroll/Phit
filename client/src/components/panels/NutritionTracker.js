@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Meal from "../../pages/Meal";
-import DatePickers from "../DatePicker";
+
 import MealsDropdown from "../tracking/MealsDropdown";
 
 // Material UI imports
@@ -10,10 +10,10 @@ import Paper from "@material-ui/core/Paper";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import Button from "@material-ui/core/Button";
+
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import FormControl from "@material-ui/core/FormControl";
+
 import Grid from "@material-ui/core/Grid";
 import TrackerTable from "../Table";
 import MoodIcon from "@material-ui/icons/Mood";

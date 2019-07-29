@@ -471,7 +471,7 @@ class NutritionPanel extends Component {
     if (this.state.mealToLoad.label) {
       API.getMeal(this.state.mealToLoad.value).then(res => {
         mealArray[this.state.value].foodItem = [];
-        mealArray[this.state.value].name = res.data[0].meal.name;
+        mealArray[this.state.value].name = res.data[0].meal.name.toLowerCase();
 
         if (res.data[0].meal.foodItem.length) {
           res.data[0].meal.foodItem.forEach(foodItem => {
@@ -489,7 +489,7 @@ class NutritionPanel extends Component {
 
         this.setState({
           mealsToAdd: mealArray,
-          mealName: res.data[0].meal.name,
+          mealName: res.data[0].meal.name.toLowerCase(),
           mealToLoad: { label: null }
         });
       });
@@ -560,6 +560,9 @@ class NutritionPanel extends Component {
           meal: this.state.mealsToAdd
         }
       };
+      for (let i = 0; i < data.Nutrition.meal.length; i++) {
+        data.Nutrition.meal[i].name = data.Nutrition.meal[i].name.toLowerCase();
+      }
       API.saveMeal(data.Nutrition).then(res => {
         this.getNutritionByTimeframe();
         this.setState({ fetchDropdownData: false });

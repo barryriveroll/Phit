@@ -475,7 +475,7 @@ class FitnessPanel extends Component {
       };
 
       if (this.state.woName) {
-        data.WorkOut["name"] = this.state.woName;
+        data.WorkOut["name"] = this.state.woName.toLowerCase();
       }
 
       let resistanceNames = [...this.state.resistanceExerciseNames];
@@ -484,11 +484,11 @@ class FitnessPanel extends Component {
       if (this.state.resistanceToAdd.length) {
         this.state.resistanceToAdd.map(resistance => {
           if (!resistanceNames.includes(resistance.name)) {
-            resistanceNames.push(resistance.name);
+            resistanceNames.push(resistance.name.toLowerCase());
           }
 
           data.WorkOut.resistance.push({
-            name: resistance.name,
+            name: resistance.name.toLowerCase(),
             sets: parseInt(resistance.sets),
             reps: resistance.reps,
             weight: resistance.weight
@@ -498,10 +498,10 @@ class FitnessPanel extends Component {
       if (this.state.cardioToAdd.length) {
         this.state.cardioToAdd.map(cardio => {
           if (!cardioNames.includes(cardio.name)) {
-            cardioNames.push(cardio.name);
+            cardioNames.push(cardio.name.toLowerCase());
           }
           data.WorkOut.cardio.push({
-            name: cardio.name,
+            name: cardio.name.toLowerCase(),
             distance: parseInt(cardio.distance),
             time: parseInt(cardio.time)
           });

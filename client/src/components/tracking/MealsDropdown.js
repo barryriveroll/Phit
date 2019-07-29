@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import deburr from "lodash/deburr";
 import Autosuggest from "react-autosuggest";
 import match from "autosuggest-highlight/match";
@@ -10,7 +10,7 @@ import Popper from "@material-ui/core/Popper";
 import { makeStyles } from "@material-ui/core/styles";
 import API from "../../utils/API";
 
-let suggestions = updateDropdownSuggestions();
+let suggestions = [];
 
 function updateDropdownSuggestions() {
   let workoutSuggestions = [];
@@ -18,7 +18,7 @@ function updateDropdownSuggestions() {
     console.log(res);
     if (res.data.length) {
       for (let i = 0; i < res.data.length; i++) {
-        suggestions.push({
+        workoutSuggestions.push({
           label: res.data[i].name,
           value: res.data[i]._id
         });
@@ -36,33 +36,6 @@ function updateDropdownSuggestions() {
   });
   return workoutSuggestions;
 }
-
-const updateDropdownSuggestions2 = () => {
-  API.getMealNames(localStorage.userId).then(res => {
-    let suggestions = [];
-    if (res.data.length) {
-      for (let i = 0; i < res.data.length; i++) {
-        for (let j = 0; j < res.data[i].meal.length; j++) {
-          suggestions.push({
-            label: res.data[i].meal[j].name,
-            value: res.data[i].meal[j]._id
-          });
-        }
-      }
-
-      suggestions.sort((a, b) =>
-        a.label > b.label ? 1 : b.label > a.label ? -1 : 0
-      );
-
-      suggestions = suggestions.map(suggestion => ({
-        label: suggestion.label,
-        value: suggestion.value
-      }));
-
-      this.setState({ suggestions });
-    }
-  });
-};
 
 function renderInputComponent(inputProps) {
   const { classes, inputRef = () => {}, ref, ...other } = inputProps;
@@ -162,6 +135,10 @@ export default function MealsDropdown(props) {
     single: "",
     popper: ""
   });
+
+  useEffect(() => {
+    suggestions = updateDropdownSuggestions();
+  }, [props.fetchDropdownData]);
 
   const [stateSuggestions, setSuggestions] = React.useState([]);
 
