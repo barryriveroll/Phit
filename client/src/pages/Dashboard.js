@@ -40,7 +40,9 @@ class Dashboard extends Component {
         <CssBaseline />
         <div
           style={
-            this.global.exerciseReady && this.global.nutritionReady
+            x.matches
+              ? { display: "inherit" }
+              : this.global.exerciseReady && this.global.nutritionReady
               ? { display: "inherit" }
               : { display: "none" }
           }
@@ -111,7 +113,9 @@ class Dashboard extends Component {
         </div>
         <div
           style={
-            this.global.exerciseReady && this.global.nutritionReady
+            x.matches
+              ? { display: "none" }
+              : this.global.exerciseReady && this.global.nutritionReady
               ? { display: "none" }
               : { display: "flex" }
           }

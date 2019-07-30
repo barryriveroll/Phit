@@ -163,7 +163,7 @@ class FitnessPanel extends Component {
     resistanceToAdd: [],
     cardioToAdd: [],
     user: null,
-    workoutDate: "",
+    workoutDate: moment().format("YYYY-MM-DD"),
     selectedWorkout: "None",
     woName: "",
     savedWorkouts: [],
@@ -176,6 +176,7 @@ class FitnessPanel extends Component {
     yAxis: "",
     queryData: [],
     chartWeek: moment().week(),
+    chartMonth: moment().month() + 1,
     canClickDetail: false
   };
 
@@ -362,6 +363,8 @@ class FitnessPanel extends Component {
   };
 
   componentDidMount = () => {
+    console.log(this.state.chartMonth);
+    console.log(moment().month());
     setGlobal({ exerciseReady: false });
     API.findUserWorkOuts(localStorage.userId).then(res => {
       let savedArray = res.data[0].workouts.filter(workout => workout.name);
@@ -614,12 +617,6 @@ class FitnessPanel extends Component {
   };
 
   getWorkOutByTimeframe = exercise => {
-    console.log({
-      month: this.state.chartMonth,
-      name: exercise,
-      user: localStorage.userId,
-      type: this.state.type
-    });
     if (this.state.timeframe === "thisMonth") {
       API.workOutByMonth({
         month: this.state.chartMonth,
@@ -627,7 +624,6 @@ class FitnessPanel extends Component {
         user: localStorage.userId,
         type: this.state.type
       }).then(res => {
-        console.log(res.data);
         let newChartData = { ...this.state.data };
 
         newChartData.labels = [
@@ -638,8 +634,8 @@ class FitnessPanel extends Component {
           "Week 5"
         ];
 
-        let newData = [0, 0, 0, 0, 0];
-        let lineData = [0, 0, 0, 0, 0];
+        let newData = [null, null, null, null, null];
+        let lineData = [null, null, null, null, null];
         let line2Data = [null, null, null, null, null];
         let weekInMonth = [
           moment(`2019-${this.state.chartMonth}-01`).week(),
@@ -648,7 +644,6 @@ class FitnessPanel extends Component {
           moment(`2019-${this.state.chartMonth}-22`).week(),
           moment(`2019-${this.state.chartMonth}-29`).week()
         ];
-        console.log(weekInMonth);
         let bigOlWeekArray = [[], [], [], [], []];
 
         for (let i = 0; i < res.data.length; i++) {
@@ -659,6 +654,9 @@ class FitnessPanel extends Component {
         for (let i = 0; i < bigOlWeekArray.length; i++) {
           for (let j = 0; j < bigOlWeekArray[i].length; j++) {
             if (this.state.type === "resistance" && this.state.exercise) {
+              if (newData[i] === null) newData[i] = 0;
+              if (lineData[i] === null) newData[i] = 0;
+
               newData[i] += this.returnSum(
                 bigOlWeekArray[i][j].resistance.weight
               );
@@ -685,7 +683,8 @@ class FitnessPanel extends Component {
         newChartData.datasets[1].data = line2Data;
 
         this.setState({
-          data: newChartData
+          data: newChartData,
+          canClickDetail: false
         });
       });
     } else if (this.state.timeframe === "thisWeek") {

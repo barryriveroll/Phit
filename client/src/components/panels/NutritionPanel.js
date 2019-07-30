@@ -150,7 +150,7 @@ class NutritionPanel extends Component {
     },
     value: 0,
     mealName: "",
-    mealsToAdd: [],
+    mealsToAdd: [{ name: "Meal #1" }],
     nutritionDate: moment().format("YYYY-MM-DD"),
     mealToLoad: { label: null },
     chartType: "pieChart",
