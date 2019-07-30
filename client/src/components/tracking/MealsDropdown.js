@@ -43,6 +43,7 @@ function renderInputComponent(inputProps) {
   return (
     <TextField
       fullWidth
+      aria-autocomplete="off"
       InputProps={{
         inputRef: node => {
           ref(node);

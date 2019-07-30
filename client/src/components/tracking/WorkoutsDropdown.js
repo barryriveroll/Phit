@@ -79,12 +79,16 @@ function renderSuggestion(suggestion, { query, isHighlighted }) {
 }
 
 function getSuggestions(value) {
-  const inputValue = deburr(value.trim()).toLowerCase();
+  let inputValue = "";
+  console.log(suggestions);
+  if (value !== undefined) inputValue = deburr(value.trim()).toLowerCase();
+  else return suggestions;
+
   const inputLength = inputValue.length;
   let count = 0;
 
   return inputLength === 0
-    ? []
+    ? suggestions
     : suggestions.filter(suggestion => {
         const keep =
           count < 5 &&
@@ -148,7 +152,7 @@ export default function WorkoutsDropdown(props) {
   };
 
   const handleSuggestionsClearRequested = () => {
-    setSuggestions([]);
+    setSuggestions(suggestions);
   };
 
   const handleChange = (name, handleChange) => (event, { newValue }) => {
@@ -176,6 +180,7 @@ export default function WorkoutsDropdown(props) {
         inputProps={{
           classes,
           variant: "filled",
+          onFocus: handleSuggestionsFetchRequested,
           id: "react-autosuggest-popper",
           label: "Workout Name",
           //   placeholder: "With Popper",

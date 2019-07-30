@@ -14,6 +14,11 @@ import CloseIcon from "@material-ui/icons/Close";
 import Fab from "@material-ui/core/Fab";
 
 const styles = theme => ({
+  dashboardSettings: {
+    [theme.breakpoints.down("sm")]: {
+      display: "none"
+    }
+  },
   margin: {
     margin: theme.spacing.unit
   },
@@ -95,7 +100,7 @@ class Settings extends Component {
       <div className={classes.drawerBackground}>
         <CssBaseline />
         <Grid container justify="center">
-          <Grid spacing={8} container style={{ width: 1170 }}>
+          <Grid spacing={2} container style={{ width: 1170 }}>
             <Fab
               onClick={() => this.props.toggleSettings("right", false)}
               style={{ position: "absolute", top: 8, right: 7 }}
@@ -231,7 +236,7 @@ class Settings extends Component {
                 </Grid>
               </Paper>
             </Grid>
-            <Grid item xs={12}>
+            <Grid className={classes.dashboardSettings} item xs={12}>
               <Paper className={classes.paper}>
                 <Typography
                   component="h1"
