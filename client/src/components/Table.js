@@ -46,7 +46,7 @@ function returnNutritionData(
             onChange={changeQuantity}
             type="number"
             inputProps={{
-              style: { padding: "0 0 7px" },
+              style: { padding: "0 0 7px", boxSizing: "content-box" },
               name: mealIndex,
               id: index
             }}
@@ -97,7 +97,10 @@ function returnFitnessData(
                 onChange={changeHandler("resistanceToAdd")}
                 value={exercise.name}
                 type="text"
-                inputProps={{ placeholder: "Exercise Name" }}
+                inputProps={{
+                  placeholder: "Exercise Name",
+                  style: { boxSizing: "content-box" }
+                }}
               />
             </>
           ),
@@ -137,6 +140,10 @@ function returnFitnessData(
                 name="name"
                 onChange={changeHandler("cardioToAdd")}
                 value={exercise.name}
+                inputProps={{
+                  style: { boxSizing: "content-box" },
+                  placeholder: "Exercise Name"
+                }}
                 type="text"
               />
             </>

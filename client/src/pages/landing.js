@@ -560,15 +560,16 @@ class SignIn extends React.Component {
       }
       localStorage.userId = res.data._id;
       setGlobal({ username: res.data.username });
-      console.log(res.data);
       auth
-        .createUserWithEmailAndPassword(this.state.email, this.state.password)
+        .createUserWithEmailAndPassword(
+          this.state.email.trim(),
+          this.state.password
+        )
         .then(res => {
           if (usernameError) {
             res.user.delete();
             this.setState({ usernameError });
           } else {
-            console.log("then");
             this.setState({
               errors: null,
               email: "",
@@ -580,7 +581,6 @@ class SignIn extends React.Component {
           }
         })
         .catch(error => {
-          console.log("catch");
           this.setState({
             errors: error.message,
             usernameError
@@ -592,7 +592,7 @@ class SignIn extends React.Component {
   signIn = event => {
     event.preventDefault();
     auth
-      .signInWithEmailAndPassword(this.state.email, this.state.password)
+      .signInWithEmailAndPassword(this.state.email.trim(), this.state.password)
       .then(res => {
         API.findUser(this.state.email).then(response => {
           localStorage.setItem("userId", response.data._id);
