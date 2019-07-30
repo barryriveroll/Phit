@@ -1,20 +1,14 @@
 const nodemailer = require("nodemailer");
-const config = require("../config.json");
+const config = process.env ? null : require("../config.json");
 module.exports = {
   submitReport: async function(req, res) {
-    // Generate test SMTP service account from ethereal.email
-    // Only needed if you don't have a real mail account for testing
-    // let testAccount = await nodemailer.createTestAccount();
-
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
-      //   host: "smtp.ethgmailereal.email",
-      //   port: 587,
       service: "gmail",
-      secure: false, // true for 465, false for other ports
+      secure: false,
       auth: {
-        user: config.flag, // generated ethereal user
-        pass: config.phitlosophy // generated ethereal password
+        user: process.env.REPORT_USER || config.flag,
+        pass: process.env.REPORT_PASS || config.phitlosophy
       },
       name: "reallycoolname"
     });
@@ -22,7 +16,7 @@ module.exports = {
     // send mail with defined transport object
     let info = await transporter.sendMail({
       from: `${req.body.username} <barrphitness@gmail.com>`, // sender address
-      to: config.flag, // list of receivers
+      to: process.env.REPORT_USER || config.flag, // list of receivers
       subject: `Phit Report: ${req.body.reportCategory}`, // Subject line
       text: `Report for: ${req.body.reportedUser}. Reported User URL: ${
         req.body.reportedUserURL
