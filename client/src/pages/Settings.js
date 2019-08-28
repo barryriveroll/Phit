@@ -12,6 +12,7 @@ import FormControl from "@material-ui/core/FormControl";
 import { Link } from "react-router-dom";
 import CloseIcon from "@material-ui/icons/Close";
 import Fab from "@material-ui/core/Fab";
+import CalorieTracking from "./CalorieTracking/CalorieTracking";
 
 const styles = theme => ({
   dashboardSettings: {
@@ -85,12 +86,20 @@ const styles = theme => ({
 });
 
 class Settings extends Component {
-  state = {};
+  state = {
+    currentWeight: 0,
+    goalWeight: 0
+  };
 
   signOut = (signOutFunc, closeSettingsFunc) => {
     closeSettingsFunc("right", false);
 
     signOutFunc();
+  };
+
+  handleCalorieChange = event => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
   };
 
   render() {
@@ -156,6 +165,34 @@ class Settings extends Component {
                 </Grid>
               </Paper>
             </Grid>
+            {/* Calore Tracking Section */}
+            <Paper className={classes.paper}>
+              <Typography
+                component="h1"
+                className={classes.panelHeader}
+                color="secondary"
+              >
+                Calorie Tracking
+              </Typography>
+              <Grid container>
+                <Grid item sm={12}>
+                  <CalorieTracking
+                    name="currentWeight"
+                    label="Current Weight"
+                    handleCalorieChange={this.handleCalorieChange}
+                    value={this.state.currentWeight}
+                  />
+                </Grid>
+                <Grid item sm={12}>
+                  <CalorieTracking
+                    name="goalWeight"
+                    label="Goal Weight"
+                    handleCalorieChange={this.handleCalorieChange}
+                    value={this.state.goalWeight}
+                  />
+                </Grid>
+              </Grid>
+            </Paper>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <Typography
