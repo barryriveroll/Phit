@@ -28,7 +28,9 @@ setGlobal({
     "Full Body"
   ],
   cardioTags: ["High Intensity", "Low Impact", "Endurance", "Interval"],
-  sharedResistanceWeightProgress: []
+  sharedResistanceWeightProgress: [],
+  currentWeight: 0,
+  goalWeight: 0
 });
 
 render(<App />, document.getElementById("root"));

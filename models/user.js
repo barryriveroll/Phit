@@ -46,7 +46,9 @@ const userSchema = new mongoose.Schema({
     trim: true
   },
   shareAllMeals: { type: Boolean, default: false },
-  shareAllWorkouts: { type: Boolean, default: false }
+  shareAllWorkouts: { type: Boolean, default: false },
+  currentWeight: { type: Number, max: 10000, min: 0 },
+  goalWeight: { type: Number, max: 10000, min: 0 }
 });
 
 const User = mongoose.model(

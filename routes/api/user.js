@@ -17,6 +17,8 @@ router
 
 router.route("/settings").put(userController.updateSettings);
 
+router.route("/settings/weight").put(userController.updateWeight);
+
 router.route("/workouts/:id").get(userController.findUserWorkOuts);
 
 router.route("/upload").put(userController.uploadPicture);

@@ -86,6 +86,13 @@ module.exports = {
       .catch(err => console.log(err));
   },
 
+  updateWeight: function(req, res) {
+    db.User.findByIdAndUpdate(req.body.id, {
+      currentWeight: req.body.currentWeight,
+      goalWeight: req.body.goalWeight
+    }).catch(err => console.log(err));
+  },
+
   uploadPicture: function(req, res) {
     db.User.findByIdAndUpdate(req.body.id, {
       picture: req.body.photo

@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-
+import React, { Component, setGlobal } from "reactn";
+import API from "../utils/API";
 // Material UI imports
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { withStyles } from "@material-ui/core/styles";
@@ -91,6 +91,11 @@ class Settings extends Component {
     goalWeight: 0
   };
 
+  componentDidMount = () => {
+    //ToDO
+    //Populate value for current & goal weight from DB
+  };
+
   signOut = (signOutFunc, closeSettingsFunc) => {
     closeSettingsFunc("right", false);
 
@@ -100,6 +105,18 @@ class Settings extends Component {
   handleCalorieChange = event => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
+  };
+
+  updateWeight = () => {
+    API.updateWeight({
+      currentWeight: this.state.currentWeight,
+      goalWeight: this.state.goalWeight,
+      id: localStorage.userId
+    });
+    setGlobal({
+      currentWeight: this.state.currentWeight,
+      goalWeight: this.state.goalWeight
+    });
   };
 
   render() {
@@ -192,6 +209,18 @@ class Settings extends Component {
                   />
                 </Grid>
               </Grid>
+              <Button
+                variant="contained"
+                style={{ marginLeft: 8 }}
+                color="secondary"
+                component={Link}
+                onClick={this.updateWeight}
+                disabled={
+                  this.state.currentWeight == 0 || this.state.goalWeight == 0
+                }
+              >
+                Update Weight
+              </Button>
             </Paper>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
