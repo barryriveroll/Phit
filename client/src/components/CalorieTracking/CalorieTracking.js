@@ -6,7 +6,7 @@ export default class CalorieTracking extends Component {
     return (
       <TextField
         name={this.props.name}
-        type="number"
+        type={this.props.type}
         InputLabelProps={{
           shrink: true
         }}

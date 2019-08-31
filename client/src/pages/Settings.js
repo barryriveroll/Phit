@@ -12,7 +12,9 @@ import FormControl from "@material-ui/core/FormControl";
 import { Link } from "react-router-dom";
 import CloseIcon from "@material-ui/icons/Close";
 import Fab from "@material-ui/core/Fab";
-import CalorieTracking from "./CalorieTracking/CalorieTracking";
+import CalorieTracking from "../components/CalorieTracking/CalorieTracking";
+import Gender from "../components/CalorieTracking/Gender";
+import Height from "../components/CalorieTracking/Height";
 
 const styles = theme => ({
   dashboardSettings: {
@@ -88,17 +90,42 @@ const styles = theme => ({
 class Settings extends Component {
   state = {
     currentWeight: 0,
-    goalWeight: 0
+    goalWeight: 0,
+    age: 0,
+    rawHeight: 0,
+    lbsPerWeek: 0,
+    calorieGoal: 0,
+    currentCalories: 0
   };
 
-  componentDidMount = () => {
-    //ToDO
-    //Populate value for current & goal weight from DB
+  calculateHeight = () => {
+    let feet = parseInt(this.global.ft * 12);
+    let rawHeight = feet + parseInt(this.global.in);
+    this.setState({ rawHeight }, () => {
+      this.calculateBmr();
+    });
+  };
+
+  calculateBmr = () => {
+    if (this.global.gender == "male") {
+      let bmr =
+        66 +
+        6.23 * this.state.currentWeight +
+        12.7 * this.state.rawHeight -
+        6.8 * this.state.age;
+      this.setState({ calorieGoal: Math.round(bmr) });
+    } else if (this.global.gender == "female") {
+      let bmr =
+        655 +
+        4.35 * this.state.currentWeight +
+        4.7 * this.state.rawHeight -
+        4.7 * this.state.age;
+      this.setState({ calorieGoal: Math.round(bmr) });
+    }
   };
 
   signOut = (signOutFunc, closeSettingsFunc) => {
     closeSettingsFunc("right", false);
-
     signOutFunc();
   };
 
@@ -108,6 +135,8 @@ class Settings extends Component {
   };
 
   updateWeight = () => {
+    this.calculateHeight();
+    this.calculateBmr();
     API.updateWeight({
       currentWeight: this.state.currentWeight,
       goalWeight: this.state.goalWeight,
@@ -195,6 +224,7 @@ class Settings extends Component {
                 <Grid item sm={12}>
                   <CalorieTracking
                     name="currentWeight"
+                    type="number"
                     label="Current Weight"
                     handleCalorieChange={this.handleCalorieChange}
                     value={this.state.currentWeight}
@@ -203,10 +233,52 @@ class Settings extends Component {
                 <Grid item sm={12}>
                   <CalorieTracking
                     name="goalWeight"
+                    type="number"
                     label="Goal Weight"
                     handleCalorieChange={this.handleCalorieChange}
                     value={this.state.goalWeight}
                   />
+                </Grid>
+                <Grid item sm={12}>
+                  <CalorieTracking
+                    name="age"
+                    type="number"
+                    label="Age"
+                    handleCalorieChange={this.handleCalorieChange}
+                    value={this.state.age}
+                  />
+                </Grid>
+                <Grid item sm={12}>
+                  {/* <CalorieTracking
+                    name="height"
+                    type="number"
+                    label="Height (inches)"
+                    handleCalorieChange={this.handleCalorieChange}
+                    value={this.state.height}
+                  /> */}
+                  <Height />
+                </Grid>
+                <Grid item sm={12}>
+                  <Gender />
+                </Grid>
+                <Grid item sm={12}>
+                  <CalorieTracking
+                    name="lbsPerWeek"
+                    type="number"
+                    label="Pounds Per Week"
+                    handleCalorieChange={this.handleCalorieChange}
+                    value={this.state.lbsPerWeek}
+                  />
+                </Grid>
+                <Grid item sm={12}>
+                  <Typography>
+                    Calorie Goal: {this.state.calorieGoal}
+                  </Typography>
+                </Grid>
+                <Grid item sm={12}>
+                  <Typography>
+                    Current Calories: {this.state.currentCalories}
+                  </Typography>
                 </Grid>
               </Grid>
               <Button

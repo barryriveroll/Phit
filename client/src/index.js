@@ -30,7 +30,10 @@ setGlobal({
   cardioTags: ["High Intensity", "Low Impact", "Endurance", "Interval"],
   sharedResistanceWeightProgress: [],
   currentWeight: 0,
-  goalWeight: 0
+  goalWeight: 0,
+  ft: 0,
+  in: 0,
+  gender: ""
 });
 
 render(<App />, document.getElementById("root"));
