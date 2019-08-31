@@ -95,7 +95,8 @@ class Settings extends Component {
     rawHeight: 0,
     lbsPerWeek: 0,
     calorieGoal: 0,
-    currentCalories: 0
+    currentCalories: 0,
+    negCal: 0
   };
 
   calculateHeight = () => {
@@ -106,14 +107,22 @@ class Settings extends Component {
     });
   };
 
+  calculateNegativeCalories = () => {
+    this.setState({ negCal: parseInt(this.state.lbsPerWeek * 3500) / 7 });
+  };
+
   calculateBmr = () => {
+    this.calculateNegativeCalories();
     if (this.global.gender == "male") {
       let bmr =
         66 +
         6.23 * this.state.currentWeight +
         12.7 * this.state.rawHeight -
         6.8 * this.state.age;
-      this.setState({ calorieGoal: Math.round(bmr) });
+
+      let dailyGoal = bmr - this.state.negCal;
+
+      this.setState({ calorieGoal: Math.round(dailyGoal) });
     } else if (this.global.gender == "female") {
       let bmr =
         655 +
@@ -272,7 +281,7 @@ class Settings extends Component {
                 </Grid>
                 <Grid item sm={12}>
                   <Typography>
-                    Calorie Goal: {this.state.calorieGoal}
+                    Daily Calorie Goal: {this.state.calorieGoal}
                   </Typography>
                 </Grid>
                 <Grid item sm={12}>
