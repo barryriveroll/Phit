@@ -58,6 +58,10 @@ export default {
   updateSettings: function(setting) {
     return axios.put("/api/users/settings/", setting);
   },
+
+  updateWeight: function(weight) {
+    return axios.put("/api/users/settings/weight", weight);
+  },
   //--------------------------------------------------
   //--------------------MEAL--------------------------
   //--------------------------------------------------

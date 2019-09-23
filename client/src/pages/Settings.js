@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-
+import React, { Component, setGlobal } from "reactn";
+import API from "../utils/API";
 // Material UI imports
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { withStyles } from "@material-ui/core/styles";
@@ -12,6 +12,9 @@ import FormControl from "@material-ui/core/FormControl";
 import { Link } from "react-router-dom";
 import CloseIcon from "@material-ui/icons/Close";
 import Fab from "@material-ui/core/Fab";
+import CalorieTracking from "../components/CalorieTracking/CalorieTracking";
+import Gender from "../components/CalorieTracking/Gender";
+import Height from "../components/CalorieTracking/Height";
 
 const styles = theme => ({
   dashboardSettings: {
@@ -85,12 +88,73 @@ const styles = theme => ({
 });
 
 class Settings extends Component {
-  state = {};
+  state = {
+    currentWeight: 0,
+    goalWeight: 0,
+    age: 0,
+    rawHeight: 0,
+    lbsPerWeek: 0,
+    calorieGoal: 0,
+    currentCalories: 0,
+    negCal: 0
+  };
+
+  calculateHeight = () => {
+    let feet = parseInt(this.global.ft * 12);
+    let rawHeight = feet + parseInt(this.global.in);
+    this.setState({ rawHeight }, () => {
+      this.calculateBmr();
+    });
+  };
+
+  calculateNegativeCalories = () => {
+    this.setState({ negCal: parseInt(this.state.lbsPerWeek * 3500) / 7 });
+  };
+
+  calculateBmr = () => {
+    this.calculateNegativeCalories();
+    if (this.global.gender == "male") {
+      let bmr =
+        66 +
+        6.23 * this.state.currentWeight +
+        12.7 * this.state.rawHeight -
+        6.8 * this.state.age;
+
+      let dailyGoal = bmr - this.state.negCal;
+
+      this.setState({ calorieGoal: Math.round(dailyGoal) });
+    } else if (this.global.gender == "female") {
+      let bmr =
+        655 +
+        4.35 * this.state.currentWeight +
+        4.7 * this.state.rawHeight -
+        4.7 * this.state.age;
+      this.setState({ calorieGoal: Math.round(bmr) });
+    }
+  };
 
   signOut = (signOutFunc, closeSettingsFunc) => {
     closeSettingsFunc("right", false);
-
     signOutFunc();
+  };
+
+  handleCalorieChange = event => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  };
+
+  updateWeight = () => {
+    this.calculateHeight();
+    this.calculateBmr();
+    API.updateWeight({
+      currentWeight: this.state.currentWeight,
+      goalWeight: this.state.goalWeight,
+      id: localStorage.userId
+    });
+    setGlobal({
+      currentWeight: this.state.currentWeight,
+      goalWeight: this.state.goalWeight
+    });
   };
 
   render() {
@@ -156,6 +220,89 @@ class Settings extends Component {
                 </Grid>
               </Paper>
             </Grid>
+            {/* Calore Tracking Section */}
+            <Paper className={classes.paper}>
+              <Typography
+                component="h1"
+                className={classes.panelHeader}
+                color="secondary"
+              >
+                Calorie Tracking
+              </Typography>
+              <Grid container>
+                <Grid item sm={12}>
+                  <CalorieTracking
+                    name="currentWeight"
+                    type="number"
+                    label="Current Weight"
+                    handleCalorieChange={this.handleCalorieChange}
+                    value={this.state.currentWeight}
+                  />
+                </Grid>
+                <Grid item sm={12}>
+                  <CalorieTracking
+                    name="goalWeight"
+                    type="number"
+                    label="Goal Weight"
+                    handleCalorieChange={this.handleCalorieChange}
+                    value={this.state.goalWeight}
+                  />
+                </Grid>
+                <Grid item sm={12}>
+                  <CalorieTracking
+                    name="age"
+                    type="number"
+                    label="Age"
+                    handleCalorieChange={this.handleCalorieChange}
+                    value={this.state.age}
+                  />
+                </Grid>
+                <Grid item sm={12}>
+                  {/* <CalorieTracking
+                    name="height"
+                    type="number"
+                    label="Height (inches)"
+                    handleCalorieChange={this.handleCalorieChange}
+                    value={this.state.height}
+                  /> */}
+                  <Height />
+                </Grid>
+                <Grid item sm={12}>
+                  <Gender />
+                </Grid>
+                <Grid item sm={12}>
+                  <CalorieTracking
+                    name="lbsPerWeek"
+                    type="number"
+                    label="Pounds Per Week"
+                    handleCalorieChange={this.handleCalorieChange}
+                    value={this.state.lbsPerWeek}
+                  />
+                </Grid>
+                <Grid item sm={12}>
+                  <Typography>
+                    Daily Calorie Goal: {this.state.calorieGoal}
+                  </Typography>
+                </Grid>
+                <Grid item sm={12}>
+                  <Typography>
+                    Current Calories: {this.state.currentCalories}
+                  </Typography>
+                </Grid>
+              </Grid>
+              <Button
+                variant="contained"
+                style={{ marginLeft: 8 }}
+                color="secondary"
+                component={Link}
+                onClick={this.updateWeight}
+                disabled={
+                  this.state.currentWeight == 0 || this.state.goalWeight == 0
+                }
+              >
+                Update Weight
+              </Button>
+            </Paper>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
                 <Typography
