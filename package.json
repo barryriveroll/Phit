@@ -30,7 +30,7 @@
     "autosuggest-highlight": "^3.1.1",
     "emotion": "^10.0.9",
     "express": "^4.16.3",
-    "express-fileupload": "^1.1.5",
+    "express-fileupload": "^1.1.9",
     "filepond": "^4.4.11",
     "filepond-plugin-file-validate-size": "^2.2.0",
     "filepond-plugin-image-exif-orientation": "^1.0.6",
